@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
+import "@polkadot/api-augment";
 import { UseInkProvider } from "useink";
 import { AlephTestnet, Aleph } from "useink/chains";
 import "@fontsource/roboto/300.css";

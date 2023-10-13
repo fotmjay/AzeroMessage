@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { WalletAccount } from "useink/core";
+import { FONTSIZE } from "../../constants/stylingConstants";
+import { shortenAddressWithEllipsis } from "../../helpers/addressFormatting";
 
 type Props = {
   account: WalletAccount | undefined;
@@ -27,7 +29,6 @@ export const ConnectedWallet = (props: Props) => {
       const accountChosen = props.accounts.find((account) => account.address === e.target.value);
       if (accountChosen !== undefined) {
         return props.setAccount(accountChosen);
-        console.log(accountChosen);
       }
     }
   };
@@ -43,36 +44,58 @@ export const ConnectedWallet = (props: Props) => {
         gap: "5px",
       }}
     >
-      <Typography>{props.account ? props.account.name : null}</Typography>
-      <Typography>{props.account ? props.account.address : null}</Typography>
+      <Typography variant="caption">{props.account ? props.account.name : null}</Typography>
+      <Typography variant="body1">
+        {props.account ? shortenAddressWithEllipsis(props.account.address) : null}
+      </Typography>
       <Box width="100%" display="flex" justifyContent="space-between">
+        {props.accounts!.length > 1 && (
+          <Button
+            style={{ fontSize: FONTSIZE.BUTTON.WALLET }}
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={() => setSwitchAccountToggle((toggle) => !toggle)}
+          >
+            Switch Account
+          </Button>
+        )}
+
         <Button
+          style={{ fontSize: FONTSIZE.BUTTON.WALLET }}
+          sx={{ marginLeft: "auto" }}
           size="small"
           variant="contained"
-          color="primary"
-          onClick={() => setSwitchAccountToggle((toggle) => !toggle)}
+          color="error"
+          onClick={props.disconnect}
         >
-          Switch Account
-        </Button>
-        <Button size="small" variant="contained" color="error" onClick={props.disconnect}>
           Disconnect
         </Button>
       </Box>
       {switchAccountToggle && (
         <FormControl sx={{ marginTop: "20px" }} fullWidth>
-          <InputLabel id="demo-simple-select-label">Switch</InputLabel>
+          <InputLabel id="demo-simple-select-label">Switch address</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={props.account}
-            label="account"
+            label="Switch address"
             onChange={switchAccount}
             defaultValue={props.account}
+            value={props.account}
+            size="small"
           >
             {props.accounts?.map((account) => {
               return (
-                <MenuItem sx={{ width: "fit-content" }} key={account.address} value={account.address}>
-                  {account.address}
+                <MenuItem
+                  sx={{
+                    width: "100%",
+                    border: account.address === props.account!.address ? "1px solid green" : "",
+                  }}
+                  key={account.address}
+                  value={account.address}
+                  defaultChecked
+                >
+                  {shortenAddressWithEllipsis(account.address)}
                 </MenuItem>
               );
             })}

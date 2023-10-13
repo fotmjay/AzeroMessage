@@ -1,19 +1,78 @@
-import { Container } from "@mui/material";
-import { useWallet } from "useink";
-import { Web3ConnectionSection } from "./components/web3/Web3ConnectionSection";
+import { Container, createTheme, CssBaseline, ThemeProvider, responsiveFontSizes } from "@mui/material";
+
+import { useApi, useWallet } from "useink";
+import { useEffect, useState } from "react";
+import { BaseAppLayout } from "./components/layout/BaseAppLayout";
+import { MainLayout } from "./components/layout/MainLayout";
+import { getBalanceFromChain } from "./chainRequests/balanceRequest";
+import type { accountBalance } from "./types/polkaTypes";
+
+const darkTheme = responsiveFontSizes(
+  createTheme({
+    palette: {
+      mode: "dark",
+    },
+    typography: {
+      fontSize: 10,
+    },
+  })
+);
+
+const lightTheme = responsiveFontSizes(
+  createTheme({
+    palette: {
+      mode: "light",
+    },
+    typography: {
+      fontSize: 10,
+    },
+  })
+);
 
 function App() {
+  const [darkMode, setDarkMode] = useState<boolean>(() => localStorage.getItem("darkMode") === "true");
   const { account, connect, disconnect, accounts, setAccount } = useWallet();
+  const [selectedAccountBalance, setSelectedAccountBalance] = useState<accountBalance>();
+  const chainNode = useApi();
+
+  function switchTheme() {
+    setDarkMode((darkMode) => {
+      localStorage.setItem("darkMode", `${!darkMode}`);
+      return !darkMode;
+    });
+  }
+
+  useEffect(() => {
+    if (account && chainNode) {
+      getBalanceFromChain(chainNode, account.address, setSelectedAccountBalance);
+    }
+  }, [account, chainNode]);
+
   return (
-    <Container sx={{ width: "450px" }}>
-      <Web3ConnectionSection
-        account={account}
-        connect={connect}
-        disconnect={disconnect}
-        accounts={accounts}
-        setAccount={setAccount}
-      />
-    </Container>
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+      <CssBaseline />
+      <Container sx={{ height: "100vh" }}>
+        <Container
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "flex-start",
+          }}
+        >
+          <BaseAppLayout
+            selectedAccountBalance={selectedAccountBalance}
+            darkMode={darkMode}
+            switchTheme={switchTheme}
+            account={account}
+            connect={connect}
+            disconnect={disconnect}
+            accounts={accounts}
+            setAccount={setAccount}
+          />
+        </Container>
+        <MainLayout provider={chainNode} selectedAccount={account} />
+      </Container>
+    </ThemeProvider>
   );
 }
 

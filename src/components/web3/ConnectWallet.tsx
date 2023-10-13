@@ -1,5 +1,5 @@
 import { useAllWallets } from "useink";
-import { List, ListItemText, ListItemButton, Card } from "@mui/material";
+import { List, ListItemText, ListItemButton, DialogContent } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 
 type Props = {
@@ -25,8 +25,8 @@ export const ConnectWallet = (props: Props) => {
   };
 
   return (
-    <Card sx={{ maxWidth: "200px", marginX: "auto" }}>
-      <List sx={{ width: "100%", maxWidth: 200, bgcolor: "background.paper" }}>
+    <DialogContent>
+      <List sx={{ width: "100%", maxWidth: 200 }}>
         {wallets.map((w) => {
           return (
             <ListItemButton sx={{ gap: "3px" }} onClick={() => handleClick(w.installed, w)} key={w.title}>
@@ -41,7 +41,7 @@ export const ConnectWallet = (props: Props) => {
           );
         })}
       </List>
-    </Card>
+    </DialogContent>
   );
 };
 
