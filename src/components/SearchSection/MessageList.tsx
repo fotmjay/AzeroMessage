@@ -1,15 +1,16 @@
-import { Transfer } from "../../types/polkaTypes";
+import { MessageFromDatabase } from "../../types/polkaTypes";
 import { MessageCard } from "./MessageCard";
 
 type Props = {
-  transactionArray: Transfer[];
+  messageList: MessageFromDatabase[];
 };
 
 export const MessageList = (props: Props) => {
-  const filteredArray = props.transactionArray.filter((transaction) => transaction.amount_v2 === "4206942069");
-  console.log(filteredArray);
-
   return (
-    filteredArray.length > 0 && filteredArray.map((transaction, i) => <MessageCard key={i} transaction={transaction} />)
+    <>
+      {props.messageList.length === 0
+        ? "No messages found."
+        : props.messageList.map((message, i) => <MessageCard key={i} message={message} />)}
+    </>
   );
 };

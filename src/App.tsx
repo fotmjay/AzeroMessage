@@ -33,7 +33,7 @@ function App() {
   const [darkMode, setDarkMode] = useState<boolean>(() => localStorage.getItem("darkMode") === "true");
   const { account, connect, disconnect, accounts, setAccount } = useWallet();
   const [selectedAccountBalance, setSelectedAccountBalance] = useState<accountBalance>();
-  const chainNode = useApi();
+  const chainNode = useApi("aleph");
 
   function switchTheme() {
     setDarkMode((darkMode) => {

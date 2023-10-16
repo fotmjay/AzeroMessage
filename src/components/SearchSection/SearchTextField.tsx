@@ -2,15 +2,16 @@ import { TextField, IconButton, InputAdornment, Typography, Divider } from "@mui
 import { SetStateAction, useState } from "react";
 import { addressFormatValidation } from "../../helpers/validations";
 import { axiosInstance } from "../../config/axios";
-import { Transfer } from "../../types/polkaTypes";
+import { MessageFromDatabase } from "../../types/polkaTypes";
 
 type Props = {
-  setTransactionArray: React.Dispatch<SetStateAction<Transfer[] | undefined>>;
+  setMessageList: React.Dispatch<SetStateAction<MessageFromDatabase[] | undefined>>;
 };
 
 export const SearchTextField = (props: Props) => {
   const [addressTextField, setAddressTextField] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [toggleMessageFrom, setToggleMessageFrom] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddressTextField(e.target.value);
@@ -18,13 +19,15 @@ export const SearchTextField = (props: Props) => {
 
   const handleSearch = () => {
     if (!addressFormatValidation(addressTextField)) {
+      props.setMessageList(undefined);
       setErrorMessage("The address you entered is not valid.");
       return;
     }
+    const fromOrTo = toggleMessageFrom ? "sender" : "receiver";
     axiosInstance
-      .post("/api/v2/scan/transfers", { address: addressTextField, row: 100 })
+      .get(`/api/messages/${fromOrTo}/${addressTextField.toLowerCase()}`)
       .then((res) => {
-        props.setTransactionArray(res.data.data.transfers);
+        props.setMessageList(res.data.data);
       })
       .catch((err) => console.error(err));
 
@@ -40,6 +43,21 @@ export const SearchTextField = (props: Props) => {
         value={addressTextField}
         placeholder="Enter address"
         InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <IconButton
+                sx={{ borderRadius: "0" }}
+                type="button"
+                onClick={() => setToggleMessageFrom((toggle) => !toggle)}
+                size="small"
+                edge="start"
+                color="primary"
+              >
+                {toggleMessageFrom ? "Sent from:" : "Sent to:"}
+              </IconButton>
+              <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+            </InputAdornment>
+          ),
           endAdornment: (
             <InputAdornment position="end">
               <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
@@ -51,7 +69,7 @@ export const SearchTextField = (props: Props) => {
                 edge="end"
                 color="primary"
               >
-                <Typography padding="0">SEARCH</Typography>
+                Search
               </IconButton>
             </InputAdornment>
           ),

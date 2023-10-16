@@ -3,7 +3,10 @@ export type accountBalance = {
   chainTokens: string;
 };
 
-export type Transfer = {
+export type MessageFromDatabase = {
   from: string;
-  amount_v2: string;
+  to: string;
+  timestamp: number;
+  text: string;
+  explorerLink: string;
 };

@@ -1,4 +1,4 @@
-import { Button, Typography } from "@mui/material";
+import { Button, Card, TextField, Typography, FormControl, Divider, IconButton, InputAdornment } from "@mui/material";
 import { IApiProvider } from "useink";
 import { makeTransaction } from "../../chainRequests/transactionRequest";
 import { WalletAccount } from "useink/core";
@@ -14,15 +14,25 @@ export const SendingSectionContainer = (props: Props) => {
 
   const createTransaction = () => {
     if (props.provider && props.selectedAccount) {
-      makeTransaction(props.provider, props.selectedAccount, setTransactionState);
+      console.log("clicked");
     }
   };
   return (
-    <>
-      <Button onClick={createTransaction} variant="contained">
-        Send
-      </Button>
-      <Typography>{transactionState}</Typography>
-    </>
+    <Card sx={{ padding: "15px" }}>
+      <FormControl size="small" fullWidth>
+        <TextField fullWidth size="small" variant="outlined" sx={{ marginBottom: "10px" }} label="Address" />
+        <TextField
+          fullWidth
+          size="small"
+          variant="outlined"
+          label="Message"
+          sx={{ marginBottom: "10px", overflowWrap: "break-word" }}
+          maxRows="5"
+        />
+        <Button sx={{ width: "fit-content" }} onClick={createTransaction} variant="contained">
+          Send
+        </Button>
+      </FormControl>
+    </Card>
   );
 };
