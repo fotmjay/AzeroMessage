@@ -1,4 +1,4 @@
-import { Card, Box, Typography, Divider, useMediaQuery } from "@mui/material";
+import { Card, Box, Typography, Divider, useMediaQuery, Link } from "@mui/material";
 import { MessageFromDatabase } from "../../types/polkaTypes";
 import { shortenAddressWithEllipsis } from "../../helpers/addressFormatting";
 import { useState } from "react";
@@ -18,7 +18,9 @@ export const MessageCard = (props: Props) => {
   const mediaSmall = useMediaQuery("(max-width:400px)");
   return (
     <Card sx={{ position: "relative", margin: "10px", padding: "5px", border: "1px solid grey" }}>
-      <Typography textAlign="center">{formatTimestamp(props.message.timestamp)}</Typography>
+      <Link target="_blank" rel="noopener" href={props.message.explorerLink} underline="always">
+        <Typography textAlign="center">{formatTimestamp(props.message.timestamp)}</Typography>
+      </Link>
       <Divider />
       <Box display={mediaSmall ? "block" : "flex"} justifyContent="space-around" alignItems="center">
         <Typography textAlign={mediaSmall ? "center" : "left"} display="block" variant="subtitle1">

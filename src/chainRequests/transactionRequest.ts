@@ -1,55 +1,38 @@
 import { IApiProvider } from "useink";
-import { WalletAccount } from "useink/core";
+import { ContractPromise, WalletAccount } from "useink/core";
+import metadata from "../assets/metadata.json";
+import { CONSTANT } from "../constants/constants";
+import { BN } from "@polkadot/util";
+import { SetStateAction } from "react";
 
 export const makeTransaction = async (
   provider: IApiProvider,
   signerAccount: WalletAccount,
-  setSubscriptionText: React.Dispatch<React.SetStateAction<string>>
+  address: string,
+  message: string,
+  setSubscriptionText: React.Dispatch<SetStateAction<string>>
 ) => {
-  const toArray = [
-    {
-      address: "5DXv1GkX3eKeZZaqrZUHEkbKECgmERrWpuPjFAmDLeS8cd4U", // Bob (with 42 ss58 prefix)
-      amount: 4_206_942_069,
-    },
-  ];
-
-  // https://polkadot.js.org/docs/api/cookbook/tx#how-can-i-batch-transactions
-  const callArr = toArray.map((toInfo) => {
-    const { amount, address: toAddress } = toInfo;
-    const transfer = provider.api.tx.balances.transferKeepAlive(toAddress, amount);
-
-    return transfer;
+  const contract = new ContractPromise(provider.api, metadata, CONSTANT.CONTRACT.ADDRESS);
+  const gasLimit = provider.api?.registry.createType("WeightV2", {
+    refTime: 3912368128,
+    proofSize: 131072,
   });
-  callArr.push(await provider.api.tx.system.remarkWithEvent("hi how u doing"));
-  const SENDER = signerAccount.address;
-  provider.api.tx.utility.batch(callArr).signAndSend(SENDER, { signer: signerAccount.signer }, (result) => {
+  const transaction = await contract.tx.sendMessage(
+    { gasLimit: gasLimit, storageDepositLimit: null, value: new BN("200000000001") },
+    address,
+    message
+  );
+
+  const unsub = await transaction.signAndSend(signerAccount.address, { signer: signerAccount.signer }, (result) => {
     setSubscriptionText(`Status: ${result.status.defKeys[result.status.index]}`);
     if (result.status.isInBlock) {
       setSubscriptionText(`Transaction included in block.`);
     } else if (result.status.isFinalized) {
       setSubscriptionText(`Transaction finalized.`);
+      unsub();
       setTimeout(() => setSubscriptionText(""), 1500);
     } else if (result.status.index > 6 || result.status.index === 4) {
       setSubscriptionText(`Error: Transaction ${result.status.defKeys[result.status.index]}`);
     }
   });
-
-  //   try {
-  //     await provider.api.tx.balances
-  //       .transferKeepAlive("5DXv1GkX3eKeZZaqrZUHEkbKECgmERrWpuPjFAmDLeS8cd4U", 1_000_000_000_000)
-  //       .signAndSend(SENDER, { signer: signerAccount.signer }, (result) => {
-  //         setSubscriptionText(`Status: ${result.status.defKeys[result.status.index]}`);
-  //         if (result.status.isInBlock) {
-  //           setSubscriptionText(`Transaction included in block.`);
-  //         } else if (result.status.isFinalized) {
-  //           setSubscriptionText(`Transaction finalized.`);
-  //           setTimeout(() => setSubscriptionText(""), 1500);
-  //         } else if (result.status.index > 6 || result.status.index === 4) {
-  //           setSubscriptionText(`Error: Transaction ${result.status.defKeys[result.status.index]}`);
-  //         }
-  //       });
-  //   } catch (err) {
-  //     setSubscriptionText("UNKNOWN_ERROR");
-  //     console.error(err);
-  //   }
 };
