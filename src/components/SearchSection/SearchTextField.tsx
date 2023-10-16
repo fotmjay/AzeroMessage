@@ -26,11 +26,14 @@ export const SearchTextField = (props: Props) => {
 
     const fromOrTo = toggleMessageFrom ? "sender" : "receiver";
     axiosInstance
-      .get(`/api/messages/${fromOrTo}/${addressTextField.toLowerCase()}`)
+      .get(`/api/messages/${fromOrTo}/${addressTextField}`)
       .then((res) => {
         props.setMessageList(res.data.data);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        setErrorMessage(err.code);
+      });
 
     setErrorMessage("");
   };
@@ -72,7 +75,7 @@ export const SearchTextField = (props: Props) => {
       </Button>
 
       {errorMessage.length > 0 && (
-        <Typography sx={{ position: "absolute", top: "40px" }} gutterBottom textAlign="center" color="error">
+        <Typography sx={{ position: "absolute", top: "70px" }} gutterBottom textAlign="center" color="error">
           {errorMessage}
         </Typography>
       )}

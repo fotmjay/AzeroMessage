@@ -44,10 +44,3 @@ export const ConnectWallet = (props: Props) => {
     </DialogContent>
   );
 };
-
-//     <>
-//       <p>You are connected as {account?.name || account.address}</p>
-
-//       <button onClick={disconnect}>Disconnect Wallet</button>
-//     </>
-//   );
