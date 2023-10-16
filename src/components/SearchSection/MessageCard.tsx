@@ -3,6 +3,9 @@ import { MessageFromDatabase } from "../../types/polkaTypes";
 import { shortenAddressWithEllipsis } from "../../helpers/addressFormatting";
 import { useState } from "react";
 import { truncateText } from "../../helpers/textTruncate";
+import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
+import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
+import { formatTimestamp } from "../../helpers/timestampFormatting";
 
 type Props = {
   message: MessageFromDatabase;
@@ -15,6 +18,8 @@ export const MessageCard = (props: Props) => {
   const mediaSmall = useMediaQuery("(max-width:400px)");
   return (
     <Card sx={{ position: "relative", margin: "10px", padding: "5px", border: "1px solid grey" }}>
+      <Typography textAlign="center">{formatTimestamp(props.message.timestamp)}</Typography>
+      <Divider />
       <Box display={mediaSmall ? "block" : "flex"} justifyContent="space-around" alignItems="center">
         <Typography textAlign={mediaSmall ? "center" : "left"} display="block" variant="subtitle1">
           From: {shortenAddressWithEllipsis(props.message.from)}
@@ -31,17 +36,18 @@ export const MessageCard = (props: Props) => {
         </Typography>
       </Box>
       {props.message.text.length > textLengthToTruncate && (
-        <Typography
-          color="primary"
-          sx={{ cursor: "pointer" }}
-          onClick={() => setToggleShowAll((toggle) => !toggle)}
-          fontSize="0.5rem"
-          position="absolute"
-          right="0"
-          bottom="0"
-          paddingRight="5px"
-        >
-          {toggleShowAll ? "Wrap" : "Unwrap"}
+        <Typography fontSize="0.25rem" position="absolute" right="0" bottom="0" paddingRight="5px" color="primary">
+          {toggleShowAll ? (
+            <KeyboardDoubleArrowUpIcon
+              sx={{ cursor: "pointer" }}
+              onClick={() => setToggleShowAll((toggle) => !toggle)}
+            />
+          ) : (
+            <KeyboardDoubleArrowDownIcon
+              sx={{ cursor: "pointer" }}
+              onClick={() => setToggleShowAll((toggle) => !toggle)}
+            />
+          )}
         </Typography>
       )}
     </Card>

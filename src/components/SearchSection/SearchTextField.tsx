@@ -1,4 +1,4 @@
-import { TextField, IconButton, InputAdornment, Typography, Divider } from "@mui/material";
+import { TextField, IconButton, InputAdornment, Typography, Divider, useMediaQuery, Button } from "@mui/material";
 import { SetStateAction, useState } from "react";
 import { addressFormatValidation } from "../../helpers/validations";
 import { axiosInstance } from "../../config/axios";
@@ -23,6 +23,7 @@ export const SearchTextField = (props: Props) => {
       setErrorMessage("The address you entered is not valid.");
       return;
     }
+
     const fromOrTo = toggleMessageFrom ? "sender" : "receiver";
     axiosInstance
       .get(`/api/messages/${fromOrTo}/${addressTextField.toLowerCase()}`)
@@ -53,28 +54,22 @@ export const SearchTextField = (props: Props) => {
                 edge="start"
                 color="primary"
               >
-                {toggleMessageFrom ? "Sent from:" : "Sent to:"}
+                {toggleMessageFrom ? "Sent from" : "Sent to"}
               </IconButton>
               <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
             </InputAdornment>
           ),
-          endAdornment: (
-            <InputAdornment position="end">
-              <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-              <IconButton
-                sx={{ borderRadius: "0" }}
-                type="button"
-                onClick={handleSearch}
-                size="small"
-                edge="end"
-                color="primary"
-              >
-                Search
-              </IconButton>
-            </InputAdornment>
-          ),
+          sx: { paddingLeft: "10px", borderBottomLeftRadius: "0", borderBottomRightRadius: "0" },
         }}
       />
+      <Button
+        sx={{ borderTopLeftRadius: "0", borderTopRightRadius: "0" }}
+        variant="contained"
+        onClick={handleSearch}
+        fullWidth
+      >
+        Search
+      </Button>
 
       {errorMessage.length > 0 && (
         <Typography sx={{ position: "absolute", top: "40px" }} gutterBottom textAlign="center" color="error">
