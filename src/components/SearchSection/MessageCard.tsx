@@ -6,6 +6,7 @@ import { truncateText } from "../../helpers/textTruncate";
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 import { formatTimestamp } from "../../helpers/timestampFormatting";
+import { Tooltip } from "react-tooltip";
 
 type Props = {
   message: MessageFromDatabase;
@@ -15,7 +16,17 @@ const textLengthToTruncate = 150;
 
 export const MessageCard = (props: Props) => {
   const [toggleShowAll, setToggleShowAll] = useState(false);
-  const mediaSmall = useMediaQuery("(max-width:400px)");
+  const [tooltip, setTooltip] = useState(false);
+  const mediaSmall = useMediaQuery("(max-width:500px)");
+
+  const handleClick = (e: React.MouseEvent, text: string) => {
+    copyText(text);
+  };
+
+  const copyText = (text: string) => {
+    navigator.clipboard.writeText(text);
+  };
+
   return (
     <Card sx={{ position: "relative", margin: "10px", padding: "5px", border: "1px solid grey" }}>
       <Link target="_blank" rel="noopener" href={props.message.explorerLink} underline="always">
@@ -23,13 +34,36 @@ export const MessageCard = (props: Props) => {
       </Link>
       <Divider />
       <Box display={mediaSmall ? "block" : "flex"} justifyContent="space-around" alignItems="center">
-        <Typography textAlign={mediaSmall ? "center" : "left"} display="block" variant="subtitle1">
+        <Typography
+          data-tooltip-id="copiedTo"
+          data-tooltip-content="Copied to clipboard"
+          onClick={(e) => handleClick(e, props.message.from)}
+          textAlign={mediaSmall ? "center" : "left"}
+          display="block"
+          variant="subtitle1"
+          width="fit-content"
+          marginX="auto"
+          sx={{ cursor: "copy", "&:hover": { textShadow: "1px 1px 2px red, 0 0 1em blue" } }}
+        >
           From: {shortenAddressWithEllipsis(props.message.from)}
         </Typography>
+
         {!mediaSmall && <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />}
-        <Typography textAlign={mediaSmall ? "center" : "right"} display="block" variant="subtitle1">
+
+        <Typography
+          data-tooltip-id="copiedTo"
+          data-tooltip-content="Copied to clipboard"
+          onClick={(e) => handleClick(e, props.message.to)}
+          textAlign={mediaSmall ? "center" : "right"}
+          display="block"
+          width="fit-content"
+          marginX="auto"
+          variant="subtitle1"
+          sx={{ cursor: "copy", "&:hover": { textShadow: "1px 1px 2px red, 0 0 1em blue" } }}
+        >
           To: {shortenAddressWithEllipsis(props.message.to)}
         </Typography>
+        <Tooltip style={{ background: "gray", maxWidth: "100px" }} positionStrategy="fixed" openOnClick id="copiedTo" />
       </Box>
       <Divider sx={{ marginBottom: "5px" }} />
       <Box>

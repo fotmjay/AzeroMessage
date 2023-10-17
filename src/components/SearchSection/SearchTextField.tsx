@@ -19,9 +19,8 @@ export const SearchTextField = (props: Props) => {
   };
 
   const handleSearch = () => {
-    if (!addressFormatValidation(addressTextField)) {
+    if (!addressFormatValidation(addressTextField, props.setErrorMessage)) {
       props.setMessageList(undefined);
-      props.setErrorMessage("The address you entered is not valid.");
       return;
     }
     props.setErrorMessage("");

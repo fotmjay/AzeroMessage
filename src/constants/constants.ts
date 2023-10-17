@@ -9,4 +9,11 @@ export const CONSTANT = {
       MESSAGESENT: "MessageSent",
     },
   },
+  AZEROID: {
+    SUFFIX: {
+      TESTNET: ".tzero",
+      MAINNET: ".azero",
+    },
+  },
+  MAXMESSAGELENGTH: 500,
 };
