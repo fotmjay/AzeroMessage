@@ -23,7 +23,6 @@ const darkTheme = responsiveFontSizes(
       mode: "dark",
     },
     typography: {
-      fontSize: 10,
       fontFamily: "Roboto, Arial, serif",
       fontWeightRegular: "200",
     },
@@ -36,7 +35,6 @@ const lightTheme = responsiveFontSizes(
       mode: "light",
     },
     typography: {
-      fontSize: 10,
       fontFamily: "Roboto, Arial, serif",
       fontWeightRegular: "200",
     },
