@@ -15,7 +15,7 @@ export const SearchSectionContainer = () => {
       >
         <SearchTextField setMessageList={setMessageList} setErrorMessage={setErrorMessage} />
       </Card>
-      <Card sx={{ maxWidth: "450px", marginX: "auto" }}>
+      <Card sx={{ maxWidth: "600px", marginX: "auto" }}>
         {messageList !== undefined && <MessageList messageList={messageList} />}
       </Card>
       {errorMessage.length > 0 && (

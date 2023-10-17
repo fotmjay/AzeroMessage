@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { WalletAccount } from "useink/core";
-import { FONTSIZE } from "../../constants/stylingConstants";
 import { shortenAddressWithEllipsis } from "../../helpers/addressFormatting";
 
 type Props = {
@@ -39,36 +38,27 @@ export const ConnectedWallet = (props: Props) => {
         flexDirection: "column",
         justifyContent: "flex-start",
         alignItems: "center",
-        padding: "20px",
-        width: "fit-content",
+        padding: "15px",
         gap: "5px",
       }}
     >
-      <Typography variant="caption">{props.account ? props.account.name : null}</Typography>
+      <Typography variant="h6">{props.account ? props.account.name : null}</Typography>
       <Typography variant="body1">
         {props.account ? shortenAddressWithEllipsis(props.account.address) : null}
       </Typography>
       <Box width="100%" display="flex" justifyContent="space-between">
         {props.accounts!.length > 1 && (
           <Button
-            style={{ fontSize: FONTSIZE.BUTTON.WALLET }}
             size="small"
             variant="contained"
             color="primary"
             onClick={() => setSwitchAccountToggle((toggle) => !toggle)}
           >
-            Switch Account
+            Switch
           </Button>
         )}
 
-        <Button
-          style={{ fontSize: FONTSIZE.BUTTON.WALLET }}
-          sx={{ marginLeft: "auto" }}
-          size="small"
-          variant="contained"
-          color="error"
-          onClick={props.disconnect}
-        >
+        <Button sx={{ marginLeft: "auto" }} size="small" variant="contained" color="error" onClick={props.disconnect}>
           Disconnect
         </Button>
       </Box>

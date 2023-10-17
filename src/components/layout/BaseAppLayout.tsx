@@ -42,13 +42,14 @@ export const BaseAppLayout = (props: Props) => {
         </Typography>
       </Box>
       <Dialog
+        fullWidth
         open={openWalletModal}
         onClose={() => setOpenWalletModal(false)}
         sx={{
           marginX: "auto",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          display: "block",
+          maxWidth: "400px",
+          top: "-40%",
         }}
       >
         <Web3ConnectionSection

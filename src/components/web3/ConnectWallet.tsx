@@ -26,7 +26,7 @@ export const ConnectWallet = (props: Props) => {
 
   return (
     <DialogContent>
-      <List sx={{ width: "100%", maxWidth: 200 }}>
+      <List sx={{ width: "100%", maxWidth: "400px" }}>
         {wallets.map((w) => {
           return (
             <ListItemButton sx={{ gap: "3px" }} onClick={() => handleClick(w.installed, w)} key={w.title}>

@@ -35,7 +35,9 @@ export const SearchTextField = (props: Props) => {
       .catch((err) => {
         console.error(err);
         if (err.code === "ECONNABORTED") {
-          props.setErrorMessage("Due to free hosting, servers shut down when unused.  Retry in 15-20 seconds.");
+          props.setErrorMessage(
+            "Due to free hosting, servers shut down when unused.  Should be good in 30 seconds or so."
+          );
         } else {
           props.setErrorMessage(err.message);
         }
