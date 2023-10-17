@@ -20,9 +20,7 @@ export const SendingSectionContainer = (props: Props) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [subscriptionText, setSubscriptionText] = useState("");
   const [validatedAddress, setValidatedAddress] = useState("");
-  const domainResolver = useResolveDomainToAddress(form.address, {
-    debug: true,
-  });
+  const domainResolver = useResolveDomainToAddress(form.address);
   const debouncedAddress = useDebounce(form.address, 300);
 
   useEffect(() => {
@@ -79,7 +77,7 @@ export const SendingSectionContainer = (props: Props) => {
     messageToShow = subscriptionText;
   } else if (validatedAddress !== "") {
     messageToShow = "Address is valid.";
-    iconToShow = <Verified />;
+    iconToShow = <Verified fontSize="small" />;
   }
 
   return (

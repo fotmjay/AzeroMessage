@@ -9,8 +9,10 @@ type Props = {
 export const FormInfoBox = (props: Props) => {
   return (
     <Box display="flex" justifyContent="flex-start" alignItems="center" color={props.color} paddingTop="5px">
-      <Typography paddingX="5px">{props.icon}</Typography>
-      <Typography>{props.messageToShow}</Typography>
+      <Typography variant="body1" sx={{ marginTop: "5px" }} paddingX="5px">
+        {props.icon}
+      </Typography>
+      <Typography variant="body1">{props.messageToShow}</Typography>
     </Box>
   );
 };

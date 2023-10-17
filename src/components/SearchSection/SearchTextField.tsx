@@ -14,9 +14,7 @@ export const SearchTextField = (props: Props) => {
   const [addressTextField, setAddressTextField] = useState("");
   const [toggleMessageFrom, setToggleMessageFrom] = useState(false);
   const [disabledSearch, setDisabledSearch] = useState(false);
-  const domainResolver = useResolveDomainToAddress(addressTextField, {
-    debug: true,
-  });
+  const domainResolver = useResolveDomainToAddress(addressTextField);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddressTextField(e.target.value);
   };
@@ -89,7 +87,7 @@ export const SearchTextField = (props: Props) => {
         fullWidth
         disabled={disabledSearch}
       >
-        {disabledSearch ? <CircularProgress /> : "Search"}
+        {disabledSearch ? <CircularProgress size="small" /> : "Search"}
       </Button>
     </>
   );
