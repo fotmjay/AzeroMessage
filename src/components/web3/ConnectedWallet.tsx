@@ -23,7 +23,7 @@ type Props = {
 export const ConnectedWallet = (props: Props) => {
   const [switchAccountToggle, setSwitchAccountToggle] = useState(false);
 
-  const switchAccount = (e: SelectChangeEvent<WalletAccount>) => {
+  const switchAccount = (e: SelectChangeEvent<string>) => {
     if (props.accounts) {
       const accountChosen = props.accounts.find((account) => account.address === e.target.value);
       if (accountChosen !== undefined) {
@@ -70,9 +70,9 @@ export const ConnectedWallet = (props: Props) => {
             id="demo-simple-select"
             label="Switch address"
             onChange={switchAccount}
-            defaultValue={props.account}
-            value={props.account}
-            size="small"
+            value={props?.account?.address}
+            defaultValue=""
+            size="medium"
           >
             {props.accounts?.map((account) => {
               return (
@@ -83,7 +83,6 @@ export const ConnectedWallet = (props: Props) => {
                   }}
                   key={account.address}
                   value={account.address}
-                  defaultChecked
                 >
                   {shortenAddressWithEllipsis(account.address)}
                 </MenuItem>

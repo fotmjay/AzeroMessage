@@ -7,6 +7,7 @@ import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 import { formatTimestamp } from "../../helpers/timestampFormatting";
 import { Tooltip } from "react-tooltip";
+import { useResolveAddressToDomain } from "@azns/resolver-react";
 
 type Props = {
   message: MessageFromDatabase;
@@ -17,6 +18,8 @@ const textLengthToTruncate = 150;
 export const MessageCard = (props: Props) => {
   const [toggleShowAll, setToggleShowAll] = useState(false);
   const mediaSmall = useMediaQuery("(max-width:500px)");
+  const toResolver = useResolveAddressToDomain(props.message.to);
+  const fromResolver = useResolveAddressToDomain(props.message.from);
 
   const copyText = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -40,7 +43,7 @@ export const MessageCard = (props: Props) => {
           marginX="auto"
           sx={{ cursor: "copy", "&:hover": { textShadow: "1px 1px 2px red, 0 0 1em blue" } }}
         >
-          From: {shortenAddressWithEllipsis(props.message.from)}
+          From: {fromResolver.primaryDomain || shortenAddressWithEllipsis(props.message.from)}
         </Typography>
 
         {!mediaSmall && <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />}
@@ -56,7 +59,7 @@ export const MessageCard = (props: Props) => {
           variant="subtitle1"
           sx={{ cursor: "copy", "&:hover": { textShadow: "1px 1px 2px red, 0 0 1em blue" } }}
         >
-          To: {shortenAddressWithEllipsis(props.message.to)}
+          To: {toResolver.primaryDomain || shortenAddressWithEllipsis(props.message.to)}
         </Typography>
         <Tooltip style={{ background: "gray", maxWidth: "100px" }} positionStrategy="fixed" openOnClick id="copiedTo" />
       </Box>

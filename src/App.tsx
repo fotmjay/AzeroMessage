@@ -1,5 +1,4 @@
 import { Container, createTheme, CssBaseline, ThemeProvider, responsiveFontSizes } from "@mui/material";
-
 import { useApi, useWallet } from "useink";
 import { useEffect, useState } from "react";
 import { BaseAppLayout } from "./components/layout/BaseAppLayout";

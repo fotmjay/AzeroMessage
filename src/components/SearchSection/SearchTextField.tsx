@@ -15,6 +15,7 @@ export const SearchTextField = (props: Props) => {
   const [toggleMessageFrom, setToggleMessageFrom] = useState(false);
   const [disabledSearch, setDisabledSearch] = useState(false);
   const domainResolver = useResolveDomainToAddress(addressTextField);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddressTextField(e.target.value);
   };
@@ -32,6 +33,10 @@ export const SearchTextField = (props: Props) => {
     } else {
       address = domainResolver.address;
     }
+    requestToDatabase(address);
+  };
+
+  const requestToDatabase = (address: string) => {
     props.setErrorMessage("");
     setDisabledSearch(true);
     const fromOrTo = toggleMessageFrom ? "sender" : "receiver";
@@ -44,7 +49,7 @@ export const SearchTextField = (props: Props) => {
         console.error(err);
         if (err.code === "ECONNABORTED") {
           props.setErrorMessage(
-            "Due to free hosting, servers shut down when unused.  Should be good in 30 seconds or so."
+            "Due to free hosting, servers shut down when unused.  Should be good in 45 seconds or so."
           );
         } else {
           props.setErrorMessage(err.message);
@@ -87,7 +92,7 @@ export const SearchTextField = (props: Props) => {
         fullWidth
         disabled={disabledSearch}
       >
-        {disabledSearch ? <CircularProgress size="small" /> : "Search"}
+        {disabledSearch ? <CircularProgress /> : "Search"}
       </Button>
     </>
   );
