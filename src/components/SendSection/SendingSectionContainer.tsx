@@ -53,7 +53,7 @@ export const SendingSectionContainer = (props: Props) => {
     makeTransaction(props.provider, props.selectedAccount, form.address, form.message, setSubscriptionText);
   };
   return (
-    <Card sx={{ padding: "15px", paddingTop: "0px", maxWidth: "400px", marginX: "auto", marginBottom: "10px" }}>
+    <Card sx={{ padding: "15px", paddingTop: "0px", maxWidth: "500px", marginX: "auto", marginBottom: "10px" }}>
       <Typography color="red">{errorMessage.length > 0 ? errorMessage : ""}</Typography>
       <Typography color="green">{subscriptionText.length > 0 ? subscriptionText : ""}</Typography>
       <FormControl onSubmit={submitForm} size="small" fullWidth>

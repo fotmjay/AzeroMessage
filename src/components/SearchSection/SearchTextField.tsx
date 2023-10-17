@@ -1,4 +1,4 @@
-import { TextField, IconButton, InputAdornment, Typography, Divider, Button } from "@mui/material";
+import { TextField, IconButton, InputAdornment, Divider, Button, CircularProgress } from "@mui/material";
 import { SetStateAction, useState } from "react";
 import { addressFormatValidation } from "../../helpers/validations";
 import { axiosInstance } from "../../config/axios";
@@ -6,12 +6,13 @@ import { MessageFromDatabase } from "../../types/polkaTypes";
 
 type Props = {
   setMessageList: React.Dispatch<SetStateAction<MessageFromDatabase[] | undefined>>;
+  setErrorMessage: React.Dispatch<SetStateAction<string>>;
 };
 
 export const SearchTextField = (props: Props) => {
   const [addressTextField, setAddressTextField] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
   const [toggleMessageFrom, setToggleMessageFrom] = useState(false);
+  const [disabledSearch, setDisabledSearch] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddressTextField(e.target.value);
@@ -20,10 +21,11 @@ export const SearchTextField = (props: Props) => {
   const handleSearch = () => {
     if (!addressFormatValidation(addressTextField)) {
       props.setMessageList(undefined);
-      setErrorMessage("The address you entered is not valid.");
+      props.setErrorMessage("The address you entered is not valid.");
       return;
     }
-
+    props.setErrorMessage("");
+    setDisabledSearch(true);
     const fromOrTo = toggleMessageFrom ? "sender" : "receiver";
     axiosInstance
       .get(`/api/messages/${fromOrTo}/${addressTextField}`)
@@ -32,10 +34,13 @@ export const SearchTextField = (props: Props) => {
       })
       .catch((err) => {
         console.error(err);
-        setErrorMessage(err.code);
-      });
-
-    setErrorMessage("");
+        if (err.code === "ECONNABORTED") {
+          props.setErrorMessage("Due to free hosting, servers shut down when unused.  Retry in 15-20 seconds.");
+        } else {
+          props.setErrorMessage(err.message);
+        }
+      })
+      .finally(() => setDisabledSearch(false));
   };
 
   return (
@@ -70,15 +75,10 @@ export const SearchTextField = (props: Props) => {
         variant="contained"
         onClick={handleSearch}
         fullWidth
+        disabled={disabledSearch}
       >
-        Search
+        {disabledSearch ? <CircularProgress /> : "Search"}
       </Button>
-
-      {errorMessage.length > 0 && (
-        <Typography sx={{ position: "absolute", top: "70px" }} gutterBottom textAlign="center" color="error">
-          {errorMessage}
-        </Typography>
-      )}
     </>
   );
 };

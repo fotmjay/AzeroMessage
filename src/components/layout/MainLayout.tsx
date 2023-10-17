@@ -21,7 +21,7 @@ export const MainLayout = (props: Props) => {
       <Box>
         <Tabs
           variant="fullWidth"
-          sx={{ maxWidth: "400px", margin: "auto" }}
+          sx={{ maxWidth: "500px", margin: "auto" }}
           value={toggleSendingTab}
           onChange={handleChange}
           textColor="primary"
