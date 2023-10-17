@@ -3,6 +3,7 @@ import { SetStateAction, useState } from "react";
 import { addressFormatValidation } from "../../helpers/validations";
 import { axiosInstance } from "../../config/axios";
 import { MessageFromDatabase } from "../../types/polkaTypes";
+import { useResolveDomainToAddress } from "@azns/resolver-react";
 
 type Props = {
   setMessageList: React.Dispatch<SetStateAction<MessageFromDatabase[] | undefined>>;
@@ -13,21 +14,31 @@ export const SearchTextField = (props: Props) => {
   const [addressTextField, setAddressTextField] = useState("");
   const [toggleMessageFrom, setToggleMessageFrom] = useState(false);
   const [disabledSearch, setDisabledSearch] = useState(false);
-
+  const domainResolver = useResolveDomainToAddress(addressTextField, {
+    debug: true,
+  });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddressTextField(e.target.value);
   };
 
   const handleSearch = () => {
-    if (!addressFormatValidation(addressTextField, props.setErrorMessage)) {
-      props.setMessageList(undefined);
+    let address = addressTextField;
+    if (domainResolver.address === null) {
+      props.setErrorMessage("There is no address resolved from this domain.");
       return;
+    } else if (domainResolver.address === undefined) {
+      if (!addressFormatValidation(address, props.setErrorMessage)) {
+        props.setMessageList(undefined);
+        return;
+      }
+    } else {
+      address = domainResolver.address;
     }
     props.setErrorMessage("");
     setDisabledSearch(true);
     const fromOrTo = toggleMessageFrom ? "sender" : "receiver";
     axiosInstance
-      .get(`/api/messages/${fromOrTo}/${addressTextField}`)
+      .get(`/api/messages/${fromOrTo}/${address}`)
       .then((res) => {
         props.setMessageList(res.data.data);
       })

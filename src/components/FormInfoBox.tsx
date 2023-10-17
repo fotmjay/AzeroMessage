@@ -1,5 +1,4 @@
-import { Box, SvgIconTypeMap, Typography } from "@mui/material";
-import { OverridableComponent } from "@mui/material/OverridableComponent";
+import { Box, Typography } from "@mui/material";
 
 type Props = {
   messageToShow: string;

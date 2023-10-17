@@ -13,16 +13,16 @@ export const SearchSectionContainer = () => {
       <Card
         sx={{ position: "relative", overflow: "visible", marginBottom: "10px", maxWidth: "500px", marginX: "auto" }}
       >
+        {errorMessage.length > 0 && (
+          <Typography sx={{ display: "block", marginX: "auto", paddingLeft: "20px" }} textAlign="left" color="error">
+            {errorMessage}
+          </Typography>
+        )}
         <SearchTextField setMessageList={setMessageList} setErrorMessage={setErrorMessage} />
       </Card>
       <Card sx={{ maxWidth: "600px", marginX: "auto" }}>
         {messageList !== undefined && <MessageList messageList={messageList} />}
       </Card>
-      {errorMessage.length > 0 && (
-        <Typography sx={{ display: "block", marginX: "auto" }} textAlign="center" color="error">
-          {errorMessage}
-        </Typography>
-      )}
     </>
   );
 };

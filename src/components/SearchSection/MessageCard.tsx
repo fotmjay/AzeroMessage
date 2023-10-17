@@ -16,12 +16,7 @@ const textLengthToTruncate = 150;
 
 export const MessageCard = (props: Props) => {
   const [toggleShowAll, setToggleShowAll] = useState(false);
-  const [tooltip, setTooltip] = useState(false);
   const mediaSmall = useMediaQuery("(max-width:500px)");
-
-  const handleClick = (e: React.MouseEvent, text: string) => {
-    copyText(text);
-  };
 
   const copyText = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -37,7 +32,7 @@ export const MessageCard = (props: Props) => {
         <Typography
           data-tooltip-id="copiedTo"
           data-tooltip-content="Copied to clipboard"
-          onClick={(e) => handleClick(e, props.message.from)}
+          onClick={() => copyText(props.message.from)}
           textAlign={mediaSmall ? "center" : "left"}
           display="block"
           variant="subtitle1"
@@ -53,7 +48,7 @@ export const MessageCard = (props: Props) => {
         <Typography
           data-tooltip-id="copiedTo"
           data-tooltip-content="Copied to clipboard"
-          onClick={(e) => handleClick(e, props.message.to)}
+          onClick={() => copyText(props.message.from)}
           textAlign={mediaSmall ? "center" : "right"}
           display="block"
           width="fit-content"
