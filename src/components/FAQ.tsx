@@ -2,7 +2,7 @@ import { Card, Link, List, ListItem, Typography } from "@mui/material";
 
 export const FAQ = () => {
   return (
-    <Card sx={{ maxWidth: "450px", marginX: "auto", marginTop: "15px", marginBottom: "25px" }}>
+    <Card sx={{ maxWidth: "500px", marginX: "auto", marginTop: "15px", marginBottom: "25px" }}>
       <Typography
         sx={{ textDecorationLine: "underline", textDecorationThickness: "0.5px" }}
         textAlign="center"
