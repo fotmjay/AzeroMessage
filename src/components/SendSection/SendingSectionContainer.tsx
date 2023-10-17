@@ -53,7 +53,7 @@ export const SendingSectionContainer = (props: Props) => {
     makeTransaction(props.provider, props.selectedAccount, form.address, form.message, setSubscriptionText);
   };
   return (
-    <Card sx={{ padding: "15px", maxWidth: "450px", marginX: "auto" }}>
+    <Card sx={{ padding: "15px", paddingTop: "0px", maxWidth: "400px", marginX: "auto", marginBottom: "10px" }}>
       <Typography color="red">{errorMessage.length > 0 ? errorMessage : ""}</Typography>
       <Typography color="green">{subscriptionText.length > 0 ? subscriptionText : ""}</Typography>
       <FormControl onSubmit={submitForm} size="small" fullWidth>
@@ -64,7 +64,6 @@ export const SendingSectionContainer = (props: Props) => {
           size="small"
           onChange={handleChange}
           value={form.address}
-          placeholder="Enter address"
           onBlur={validateAddress}
           InputProps={{
             startAdornment: (
@@ -78,8 +77,6 @@ export const SendingSectionContainer = (props: Props) => {
             sx: {
               paddingLeft: "10px",
               paddingRight: "12px",
-              borderBottomLeftRadius: 0,
-              borderBottomRightRadius: 0,
             },
           }}
         />
@@ -93,19 +90,6 @@ export const SendingSectionContainer = (props: Props) => {
           maxRows="5"
           placeholder="Enter message"
           value={form.message}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start" sx={{ paddingX: "0", marginX: "5" }}>
-                <Typography textAlign="left" sx={{ cursor: "default", width: "50px" }}>
-                  Message
-                </Typography>
-                <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-              </InputAdornment>
-            ),
-            sx: { paddingLeft: "10px", paddingRight: "12px", borderTopLeftRadius: 0, borderTopRightRadius: 0 },
-            maxRows: "5",
-            multiline: true,
-          }}
         />
         <Button type="submit" onClick={submitForm} fullWidth sx={{ marginX: "auto" }} variant="contained">
           Send

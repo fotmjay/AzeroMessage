@@ -10,7 +10,7 @@ export const SearchSectionContainer = () => {
   return (
     <>
       <Card
-        sx={{ position: "relative", overflow: "visible", marginBottom: "10px", maxWidth: "450px", marginX: "auto" }}
+        sx={{ position: "relative", overflow: "visible", marginBottom: "10px", maxWidth: "400px", marginX: "auto" }}
       >
         <SearchTextField setMessageList={setMessageList} />
       </Card>

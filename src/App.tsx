@@ -1,4 +1,13 @@
-import { Container, createTheme, CssBaseline, ThemeProvider, responsiveFontSizes } from "@mui/material";
+import {
+  Container,
+  createTheme,
+  CssBaseline,
+  ThemeProvider,
+  responsiveFontSizes,
+  Typography,
+  Button,
+  Collapse,
+} from "@mui/material";
 
 import { useApi, useWallet } from "useink";
 import { useEffect, useState } from "react";
@@ -6,6 +15,7 @@ import { BaseAppLayout } from "./components/layout/BaseAppLayout";
 import { MainLayout } from "./components/layout/MainLayout";
 import { getBalanceFromChain } from "./chainRequests/balanceRequest";
 import type { accountBalance } from "./types/polkaTypes";
+import { FAQ } from "./components/FAQ";
 
 const darkTheme = responsiveFontSizes(
   createTheme({
@@ -14,6 +24,8 @@ const darkTheme = responsiveFontSizes(
     },
     typography: {
       fontSize: 10,
+      fontFamily: "Roboto, Arial, serif",
+      fontWeightRegular: "200",
     },
   })
 );
@@ -25,6 +37,8 @@ const lightTheme = responsiveFontSizes(
     },
     typography: {
       fontSize: 10,
+      fontFamily: "Roboto, Arial, serif",
+      fontWeightRegular: "200",
     },
   })
 );
@@ -33,6 +47,7 @@ function App() {
   const [darkMode, setDarkMode] = useState<boolean>(() => localStorage.getItem("darkMode") === "true");
   const { account, connect, disconnect, accounts, setAccount } = useWallet();
   const [selectedAccountBalance, setSelectedAccountBalance] = useState<accountBalance>();
+  const [faqIsOpen, setFaqIsOpen] = useState(false);
   const chainNode = useApi("aleph");
 
   function switchTheme() {
@@ -71,6 +86,20 @@ function App() {
           />
         </Container>
         <MainLayout provider={chainNode} selectedAccount={account} />
+
+        <Typography textAlign="center" paddingBottom="10px">
+          &copy; 2023 - FotmJay
+        </Typography>
+        <Button
+          onClick={() => setFaqIsOpen((toggle) => !toggle)}
+          variant="outlined"
+          sx={{ display: "block", marginX: "auto" }}
+        >
+          FAQ
+        </Button>
+        <Collapse in={faqIsOpen}>
+          <FAQ />
+        </Collapse>
       </Container>
     </ThemeProvider>
   );
