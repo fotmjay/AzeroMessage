@@ -67,6 +67,7 @@ export const SendingSectionContainer = (props: Props) => {
     setErrorMessage("");
     makeTransaction(props.provider, props.selectedAccount, validatedAddress, form.message, setSubscriptionText);
   };
+
   let messageToShow = "";
   let iconToShow = undefined;
   let color = "green";

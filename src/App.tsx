@@ -47,6 +47,8 @@ function App() {
   useEffect(() => {
     if (account && chainNode) {
       getBalanceFromChain(chainNode, account.address, setSelectedAccountBalance);
+    } else {
+      setSelectedAccountBalance(undefined);
     }
   }, [account, chainNode]);
 
@@ -70,6 +72,7 @@ function App() {
             disconnect={disconnect}
             accounts={accounts}
             setAccount={setAccount}
+            provider={chainNode}
           />
         </Container>
         <MainLayout provider={chainNode} selectedAccount={account} />

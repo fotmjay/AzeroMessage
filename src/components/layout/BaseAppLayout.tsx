@@ -8,6 +8,8 @@ import { useState } from "react";
 import { WalletAccount } from "useink/core";
 import { ConnectionStatus } from "../web3/ConnectionStatus";
 import type { accountBalance } from "../../types/polkaTypes";
+import { WalletOwnershipProver } from "../web3/WalletOwnershipProver";
+import { IApiProvider } from "useink";
 
 type Props = {
   darkMode: boolean;
@@ -18,6 +20,7 @@ type Props = {
   connect: (walletName: string) => void;
   switchTheme: () => void;
   selectedAccountBalance?: accountBalance;
+  provider?: IApiProvider;
 };
 
 export const BaseAppLayout = (props: Props) => {
@@ -31,11 +34,16 @@ export const BaseAppLayout = (props: Props) => {
             <DarkModeIcon />
             <Switch onClick={props.switchTheme} size="small" checked={props.darkMode}></Switch>
           </Box>
-          <ConnectionStatus
-            selectedAccountBalance={props.selectedAccountBalance}
-            setOpenWalletModal={setOpenWalletModal}
-            connectedWallet={props.account}
-          />
+          <Box display="flex" flexDirection="column" justifyContent="flex-start" alignItems="flex-end">
+            <ConnectionStatus
+              selectedAccountBalance={props.selectedAccountBalance}
+              setOpenWalletModal={setOpenWalletModal}
+              connectedWallet={props.account}
+            />
+            {props.account && props.provider && (
+              <WalletOwnershipProver provider={props.provider} connectedWallet={props.account} />
+            )}
+          </Box>
         </Box>
         <Typography textAlign="center" variant="h2" component="h1">
           Azero Message
