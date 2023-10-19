@@ -48,9 +48,7 @@ export const SearchTextField = (props: Props) => {
       .catch((err) => {
         console.error(err);
         if (err.code === "ECONNABORTED") {
-          props.setErrorMessage(
-            "Due to free hosting, servers shut down when unused.  Should be good in 45 seconds or so."
-          );
+          props.setErrorMessage("Connection timed out.  Please try again.");
         } else {
           props.setErrorMessage(err.message);
         }

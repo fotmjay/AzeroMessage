@@ -3,7 +3,7 @@ import { APIENDPOINT } from "../constants/apiendpoint";
 
 export const axiosInstance = axios.create({
   baseURL: APIENDPOINT.azeroMessageBackend,
-  timeout: 6000,
+  timeout: 8000,
   headers: {
     "Content-Type": "application/json",
   },
