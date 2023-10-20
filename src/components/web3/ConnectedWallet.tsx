@@ -40,6 +40,7 @@ export const ConnectedWallet = (props: Props) => {
         alignItems: "center",
         padding: "15px",
         gap: "5px",
+        border: "1px solid",
       }}
     >
       <Typography variant="h6">{props.account ? props.account.name : null}</Typography>

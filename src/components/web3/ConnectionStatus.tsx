@@ -22,7 +22,7 @@ export const ConnectionStatus = (props: Props) => {
         alignItems: "flex-end",
       }}
     >
-      <Box display="flex" gap="10px">
+      <Box display="flex" alignItems="center" gap="10px">
         <Typography sx={{ fontSize: "0.75rem" }}>
           {props.connectedWallet !== undefined
             ? shortenAddressWithEllipsis(props.connectedWallet.address)
