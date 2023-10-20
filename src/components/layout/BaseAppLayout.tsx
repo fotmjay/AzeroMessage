@@ -1,4 +1,4 @@
-import { Box, Switch, Dialog, Container, Typography } from "@mui/material";
+import { Box, Switch, Dialog, Container, Typography, Button } from "@mui/material";
 import { Web3ConnectionSection } from "../web3/Web3ConnectionSection";
 
 // ICONS
@@ -8,8 +8,8 @@ import { useState } from "react";
 import { WalletAccount } from "useink/core";
 import { ConnectionStatus } from "../web3/ConnectionStatus";
 import type { accountBalance } from "../../types/polkaTypes";
-import { WalletOwnershipProver } from "../web3/WalletOwnershipProver";
 import { IApiProvider } from "useink";
+import { EncryptionControlPanel } from "../web3/EncryptionControlPanel";
 
 type Props = {
   darkMode: boolean;
@@ -24,7 +24,7 @@ type Props = {
 };
 
 export const BaseAppLayout = (props: Props) => {
-  const [openWalletModal, setOpenWalletModal] = useState(false);
+  const [openModal, setOpenModal] = useState<"connectionStatus" | "encryptionStatus" | null>(null);
 
   return (
     <Container sx={{ paddingX: "0", paddingY: "10px" }}>
@@ -37,11 +37,13 @@ export const BaseAppLayout = (props: Props) => {
           <Box display="flex" flexDirection="column" justifyContent="flex-start" alignItems="flex-end">
             <ConnectionStatus
               selectedAccountBalance={props.selectedAccountBalance}
-              setOpenWalletModal={setOpenWalletModal}
+              setOpenWalletModal={() => setOpenModal("connectionStatus")}
               connectedWallet={props.account}
             />
             {props.account && props.provider && (
-              <WalletOwnershipProver provider={props.provider} connectedWallet={props.account} />
+              <Button onClick={() => setOpenModal("encryptionStatus")} size="small" variant="outlined">
+                Encryption
+              </Button>
             )}
           </Box>
         </Box>
@@ -51,22 +53,27 @@ export const BaseAppLayout = (props: Props) => {
       </Box>
       <Dialog
         fullWidth
-        open={openWalletModal}
-        onClose={() => setOpenWalletModal(false)}
+        open={openModal !== null}
+        onClose={() => setOpenModal(null)}
         sx={{
           marginX: "auto",
           display: "block",
-          maxWidth: "400px",
+          maxWidth: "500px",
           top: "-40%",
         }}
       >
-        <Web3ConnectionSection
-          account={props.account}
-          connect={props.connect}
-          disconnect={props.disconnect}
-          accounts={props.accounts}
-          setAccount={props.setAccount}
-        />
+        {openModal === "connectionStatus" ? (
+          <Web3ConnectionSection
+            account={props.account}
+            connect={props.connect}
+            disconnect={props.disconnect}
+            accounts={props.accounts}
+            setAccount={props.setAccount}
+          />
+        ) : (
+          //@ts-ignore -- Panel only opens if button confirming both props not undefined is clicked
+          <EncryptionControlPanel provider={props.provider} connectedWallet={props.account} />
+        )}
       </Dialog>
     </Container>
   );
