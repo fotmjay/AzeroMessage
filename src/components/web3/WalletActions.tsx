@@ -117,9 +117,13 @@ export const WalletActions = (props: Props) => {
           justifyContent="space-between"
           alignContent="center"
           gap="5px"
+          component="form"
         >
+          <TextField name="username" sx={{ display: "none" }} autoComplete="username"></TextField>
           <TextField
             name="password"
+            type="password"
+            autoComplete="new-password"
             value={formData.password}
             onChange={handleChange}
             size="small"
@@ -127,7 +131,9 @@ export const WalletActions = (props: Props) => {
             fullWidth={mediaSmall}
           ></TextField>
           <TextField
+            type="password"
             name="confirmPassword"
+            autoComplete="new-password"
             value={formData.confirmPassword}
             onChange={handleChange}
             size="small"
