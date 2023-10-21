@@ -1,4 +1,4 @@
-import { Button, Card, TextField, Typography, FormControl, Divider, InputAdornment } from "@mui/material";
+import { Button, Card, TextField, Typography, FormControl, Divider, InputAdornment, Box, Input } from "@mui/material";
 import { IApiProvider } from "useink";
 import { WalletAccount } from "useink/core";
 import React, { useEffect, useState } from "react";
@@ -7,8 +7,9 @@ import { makeTransaction } from "../../chainRequests/transactionRequest";
 import { useResolveDomainToAddress } from "@azns/resolver-react";
 import { useDebounce } from "@uidotdev/usehooks";
 import { FormInfoBox } from "../FormInfoBox";
-import { Verified } from "@mui/icons-material";
+import { CheckBox, Verified } from "@mui/icons-material";
 import { CONSTANT } from "../../constants/constants";
+import { axiosInstance } from "../../config/axios";
 
 type Props = {
   provider: IApiProvider | undefined;
@@ -20,6 +21,8 @@ export const SendingSectionContainer = (props: Props) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [subscriptionText, setSubscriptionText] = useState("");
   const [validatedAddress, setValidatedAddress] = useState("");
+  const [publicEncryptionAddress, setPublicEncryptionAddress] = useState("");
+  const [encryptionEnabled, setEncryptionEnabled] = useState(false);
   const domainResolver = useResolveDomainToAddress(form.address);
   const debouncedAddress = useDebounce(form.address, 300);
 
@@ -81,6 +84,26 @@ export const SendingSectionContainer = (props: Props) => {
     iconToShow = <Verified fontSize="small" />;
   }
 
+  useEffect(() => {
+    if (validatedAddress !== "") {
+      axiosInstance
+        .get(`/api/publickey/${validatedAddress}`)
+        .then((res) => {
+          if (res.data.success) {
+            console.log(res);
+            setPublicEncryptionAddress(res.data.publicKey);
+            setEncryptionEnabled(true);
+          } else {
+            setPublicEncryptionAddress("");
+            setEncryptionEnabled(false);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [validatedAddress]);
+
   return (
     <Card sx={{ padding: "15px", paddingTop: "0px", maxWidth: "500px", marginX: "auto", marginBottom: "10px" }}>
       <FormInfoBox color={color} messageToShow={messageToShow} icon={iconToShow} />
@@ -118,9 +141,19 @@ export const SendingSectionContainer = (props: Props) => {
           placeholder="Enter message"
           value={form.message}
         />
-        <Button type="submit" onClick={submitForm} fullWidth sx={{ marginX: "auto" }} variant="contained">
-          Send
-        </Button>
+        <Box display="flex" columnGap="15px">
+          <Button type="submit" onClick={submitForm} fullWidth sx={{ marginX: "auto" }} variant="contained">
+            Send
+          </Button>
+          {validatedAddress && (
+            <Button variant="outlined" disabled={!encryptionEnabled}>
+              Encrypt
+            </Button>
+          )}
+        </Box>
+        <Typography paddingTop="5px" display="block" marginLeft="auto" color="error">
+          {!encryptionEnabled && "Encryption isn't enabled on receiver address."}
+        </Typography>
       </FormControl>
     </Card>
   );
