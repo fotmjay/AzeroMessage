@@ -1,23 +1,21 @@
 import { Box, Button, CircularProgress, TextField, Typography, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import { WalletAccount } from "useink/core";
-import { axiosInstance } from "../../config/axios";
 import { IApiProvider } from "useink";
 import { CONSTANT } from "../../constants/constants";
 import { validatePassword } from "../../helpers/validations";
+import {
+  decryptMessageWithEncryptedPrivateKey,
+  encryptMessageWithPublicKey,
+  generateKeyPair,
+} from "../../helpers/encryptionHelper";
+import { getNonceFromDatabase, signMessage } from "../../helpers/walletInteractions";
 
 type Props = {
   connectedWallet: WalletAccount;
   provider: IApiProvider;
   decryptingMessage: boolean;
-  changingPassword: boolean;
-};
-
-type ConfirmWalletApiReturn = {
-  success: boolean;
-  token?: string;
-  message?: string;
-  error?: string;
+  settingPassword: boolean;
 };
 
 type PasswordForm = {
@@ -25,7 +23,7 @@ type PasswordForm = {
   confirmPassword: string;
 };
 
-export const WalletOwnershipProver = (props: Props) => {
+export const WalletActions = (props: Props) => {
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState("");
   const [hasError, setHasError] = useState(false);
@@ -42,7 +40,7 @@ export const WalletOwnershipProver = (props: Props) => {
   };
 
   const submitClick = async () => {
-    const errorMessage = validatePassword(formData.password, formData.confirmPassword);
+    const errorMessage: string = validatePassword(formData.password, formData.confirmPassword);
     if (errorMessage !== "") {
       setHasError(true);
       setConfirmationMessage(errorMessage);
@@ -52,12 +50,24 @@ export const WalletOwnershipProver = (props: Props) => {
     setButtonDisabled(true);
     setConfirmationMessage("");
     try {
-      const randomNonce = await fetchNonce();
+      const randomNonce = await getNonceFromDatabase(
+        props.connectedWallet.address,
+        setHasError,
+        setConfirmationMessage
+      );
       if (randomNonce === undefined) {
-        setConfirmationMessage("Failed fetching message to sign.");
         return;
       }
-      await signMessage(randomNonce);
+      const generatedKeys = await generateKeyPair(formData.password);
+      await signMessage(
+        props.connectedWallet,
+        randomNonce,
+        props.provider,
+        setHasError,
+        setConfirmationMessage,
+        generatedKeys.encryptedPrivateKey,
+        generatedKeys.publicKey
+      );
     } catch (err) {
       setHasError(true);
       console.error(err);
@@ -65,43 +75,30 @@ export const WalletOwnershipProver = (props: Props) => {
     setButtonDisabled(false);
   };
 
-  const signMessage = async (randomNonce: string) => {
-    setButtonDisabled(true);
-    const signedMessage = await props.provider.api.sign(
-      props.connectedWallet.address,
-      { data: randomNonce },
-      { signer: props.connectedWallet.signer }
-    );
-    axiosInstance
-      .post("/auth/confirmWallet", { signature: signedMessage, walletAddress: props.connectedWallet.address })
-      .then((res: { data: ConfirmWalletApiReturn }) => {
-        if (res.data.success && res.data.token) {
-          localStorage.setItem(CONSTANT.LOCALSTORAGE.KEYS.TOKEN, res.data.token);
-          setConfirmationMessage("Successfully signed.");
-          console.log(res.data.token);
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        setHasError(true);
-        setConfirmationMessage(`${err.code}: ${err.response.data}`);
-      });
-    setButtonDisabled(false);
+  const testEncrypt = async () => {
+    const pubKey = sessionStorage.getItem("publicKey");
+    const encryptedMessage = await encryptMessageWithPublicKey(pubKey!, "works");
+    console.log(encryptedMessage);
   };
 
-  const fetchNonce = () => {
-    return axiosInstance
-      .get(`/auth/generateNonce/${props.connectedWallet.address}`)
-      .then((res) => {
-        return res.data.randomNonce;
-      })
-      .catch((err) => {
-        console.error(err);
-        setHasError(true);
-        setConfirmationMessage("Could not query the message to sign for your address.");
-        setButtonDisabled(false);
-      });
+  const testDecrypt = async () => {
+    const encPrivKey = sessionStorage.getItem("encryptedPrivateKey");
+    const pubKey = sessionStorage.getItem("publicKey");
+    const psw = prompt();
+    if (!encPrivKey || !pubKey) {
+      setHasError(true);
+      setConfirmationMessage("Please sign ownership of your wallet before decrypting.");
+      return;
+    }
+    const decrypted = await decryptMessageWithEncryptedPrivateKey(
+      "7930176a580154a34e54fdce50ea3869f2e86e105954fd6251ae4b130c5bb50931dd4cb0190c0f7819f3ec3ea40d8adaac7517cd09",
+      encPrivKey,
+      pubKey,
+      psw!
+    );
+    console.log(decrypted);
   };
+
   const buttonText = toggleForm ? "Sign & Send" : "Set Password";
   return (
     <Box paddingTop="15px" display="flex" flexDirection="column" alignContent="center" gap="15px">
@@ -142,6 +139,8 @@ export const WalletOwnershipProver = (props: Props) => {
       <Typography textAlign="center" color={hasError ? "red" : "lightgreen"}>
         {confirmationMessage}
       </Typography>
+      <Button onClick={testEncrypt}>encrypt</Button>
+      <Button onClick={testDecrypt}>decrypt</Button>
     </Box>
   );
 };

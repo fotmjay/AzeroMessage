@@ -1,5 +1,5 @@
 import { Box, Card, Divider, Typography } from "@mui/material";
-import { WalletOwnershipProver } from "./WalletOwnershipProver";
+import { WalletActions } from "./WalletActions";
 import { WalletAccount } from "useink/core";
 import { IApiProvider } from "useink";
 
@@ -21,11 +21,11 @@ export const EncryptionControlPanel = (props: Props) => {
         <Typography variant="subtitle1" fontWeight="medium">
           Previous messages won't be decryptable anymore after you change your password.
         </Typography>
-        <WalletOwnershipProver
+        <WalletActions
           provider={props.provider}
           connectedWallet={props.connectedWallet}
           decryptingMessage={false}
-          changingPassword={true}
+          settingPassword={true}
         />
       </Card>
     </Box>
