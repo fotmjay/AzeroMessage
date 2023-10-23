@@ -11,8 +11,6 @@ import type { accountBalance } from "../../types/polkaTypes";
 import { IApiProvider } from "useink";
 import { EncryptionControlPanel } from "../web3/EncryptionControlPanel";
 import { axiosInstance } from "../../config/axios";
-import { CONSTANT } from "../../constants/constants";
-import useSessionStorage from "../../hooks/useSessionStorage";
 
 type Props = {
   darkMode: boolean;

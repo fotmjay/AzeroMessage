@@ -2,7 +2,6 @@ import { Box, Button, CircularProgress, TextField, Typography, useMediaQuery } f
 import { useState } from "react";
 import { WalletAccount } from "useink/core";
 import { IApiProvider } from "useink";
-import { CONSTANT } from "../../constants/constants";
 import { validatePassword } from "../../helpers/validations";
 import {
   decryptMessageWithEncryptedPrivateKey,

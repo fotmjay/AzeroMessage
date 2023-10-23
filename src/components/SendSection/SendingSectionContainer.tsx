@@ -1,4 +1,14 @@
-import { Button, Card, TextField, Typography, FormControl, Divider, InputAdornment, Box, Input } from "@mui/material";
+import {
+  Button,
+  Card,
+  TextField,
+  Typography,
+  FormControl,
+  Divider,
+  InputAdornment,
+  Box,
+  useMediaQuery,
+} from "@mui/material";
 import { IApiProvider } from "useink";
 import { WalletAccount } from "useink/core";
 import React, { useEffect, useState } from "react";
@@ -7,9 +17,10 @@ import { makeTransaction } from "../../chainRequests/transactionRequest";
 import { useResolveDomainToAddress } from "@azns/resolver-react";
 import { useDebounce } from "@uidotdev/usehooks";
 import { FormInfoBox } from "../FormInfoBox";
-import { CheckBox, Verified } from "@mui/icons-material";
+import { Verified } from "@mui/icons-material";
 import { CONSTANT } from "../../constants/constants";
 import { axiosInstance } from "../../config/axios";
+import { encryptMessageWithPublicKey } from "../../helpers/encryptionHelper";
 
 type Props = {
   provider: IApiProvider | undefined;
@@ -25,6 +36,7 @@ export const SendingSectionContainer = (props: Props) => {
   const [encryptionEnabled, setEncryptionEnabled] = useState(false);
   const domainResolver = useResolveDomainToAddress(form.address);
   const debouncedAddress = useDebounce(form.address, 300);
+  const mediaSmall = useMediaQuery("(max-width:400px)");
 
   useEffect(() => {
     if (domainResolver.address !== null && domainResolver.address !== undefined) {
@@ -51,7 +63,11 @@ export const SendingSectionContainer = (props: Props) => {
     if (e.target.name === "message" && e.target.value.length > CONSTANT.MAXMESSAGELENGTH) {
       setErrorMessage(`Message needs to be less than ${CONSTANT.MAXMESSAGELENGTH} characters.`);
       text = e.target.value.slice(0, CONSTANT.MAXMESSAGELENGTH);
-    } else if (e.target.name === "address") {
+    } else {
+      setErrorMessage("");
+    }
+
+    if (e.target.name === "address") {
       setValidatedAddress("");
     }
 
@@ -61,7 +77,7 @@ export const SendingSectionContainer = (props: Props) => {
     });
   };
 
-  const submitForm = () => {
+  const submitForm = async (encryptionEnabled: boolean) => {
     if (!props.provider || !props.selectedAccount) {
       setErrorMessage("Wallet not connected.");
       return;
@@ -70,7 +86,17 @@ export const SendingSectionContainer = (props: Props) => {
       return;
     }
     setErrorMessage("");
-    makeTransaction(props.provider, props.selectedAccount, validatedAddress, form.message, setSubscriptionText);
+    const messageText = encryptionEnabled
+      ? await encryptMessageWithPublicKey(publicEncryptionAddress, form.message)
+      : form.message;
+    makeTransaction(
+      props.provider,
+      props.selectedAccount,
+      validatedAddress,
+      messageText,
+      encryptionEnabled,
+      setSubscriptionText
+    );
   };
 
   let messageToShow = "";
@@ -92,7 +118,7 @@ export const SendingSectionContainer = (props: Props) => {
         .get(`/api/publickey/${validatedAddress}`)
         .then((res) => {
           if (res.data.success) {
-            console.log(res);
+            console.log(res.data.publicKey);
             setPublicEncryptionAddress(res.data.publicKey);
             setEncryptionEnabled(true);
           } else {
@@ -109,7 +135,7 @@ export const SendingSectionContainer = (props: Props) => {
   return (
     <Card sx={{ padding: "15px", paddingTop: "0px", maxWidth: "500px", marginX: "auto", marginBottom: "10px" }}>
       <FormInfoBox color={color} messageToShow={messageToShow} icon={iconToShow} />
-      <FormControl onSubmit={submitForm} size="small" fullWidth>
+      <FormControl size="small" fullWidth>
         <TextField
           sx={{ paddingBottom: "10px" }}
           fullWidth
@@ -143,13 +169,24 @@ export const SendingSectionContainer = (props: Props) => {
           placeholder="Enter message"
           value={form.message}
         />
-        <Box display="flex" columnGap="15px">
-          <Button type="submit" onClick={submitForm} fullWidth sx={{ marginX: "auto" }} variant="contained">
+        <Box display="flex" gap="15px" flexDirection={mediaSmall ? "column" : "row"}>
+          <Button
+            type="submit"
+            onClick={() => submitForm(false)}
+            fullWidth
+            sx={{ marginX: "auto" }}
+            variant="contained"
+          >
             Send
           </Button>
           {validatedAddress && (
-            <Button variant="outlined" disabled={!encryptionEnabled}>
-              Encrypt
+            <Button
+              onClick={() => submitForm(true)}
+              variant="outlined"
+              sx={{ minWidth: "50%" }}
+              disabled={!encryptionEnabled}
+            >
+              Encrypt & Send
             </Button>
           )}
         </Box>

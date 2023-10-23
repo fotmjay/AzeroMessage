@@ -10,12 +10,13 @@ export const makeTransaction = async (
   signerAccount: WalletAccount,
   address: string,
   message: string,
+  encrypted: boolean,
   setSubscriptionText: React.Dispatch<SetStateAction<string>>
 ) => {
   const contract = new ContractPromise(provider.api, metadata, CONSTANT.CONTRACT.ADDRESS);
   const gasLimit = provider.api?.registry.createType("WeightV2", {
-    refTime: 3912368128,
-    proofSize: 131072,
+    refTime: 4200000000,
+    proofSize: 200000,
   });
   const transaction = await contract.tx.sendMessage(
     { gasLimit: gasLimit, storageDepositLimit: null, value: new BN("200000000001") },

@@ -7,6 +7,7 @@ export const addressFormatValidation = (
   setErrorCB: React.Dispatch<SetStateAction<string>>
 ): boolean => {
   const isValidAddressPolkadotAddress = () => {
+    setErrorCB("");
     try {
       encodeAddress(isHex(address) ? hexToU8a(address) : decodeAddress(address));
       return true;
