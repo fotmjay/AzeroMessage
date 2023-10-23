@@ -51,6 +51,8 @@ export const SendingSectionContainer = (props: Props) => {
     if (e.target.name === "message" && e.target.value.length > CONSTANT.MAXMESSAGELENGTH) {
       setErrorMessage(`Message needs to be less than ${CONSTANT.MAXMESSAGELENGTH} characters.`);
       text = e.target.value.slice(0, CONSTANT.MAXMESSAGELENGTH);
+    } else if (e.target.name === "address") {
+      setValidatedAddress("");
     }
 
     setForm((oldForm) => {
@@ -152,7 +154,7 @@ export const SendingSectionContainer = (props: Props) => {
           )}
         </Box>
         <Typography paddingTop="5px" display="block" marginLeft="auto" color="error">
-          {!encryptionEnabled && "Encryption isn't enabled on receiver address."}
+          {!encryptionEnabled && validatedAddress && "Encryption isn't enabled on receiver address."}
         </Typography>
       </FormControl>
     </Card>
