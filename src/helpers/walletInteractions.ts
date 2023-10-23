@@ -58,6 +58,7 @@ export const signMessage = async (
       } else {
         sessionStorage.setItem("encryptedPrivateKey", res.data.encryptedPrivateKey || "");
         sessionStorage.setItem("publicKey", publicKey || "");
+        sessionStorage.setItem(connectedWallet.address, "true");
         setConfirmationMessage("Successfully fetched your encrypted private key.");
         setHasError(false);
       }

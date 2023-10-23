@@ -16,9 +16,9 @@ export const CONSTANT = {
     },
   },
   MAXMESSAGELENGTH: 500,
-  LOCALSTORAGE: {
+  SESSIONSTORAGE: {
     KEYS: {
-      TOKEN: "authorization",
+      ENCRYPTENABLE: "encryptionEnabled",
     },
   },
 };

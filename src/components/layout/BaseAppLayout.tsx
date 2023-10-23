@@ -1,15 +1,18 @@
-import { Box, Switch, Dialog, Container, Typography, Button } from "@mui/material";
+import { Box, Switch, Dialog, Container, Typography, Button, useMediaQuery } from "@mui/material";
 import { Web3ConnectionSection } from "../web3/Web3ConnectionSection";
 
 // ICONS
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { WalletAccount } from "useink/core";
 import { ConnectionStatus } from "../web3/ConnectionStatus";
 import type { accountBalance } from "../../types/polkaTypes";
 import { IApiProvider } from "useink";
 import { EncryptionControlPanel } from "../web3/EncryptionControlPanel";
+import { axiosInstance } from "../../config/axios";
+import { CONSTANT } from "../../constants/constants";
+import useSessionStorage from "../../hooks/useSessionStorage";
 
 type Props = {
   darkMode: boolean;
@@ -25,6 +28,26 @@ type Props = {
 
 export const BaseAppLayout = (props: Props) => {
   const [openModal, setOpenModal] = useState<"connectionStatus" | "encryptionStatus" | null>(null);
+  const [encryptionEnabled, setEncryptionEnabled] = useState(false);
+  const mediaSmall = useMediaQuery("(max-width:400px)");
+
+  useEffect(() => {
+    if (props.account !== undefined) {
+      const addressInStorage = sessionStorage.getItem(props.account.address);
+      if (addressInStorage !== "true") {
+        axiosInstance.get(`/api/publickey/${props.account.address}`).then((res) => {
+          if (res.data.success === true) {
+            setEncryptionEnabled(true);
+            sessionStorage.setItem(props.account!.address, "true");
+          } else {
+            setEncryptionEnabled(false);
+          }
+        });
+      } else {
+        setEncryptionEnabled(true);
+      }
+    }
+  }, [props.account]);
 
   return (
     <Container sx={{ paddingX: "0", paddingY: "10px" }}>
@@ -42,7 +65,7 @@ export const BaseAppLayout = (props: Props) => {
             />
             {props.account && props.provider && (
               <Button onClick={() => setOpenModal("encryptionStatus")} size="small" variant="outlined">
-                Encryption
+                {encryptionEnabled ? "Settings" : "Enable encryption"}
               </Button>
             )}
           </Box>
@@ -59,10 +82,10 @@ export const BaseAppLayout = (props: Props) => {
           marginX: "auto",
           display: "block",
           maxWidth: "500px",
-          top: "-40%",
+          top: mediaSmall ? "0" : "-40%",
         }}
       >
-        {openModal === "connectionStatus" ? (
+        {openModal === "connectionStatus" && (
           <Web3ConnectionSection
             account={props.account}
             connect={props.connect}
@@ -70,8 +93,9 @@ export const BaseAppLayout = (props: Props) => {
             accounts={props.accounts}
             setAccount={props.setAccount}
           />
-        ) : (
-          //@ts-ignore -- Panel only opens if button confirming both props not undefined is clicked
+        )}{" "}
+        {openModal === "encryptionStatus" && (
+          //@ts-ignore => Panel only opens if button confirming both props not undefined is clicked
           <EncryptionControlPanel provider={props.provider} connectedWallet={props.account} />
         )}
       </Dialog>
