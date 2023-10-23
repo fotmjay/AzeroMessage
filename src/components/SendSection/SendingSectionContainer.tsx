@@ -86,9 +86,10 @@ export const SendingSectionContainer = (props: Props) => {
       return;
     }
     setErrorMessage("");
-    const messageText = encryptionEnabled
-      ? await encryptMessageWithPublicKey(publicEncryptionAddress, form.message)
-      : form.message;
+    const messageText =
+      encryptionEnabled && publicEncryptionAddress !== ""
+        ? await encryptMessageWithPublicKey(publicEncryptionAddress, form.message)
+        : form.message;
     makeTransaction(
       props.provider,
       props.selectedAccount,
