@@ -23,6 +23,7 @@ type ConfirmWalletApiReturn = {
   message: string;
   hasKey?: boolean;
   encryptedPrivateKey?: string | undefined;
+  publicKey?: string | undefined;
 };
 
 export const signMessage = async (
@@ -57,7 +58,7 @@ export const signMessage = async (
         return;
       } else {
         sessionStorage.setItem("encryptedPrivateKey", res.data.encryptedPrivateKey || "");
-        sessionStorage.setItem("publicKey", publicKey || "");
+        sessionStorage.setItem("myPublicKey", res.data.publicKey || "");
         sessionStorage.setItem(connectedWallet.address, "true");
         setConfirmationMessage("Successfully fetched your encrypted private key.");
         setHasError(false);

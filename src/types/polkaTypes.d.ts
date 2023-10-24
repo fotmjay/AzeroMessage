@@ -9,4 +9,5 @@ export type MessageFromDatabase = {
   timestamp: number;
   text: string;
   explorerLink: string;
+  encrypted: boolean;
 };

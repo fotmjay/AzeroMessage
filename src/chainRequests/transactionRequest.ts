@@ -1,6 +1,6 @@
 import { IApiProvider } from "useink";
 import { ContractPromise, WalletAccount } from "useink/core";
-import metadata from "../assets/metadata.json";
+import metadata from "../assets/azero_message.json";
 import { CONSTANT } from "../constants/constants";
 import { BN } from "@polkadot/util";
 import { SetStateAction } from "react";
@@ -21,7 +21,8 @@ export const makeTransaction = async (
   const transaction = await contract.tx.sendMessage(
     { gasLimit: gasLimit, storageDepositLimit: null, value: new BN("200000000001") },
     address,
-    message
+    message,
+    encrypted
   );
 
   const unsub = await transaction.signAndSend(signerAccount.address, { signer: signerAccount.signer }, (result) => {

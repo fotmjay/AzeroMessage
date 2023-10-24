@@ -3,11 +3,7 @@ import { useState } from "react";
 import { WalletAccount } from "useink/core";
 import { IApiProvider } from "useink";
 import { validatePassword } from "../../helpers/validations";
-import {
-  decryptMessageWithEncryptedPrivateKey,
-  encryptMessageWithPublicKey,
-  generateKeyPair,
-} from "../../helpers/encryptionHelper";
+import { generateKeyPair } from "../../helpers/encryptionHelper";
 import { getNonceFromDatabase, signMessage } from "../../helpers/walletInteractions";
 
 type Props = {
@@ -38,12 +34,14 @@ export const WalletActions = (props: Props) => {
     setToggleForm(true);
   };
 
-  const submitClick = async () => {
-    const errorMessage: string = validatePassword(formData.password, formData.confirmPassword);
-    if (errorMessage !== "") {
-      setHasError(true);
-      setConfirmationMessage(errorMessage);
-      return;
+  const submitClick = async (resetPsw: boolean) => {
+    if (resetPsw === true) {
+      const errorMessage: string = validatePassword(formData.password, formData.confirmPassword);
+      if (errorMessage !== "") {
+        setHasError(true);
+        setConfirmationMessage(errorMessage);
+        return;
+      }
     }
     setHasError(false);
     setButtonDisabled(true);
@@ -57,15 +55,18 @@ export const WalletActions = (props: Props) => {
       if (randomNonce === undefined) {
         return;
       }
-      const generatedKeys = await generateKeyPair(formData.password);
+      let generatedKeys;
+      if (resetPsw) {
+        generatedKeys = await generateKeyPair(formData.password);
+      }
       await signMessage(
         props.connectedWallet,
         randomNonce,
         props.provider,
         setHasError,
         setConfirmationMessage,
-        generatedKeys.encryptedPrivateKey,
-        generatedKeys.publicKey
+        generatedKeys?.encryptedPrivateKey,
+        generatedKeys?.publicKey
       );
     } catch (err) {
       setHasError(true);
@@ -74,35 +75,11 @@ export const WalletActions = (props: Props) => {
     setButtonDisabled(false);
   };
 
-  const testEncrypt = async () => {
-    const pubKey = sessionStorage.getItem("publicKey");
-    const encryptedMessage = await encryptMessageWithPublicKey(pubKey!, "works");
-    console.log(encryptedMessage);
-  };
-
-  const testDecrypt = async () => {
-    const encPrivKey = sessionStorage.getItem("encryptedPrivateKey");
-    const pubKey = sessionStorage.getItem("publicKey");
-    const psw = prompt();
-    if (!encPrivKey || !pubKey) {
-      setHasError(true);
-      setConfirmationMessage("Please sign ownership of your wallet before decrypting.");
-      return;
-    }
-    const decrypted = await decryptMessageWithEncryptedPrivateKey(
-      "7930176a580154a34e54fdce50ea3869f2e86e105954fd6251ae4b130c5bb50931dd4cb0190c0f7819f3ec3ea40d8adaac7517cd09",
-      encPrivKey,
-      pubKey,
-      psw!
-    );
-    console.log(decrypted);
-  };
-
   const buttonText = toggleForm ? "Sign & Send" : "Set Password";
   return (
     <Box paddingTop="15px" display="flex" flexDirection="column" alignContent="center" gap="15px">
       <Button
-        onClick={toggleForm ? submitClick : handleClick}
+        onClick={toggleForm ? () => submitClick(true) : handleClick}
         size="small"
         variant={toggleForm ? "contained" : "outlined"}
         disabled={buttonDisabled}
@@ -141,11 +118,12 @@ export const WalletActions = (props: Props) => {
           ></TextField>
         </Box>
       )}
+      <Button onClick={() => submitClick(false)} size="small" variant="outlined" disabled={buttonDisabled}>
+        {buttonDisabled ? <CircularProgress sx={{ fontSize: "0.8rem" }} /> : "Prove ownership"}
+      </Button>
       <Typography textAlign="center" color={hasError ? "red" : "lightgreen"}>
         {confirmationMessage}
       </Typography>
-      <Button onClick={testEncrypt}>encrypt</Button>
-      <Button onClick={testDecrypt}>decrypt</Button>
     </Box>
   );
 };
