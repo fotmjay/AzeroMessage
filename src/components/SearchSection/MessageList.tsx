@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { MessageFromDatabase } from "../../types/polkaTypes";
 import { MessageCard } from "./MessageCard";
 
@@ -9,7 +9,7 @@ type Props = {
 
 export const MessageList = (props: Props) => {
   return (
-    <>
+    <Box>
       {props.messageList.length === 0 ? (
         <Typography textAlign="center">No messages found.</Typography>
       ) : (
@@ -17,6 +17,6 @@ export const MessageList = (props: Props) => {
           <MessageCard ownershipProven={props.ownershipProven} key={i} message={message} />
         ))
       )}
-    </>
+    </Box>
   );
 };

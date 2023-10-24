@@ -61,5 +61,5 @@ export const decryptMessageWithEncryptedPrivateKey = async (
   } catch (err) {
     console.error(err);
   }
-  return decryptedMessage;
+  return decryptedMessage || new Error("Could not decrypt the message.  Wrong password?");
 };
