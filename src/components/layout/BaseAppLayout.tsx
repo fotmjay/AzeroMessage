@@ -74,7 +74,7 @@ export const BaseAppLayout = (props: Props) => {
           display="flex"
           justifyContent="center"
           alignItems="center"
-          gap="10px"
+          columnGap="10px"
           minWidth="170px"
           flexDirection={mediaSmall ? "column" : "row"}
           margin="auto"
