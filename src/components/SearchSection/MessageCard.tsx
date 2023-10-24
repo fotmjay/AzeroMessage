@@ -1,20 +1,25 @@
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 import LockIcon from "@mui/icons-material/Lock";
-import { Card, Box, Typography, Divider, Link, Dialog, Button } from "@mui/material";
+import { Card, Box, Typography, Divider, Link } from "@mui/material";
 import { MessageFromDatabase } from "../../types/polkaTypes";
 import { Tooltip } from "react-tooltip";
 import { formatTimestamp } from "../../helpers/timestampFormatting";
 import { shortenAddressWithEllipsis } from "../../helpers/addressFormatting";
 import { truncateText } from "../../helpers/textTruncate";
 import { useResolveAddressToDomain } from "@azns/resolver-react";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, SetStateAction } from "react";
 import { decryptMessageWithEncryptedPrivateKey } from "../../helpers/encryptionHelper";
 import { CurrentConnectedWalletContext, MediaSmallContext } from "../../helpers/Contexts";
+import { DecryptionFailedDialog } from "./DecryptionFailedDialog";
+import { DecryptionPasswordDialog } from "./DecryptionPasswordDialog";
 
 type Props = {
   message: MessageFromDatabase;
   ownershipProven: boolean;
+  setDecryptionPassword: React.Dispatch<SetStateAction<string>>;
+  decryptionPassword: string;
+  encryptionAddresses: { myPubKey: string; encPrivKey: string };
 };
 
 const textLengthToTruncate = 150;
@@ -24,6 +29,7 @@ export const MessageCard = (props: Props) => {
   const [locked, setLocked] = useState(props.message.encrypted || false);
   const [decryptedText, setdecryptedText] = useState("");
   const [hasError, setHasError] = useState(false);
+  const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
 
   // CONTEXT
   const connectedWallet = useContext(CurrentConnectedWalletContext);
@@ -38,25 +44,32 @@ export const MessageCard = (props: Props) => {
     navigator.clipboard.writeText(text);
   };
 
-  const unlockText = async () => {
-    const encPrivKey = sessionStorage.getItem(`encryptedPrivateKey:${connectedWallet}`);
-    const myPubKey = sessionStorage.getItem(`myPublicKey:${connectedWallet}`);
-    if (!encPrivKey || !myPubKey) {
+  const unlockText = () => {
+    if (!props.encryptionAddresses.encPrivKey || !props.encryptionAddresses.encPrivKey) {
       console.error("You need to prove ownership.");
       return;
     }
-    const pswPrompt = prompt() || "";
+    if (props.decryptionPassword === "") {
+      setOpenPasswordDialog(true);
+    } else {
+      sendToDecrypt();
+    }
+  };
+
+  const sendToDecrypt = async () => {
     try {
+      console.log(props.decryptionPassword);
       const decrypted = await decryptMessageWithEncryptedPrivateKey(
         props.message.text,
-        encPrivKey,
-        myPubKey,
-        pswPrompt
+        props.encryptionAddresses.encPrivKey,
+        props.encryptionAddresses.myPubKey,
+        props.decryptionPassword
       );
       if (typeof decrypted === "string") {
         setdecryptedText(decrypted);
       } else {
         setHasError(true);
+        props.setDecryptionPassword("");
       }
     } catch (err) {
       console.error(err);
@@ -156,30 +169,14 @@ export const MessageCard = (props: Props) => {
           )}
         </Typography>
       )}
-      <Dialog
-        fullWidth
-        open={hasError}
-        onClose={() => setHasError(false)}
-        sx={{
-          marginX: "auto",
-          display: "block",
-          maxWidth: "500px",
-          top: mediaSmall ? "0" : "-40%",
-        }}
-      >
-        <Box>
-          <Card sx={{ padding: "15px", border: "1px solid" }}>
-            <Typography variant="h4">Decryption Failed</Typography>
-            <Divider sx={{ marginY: "10px" }} />
-            <Typography gutterBottom variant="body1">
-              Please ensure you have the right password and try again.
-            </Typography>
-            <Button onClick={() => setHasError(false)} sx={{ display: "block", marginLeft: "auto" }} variant="outlined">
-              Close
-            </Button>
-          </Card>
-        </Box>
-      </Dialog>
+      <DecryptionFailedDialog setHasError={setHasError} hasError={hasError} />
+      <DecryptionPasswordDialog
+        decryptionPassword={props.decryptionPassword}
+        setDecryptionPassword={props.setDecryptionPassword}
+        openPasswordDialog={openPasswordDialog}
+        setOpenPasswordDialog={setOpenPasswordDialog}
+        sendToDecrypt={sendToDecrypt}
+      />
     </Card>
   );
 };
