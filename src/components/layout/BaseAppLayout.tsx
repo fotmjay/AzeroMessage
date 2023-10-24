@@ -1,8 +1,10 @@
-import { Box, Switch, Dialog, Container, Typography, Button, useMediaQuery } from "@mui/material";
+import { Box, Switch, Dialog, Container, Typography, Button, useMediaQuery, Icon, SvgIcon } from "@mui/material";
 import { Web3ConnectionSection } from "../web3/Web3ConnectionSection";
 
 // ICONS
 import DarkModeIcon from "@mui/icons-material/DarkMode";
+import AlephA from "../../assets/Alephabet/A.svg?react";
+import AlephM from "../../assets/Alephabet/M.svg?react";
 
 import { useEffect, useState } from "react";
 import { WalletAccount } from "useink/core";
@@ -68,9 +70,34 @@ export const BaseAppLayout = (props: Props) => {
             )}
           </Box>
         </Box>
-        <Typography textAlign="center" variant="h2" component="h1">
-          Azero Message
-        </Typography>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          gap="10px"
+          minWidth="170px"
+          flexDirection={mediaSmall ? "column" : "row"}
+          margin="auto"
+        >
+          <Typography textAlign="center" variant="h2" component="h1" sx={{ textDecoration: "underline" }}>
+            <SvgIcon
+              viewBox="0 0 105 100"
+              sx={{ fontSize: "1.1em", marginRight: "3px", display: "inline-block", verticalAlign: "middle" }}
+              component={AlephA}
+              inheritViewBox
+            />
+            zero
+          </Typography>
+          <Typography textAlign="center" variant="h2" component="h1" sx={{ textDecoration: "underline" }}>
+            <SvgIcon
+              viewBox="0 0 92.42 100"
+              sx={{ fontSize: "1.1em", marginRight: "3px", display: "inline-block", verticalAlign: "middle" }}
+              component={AlephM}
+              inheritViewBox
+            />
+            essage
+          </Typography>
+        </Box>
       </Box>
       <Dialog
         fullWidth
