@@ -1,16 +1,18 @@
-import { Box, Button, CircularProgress, TextField, Typography, useMediaQuery } from "@mui/material";
-import { useState } from "react";
+import { Box, Button, CircularProgress, TextField, Typography } from "@mui/material";
+import { SetStateAction, useContext, useState } from "react";
 import { WalletAccount } from "useink/core";
 import { IApiProvider } from "useink";
 import { validatePassword } from "../../helpers/validations";
 import { generateKeyPair } from "../../helpers/encryptionHelper";
 import { getNonceFromDatabase, signMessage } from "../../helpers/walletInteractions";
+import { MediaSmallContext } from "../../helpers/Contexts";
 
 type Props = {
   connectedWallet: WalletAccount;
   provider: IApiProvider;
   decryptingMessage: boolean;
   settingPassword: boolean;
+  setOwnershipProven: React.Dispatch<SetStateAction<boolean>>;
 };
 
 type PasswordForm = {
@@ -24,7 +26,7 @@ export const WalletActions = (props: Props) => {
   const [hasError, setHasError] = useState(false);
   const [toggleForm, setToggleForm] = useState(false);
   const [formData, setFormData] = useState<PasswordForm>({ password: "", confirmPassword: "" });
-  const mediaSmall = useMediaQuery("(max-width:400px)");
+  const mediaSmall = useContext(MediaSmallContext);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((oldData) => ({ ...oldData, [e.target.name]: e.target.value }));
@@ -65,11 +67,13 @@ export const WalletActions = (props: Props) => {
         props.provider,
         setHasError,
         setConfirmationMessage,
+        props.setOwnershipProven,
         generatedKeys?.encryptedPrivateKey,
         generatedKeys?.publicKey
       );
     } catch (err) {
       setHasError(true);
+      setConfirmationMessage("An error occured.");
       console.error(err);
     }
     setButtonDisabled(false);
@@ -122,7 +126,7 @@ export const WalletActions = (props: Props) => {
         </Box>
       )}
 
-      <Typography textAlign="center" color={hasError ? "error.main" : "success.main"}>
+      <Typography textAlign="center" color={hasError ? "error.main" : "#00eac7"}>
         {confirmationMessage}
       </Typography>
     </Box>

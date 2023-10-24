@@ -91,7 +91,8 @@ export const lightTheme = responsiveFontSizes(
         main: "#0288d1",
       },
       background: {
-        paper: "#f3f4f4",
+        default: "#f3f4f4",
+        paper: "rgba(209, 209, 209, 0.1)",
       },
       text: {
         primary: "#14202a",

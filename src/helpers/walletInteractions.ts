@@ -32,6 +32,7 @@ export const signMessage = async (
   provider: IApiProvider,
   setHasError: React.Dispatch<SetStateAction<boolean>>,
   setConfirmationMessage: React.Dispatch<SetStateAction<string>>,
+  setOwnershipProven: React.Dispatch<SetStateAction<boolean>>,
   encryptedPrivateKey?: string,
   publicKey?: string
 ) => {
@@ -57,16 +58,18 @@ export const signMessage = async (
         setConfirmationMessage("Proving ownership is not necessary when encryption is not enabled.");
         return;
       } else {
-        sessionStorage.setItem("encryptedPrivateKey", res.data.encryptedPrivateKey || "");
-        sessionStorage.setItem("myPublicKey", res.data.publicKey || "");
+        sessionStorage.setItem(`encryptedPrivateKey:${connectedWallet.address}`, res.data.encryptedPrivateKey || "");
+        sessionStorage.setItem(`myPublicKey:${connectedWallet.address}`, res.data.publicKey || "");
         sessionStorage.setItem(connectedWallet.address, "true");
         setConfirmationMessage("Successfully fetched your encrypted private key.");
         setHasError(false);
+        setOwnershipProven(true);
       }
     })
     .catch((err) => {
       console.error(err);
       setHasError(true);
       setConfirmationMessage(`${err.code}: ${err.response.data}`);
+      setOwnershipProven(false);
     });
 };

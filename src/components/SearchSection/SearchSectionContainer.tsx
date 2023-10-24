@@ -4,7 +4,11 @@ import { SearchTextField } from "./SearchTextField";
 import { Card, Typography } from "@mui/material";
 import { MessageFromDatabase } from "../../types/polkaTypes";
 
-export const SearchSectionContainer = () => {
+type Props = {
+  ownershipProven: boolean;
+};
+
+export const SearchSectionContainer = (props: Props) => {
   const [messageList, setMessageList] = useState<MessageFromDatabase[]>();
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -21,7 +25,7 @@ export const SearchSectionContainer = () => {
         <SearchTextField setMessageList={setMessageList} setErrorMessage={setErrorMessage} />
       </Card>
       <Card sx={{ maxWidth: "600px", marginX: "auto" }}>
-        {messageList !== undefined && <MessageList messageList={messageList} />}
+        {messageList !== undefined && <MessageList ownershipProven={props.ownershipProven} messageList={messageList} />}
       </Card>
     </>
   );

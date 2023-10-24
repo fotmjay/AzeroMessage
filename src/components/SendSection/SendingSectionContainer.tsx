@@ -1,17 +1,7 @@
-import {
-  Button,
-  Card,
-  TextField,
-  Typography,
-  FormControl,
-  Divider,
-  InputAdornment,
-  Box,
-  useMediaQuery,
-} from "@mui/material";
+import { Button, Card, TextField, Typography, FormControl, Divider, InputAdornment, Box } from "@mui/material";
 import { IApiProvider } from "useink";
 import { WalletAccount } from "useink/core";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { addressFormatValidation } from "../../helpers/validations";
 import { makeTransaction } from "../../chainRequests/transactionRequest";
 import { useResolveDomainToAddress } from "@azns/resolver-react";
@@ -21,6 +11,7 @@ import { Verified } from "@mui/icons-material";
 import { CONSTANT } from "../../constants/constants";
 import { axiosInstance } from "../../config/axios";
 import { encryptMessageWithPublicKey } from "../../helpers/encryptionHelper";
+import { MediaSmallContext } from "../../helpers/Contexts";
 
 type Props = {
   provider: IApiProvider | undefined;
@@ -36,7 +27,7 @@ export const SendingSectionContainer = (props: Props) => {
   const [encryptionEnabled, setEncryptionEnabled] = useState(false);
   const domainResolver = useResolveDomainToAddress(form.address);
   const debouncedAddress = useDebounce(form.address, 300);
-  const mediaSmall = useMediaQuery("(max-width:400px)");
+  const mediaSmall = useContext(MediaSmallContext);
 
   useEffect(() => {
     if (domainResolver.address !== null && domainResolver.address !== undefined) {
@@ -102,7 +93,7 @@ export const SendingSectionContainer = (props: Props) => {
 
   let messageToShow = "";
   let iconToShow = undefined;
-  let color = "success.main";
+  let color = "#00eac7";
   if (errorMessage.length > 0) {
     messageToShow = errorMessage;
     color = "error.main";

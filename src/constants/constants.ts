@@ -15,7 +15,7 @@ export const CONSTANT = {
       MAINNET: ".azero",
     },
   },
-  MAXMESSAGELENGTH: 500,
+  MAXMESSAGELENGTH: 800,
   SESSIONSTORAGE: {
     KEYS: {
       ENCRYPTENABLE: "encryptionEnabled",

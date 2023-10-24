@@ -1,18 +1,20 @@
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 import LockIcon from "@mui/icons-material/Lock";
-import { Card, Box, Typography, Divider, useMediaQuery, Link } from "@mui/material";
+import { Card, Box, Typography, Divider, Link } from "@mui/material";
 import { MessageFromDatabase } from "../../types/polkaTypes";
 import { Tooltip } from "react-tooltip";
 import { formatTimestamp } from "../../helpers/timestampFormatting";
 import { shortenAddressWithEllipsis } from "../../helpers/addressFormatting";
 import { truncateText } from "../../helpers/textTruncate";
 import { useResolveAddressToDomain } from "@azns/resolver-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { decryptMessageWithEncryptedPrivateKey } from "../../helpers/encryptionHelper";
+import { CurrentConnectedWalletContext, MediaSmallContext } from "../../helpers/Contexts";
 
 type Props = {
   message: MessageFromDatabase;
+  ownershipProven: boolean;
 };
 
 const textLengthToTruncate = 150;
@@ -21,9 +23,11 @@ export const MessageCard = (props: Props) => {
   const [toggleShowAll, setToggleShowAll] = useState(false);
   const [locked, setLocked] = useState(props.message.encrypted || false);
   const [decryptedText, setdecryptedText] = useState("");
-  const mediaSmall = useMediaQuery("(max-width:500px)");
+  const mediaSmall = useContext(MediaSmallContext);
   const toResolver = useResolveAddressToDomain(props.message.to);
   const fromResolver = useResolveAddressToDomain(props.message.from);
+
+  const connectedWallet = useContext(CurrentConnectedWalletContext);
 
   // Copy an address when you click on it
   const copyText = (text: string) => {
@@ -31,13 +35,13 @@ export const MessageCard = (props: Props) => {
   };
 
   const unlockText = async () => {
-    const encPrivKey = sessionStorage.getItem("encryptedPrivateKey");
-    const myPubKey = sessionStorage.getItem("myPublicKey");
-    const pswPrompt = prompt() || "";
+    const encPrivKey = sessionStorage.getItem(`encryptedPrivateKey:${connectedWallet}`);
+    const myPubKey = sessionStorage.getItem(`myPublicKey:${connectedWallet}`);
     if (!encPrivKey || !myPubKey) {
       console.log("prove ownership");
       return;
     }
+    const pswPrompt = prompt() || "";
     try {
       const decrypted = await decryptMessageWithEncryptedPrivateKey(
         props.message.text,
@@ -101,10 +105,23 @@ export const MessageCard = (props: Props) => {
       <Divider sx={{ marginBottom: "5px" }} />
       <Box>
         {locked && (
-          <Box display="flex" justifyContent="center" alignItems="center">
-            <LockIcon onClick={unlockText} sx={{ fontSize: "2rem", color: "error.main" }} />
-            <Typography display="block" textAlign="center" sx={{ color: "error.main" }} variant="h4">
-              ENCRYPTED
+          <Box>
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <LockIcon sx={{ fontSize: "2rem", color: "error.main" }} />
+              <Typography display="block" textAlign="center" sx={{ color: "error.main" }} variant="h4">
+                ENCRYPTED
+              </Typography>
+            </Box>
+            <Typography
+              onClick={props.ownershipProven ? unlockText : undefined}
+              display="block"
+              width="fit-content"
+              margin="auto"
+              textAlign="center"
+              sx={{ color: "error.main", cursor: props.ownershipProven ? "pointer" : "cursor" }}
+              variant="body1"
+            >
+              {props.ownershipProven ? "click to unlock" : "prove ownership"}
             </Typography>
           </Box>
         )}

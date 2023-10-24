@@ -8,6 +8,7 @@ import { WalletAccount } from "useink/core";
 type Props = {
   provider: IApiProvider | undefined;
   selectedAccount: WalletAccount | undefined;
+  ownershipProven: boolean;
 };
 export const MainLayout = (props: Props) => {
   const [toggleSendingTab, setToggleSendingTab] = useState(false);
@@ -34,7 +35,7 @@ export const MainLayout = (props: Props) => {
         {toggleSendingTab ? (
           <SendingSectionContainer provider={props.provider} selectedAccount={props.selectedAccount} />
         ) : (
-          <SearchSectionContainer />
+          <SearchSectionContainer ownershipProven={props.ownershipProven} />
         )}
       </Box>
     </Container>

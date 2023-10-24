@@ -1,4 +1,4 @@
-import { Box, Switch, Dialog, Container, Typography, Button, useMediaQuery, Icon, SvgIcon } from "@mui/material";
+import { Box, Switch, Dialog, Container, Typography, Button, SvgIcon, Link } from "@mui/material";
 import { Web3ConnectionSection } from "../web3/Web3ConnectionSection";
 
 // ICONS
@@ -6,13 +6,14 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import AlephA from "../../assets/Alephabet/A.svg?react";
 import AlephM from "../../assets/Alephabet/M.svg?react";
 
-import { useEffect, useState } from "react";
+import React, { SetStateAction, useContext, useEffect, useState } from "react";
 import { WalletAccount } from "useink/core";
 import { ConnectionStatus } from "../web3/ConnectionStatus";
 import type { accountBalance } from "../../types/polkaTypes";
 import { IApiProvider } from "useink";
 import { EncryptionControlPanel } from "../web3/EncryptionControlPanel";
 import { axiosInstance } from "../../config/axios";
+import { MediaSmallContext } from "../../helpers/Contexts";
 
 type Props = {
   darkMode: boolean;
@@ -24,12 +25,13 @@ type Props = {
   switchTheme: () => void;
   selectedAccountBalance?: accountBalance;
   provider?: IApiProvider;
+  setOwnershipProven: React.Dispatch<SetStateAction<boolean>>;
 };
 
 export const BaseAppLayout = (props: Props) => {
   const [openModal, setOpenModal] = useState<"connectionStatus" | "encryptionStatus" | null>(null);
   const [encryptionEnabled, setEncryptionEnabled] = useState(false);
-  const mediaSmall = useMediaQuery("(max-width:400px)");
+  const mediaSmall = useContext(MediaSmallContext);
 
   useEffect(() => {
     if (props.account !== undefined) {
@@ -70,34 +72,36 @@ export const BaseAppLayout = (props: Props) => {
             )}
           </Box>
         </Box>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          columnGap="10px"
-          minWidth="170px"
-          flexDirection={mediaSmall ? "column" : "row"}
-          margin="auto"
-        >
-          <Typography textAlign="center" variant="h2" component="h1" sx={{ textDecoration: "underline" }}>
-            <SvgIcon
-              viewBox="0 0 105 100"
-              sx={{ fontSize: "1.1em", marginRight: "3px", display: "inline-block", verticalAlign: "middle" }}
-              component={AlephA}
-              inheritViewBox
-            />
-            zero
-          </Typography>
-          <Typography textAlign="center" variant="h2" component="h1" sx={{ textDecoration: "underline" }}>
-            <SvgIcon
-              viewBox="0 0 92.42 100"
-              sx={{ fontSize: "1.1em", marginRight: "3px", display: "inline-block", verticalAlign: "middle" }}
-              component={AlephM}
-              inheritViewBox
-            />
-            essage
-          </Typography>
-        </Box>
+        <Link color="text.primary" href="http://localhost:3001">
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            columnGap="10px"
+            minWidth="170px"
+            flexDirection={mediaSmall ? "column" : "row"}
+            margin="auto"
+          >
+            <Typography textAlign="center" variant="h2" component="h1" sx={{ textDecoration: "underline" }}>
+              <SvgIcon
+                viewBox="0 0 105 100"
+                sx={{ fontSize: "1.1em", marginRight: "3px", display: "inline-block", verticalAlign: "middle" }}
+                component={AlephA}
+                inheritViewBox
+              />
+              zero
+            </Typography>
+            <Typography textAlign="center" variant="h2" component="h1" sx={{ textDecoration: "underline" }}>
+              <SvgIcon
+                viewBox="0 0 92.42 100"
+                sx={{ fontSize: "1.1em", marginRight: "3px", display: "inline-block", verticalAlign: "middle" }}
+                component={AlephM}
+                inheritViewBox
+              />
+              essage
+            </Typography>
+          </Box>
+        </Link>
       </Box>
       <Dialog
         fullWidth
@@ -119,9 +123,12 @@ export const BaseAppLayout = (props: Props) => {
             setAccount={props.setAccount}
           />
         )}{" "}
-        {openModal === "encryptionStatus" && (
-          //@ts-ignore => Panel only opens if button confirming both props not undefined is clicked
-          <EncryptionControlPanel provider={props.provider} connectedWallet={props.account} />
+        {openModal === "encryptionStatus" && props.provider && props.account && (
+          <EncryptionControlPanel
+            setOwnershipProven={props.setOwnershipProven}
+            provider={props.provider}
+            connectedWallet={props.account}
+          />
         )}
       </Dialog>
     </Container>
