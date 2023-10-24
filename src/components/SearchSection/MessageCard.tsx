@@ -113,15 +113,18 @@ export const MessageCard = (props: Props) => {
               </Typography>
             </Box>
             <Typography
-              onClick={props.ownershipProven ? unlockText : undefined}
+              onClick={props.ownershipProven && connectedWallet === props.message.to ? unlockText : undefined}
               display="block"
               width="fit-content"
               margin="auto"
               textAlign="center"
-              sx={{ color: "error.main", cursor: props.ownershipProven ? "pointer" : "cursor" }}
+              sx={{
+                color: "error.main",
+                cursor: props.ownershipProven && connectedWallet === props.message.to ? "pointer" : "cursor",
+              }}
               variant="body1"
             >
-              {props.ownershipProven ? "click to unlock" : "prove ownership"}
+              {props.ownershipProven && connectedWallet === props.message.to ? "click to unlock" : "prove ownership"}
             </Typography>
           </Box>
         )}

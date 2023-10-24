@@ -18,8 +18,18 @@ export const makeTransaction = async (
     refTime: 4200000000,
     proofSize: 200000,
   });
+  const { result, output } = await contract.query.getFees(signerAccount.address, {
+    storageDepositLimit: null,
+    gasLimit: gasLimit,
+  });
+  if (!result.isOk || !output || !output.toPrimitive()) {
+    setSubscriptionText("There was an error fetching the messaging fee.");
+    return;
+  }
+  //@ts-ignore
+  const feesForMessage = new BN(output.toPrimitive().ok);
   const transaction = await contract.tx.sendMessage(
-    { gasLimit: gasLimit, storageDepositLimit: null, value: new BN("200000000001") },
+    { gasLimit: gasLimit, storageDepositLimit: null, value: feesForMessage },
     address,
     message,
     encrypted
