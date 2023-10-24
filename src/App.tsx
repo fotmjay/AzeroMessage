@@ -1,4 +1,4 @@
-import { Container, createTheme, CssBaseline, ThemeProvider, responsiveFontSizes } from "@mui/material";
+import { Container, CssBaseline, ThemeProvider } from "@mui/material";
 import { useApi, useWallet } from "useink";
 import { useEffect, useState } from "react";
 import { BaseAppLayout } from "./components/layout/BaseAppLayout";
@@ -6,30 +6,7 @@ import { MainLayout } from "./components/layout/MainLayout";
 import { getBalanceFromChain } from "./chainRequests/balanceRequest";
 import type { accountBalance } from "./types/polkaTypes";
 import { HomeFooter } from "./components/HomeFooter";
-
-const darkTheme = responsiveFontSizes(
-  createTheme({
-    palette: {
-      mode: "dark",
-    },
-    typography: {
-      fontFamily: "Roboto, Arial, serif",
-      fontWeightRegular: "200",
-    },
-  })
-);
-
-const lightTheme = responsiveFontSizes(
-  createTheme({
-    palette: {
-      mode: "light",
-    },
-    typography: {
-      fontFamily: "Roboto, Arial, serif",
-      fontWeightRegular: "200",
-    },
-  })
-);
+import { darkTheme, lightTheme } from "./constants/themes";
 
 function App() {
   const [darkMode, setDarkMode] = useState<boolean>(() => localStorage.getItem("darkMode") === "true");

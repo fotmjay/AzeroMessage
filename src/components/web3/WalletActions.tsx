@@ -78,6 +78,9 @@ export const WalletActions = (props: Props) => {
   const buttonText = toggleForm ? "Sign & Send" : "Set Password";
   return (
     <Box paddingTop="15px" display="flex" flexDirection="column" alignContent="center" gap="15px">
+      <Button onClick={() => submitClick(false)} size="small" variant="outlined" disabled={buttonDisabled}>
+        {buttonDisabled ? <CircularProgress sx={{ fontSize: "0.8rem" }} /> : "Prove ownership"}
+      </Button>
       <Button
         onClick={toggleForm ? () => submitClick(true) : handleClick}
         size="small"
@@ -118,10 +121,8 @@ export const WalletActions = (props: Props) => {
           ></TextField>
         </Box>
       )}
-      <Button onClick={() => submitClick(false)} size="small" variant="outlined" disabled={buttonDisabled}>
-        {buttonDisabled ? <CircularProgress sx={{ fontSize: "0.8rem" }} /> : "Prove ownership"}
-      </Button>
-      <Typography textAlign="center" color={hasError ? "red" : "lightgreen"}>
+
+      <Typography textAlign="center" color={hasError ? "error.main" : "success.main"}>
         {confirmationMessage}
       </Typography>
     </Box>

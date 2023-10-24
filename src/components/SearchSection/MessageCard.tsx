@@ -102,8 +102,8 @@ export const MessageCard = (props: Props) => {
       <Box>
         {locked && (
           <Box display="flex" justifyContent="center" alignItems="center">
-            <LockIcon onClick={unlockText} sx={{ fontSize: "2rem", color: "red" }} />
-            <Typography display="block" textAlign="center" sx={{ color: "red" }} variant="h4">
+            <LockIcon onClick={unlockText} sx={{ fontSize: "2rem", color: "error.main" }} />
+            <Typography display="block" textAlign="center" sx={{ color: "error.main" }} variant="h4">
               ENCRYPTED
             </Typography>
           </Box>

@@ -15,11 +15,13 @@ export const EncryptionControlPanel = (props: Props) => {
         <Typography variant="h4">Encryption Menu</Typography>
         <Divider sx={{ marginY: "10px" }} />
         <Typography gutterBottom variant="body1">
-          To enable reception of encrypted messages, sign ownership of your address and set a password.{" "}
+          To decrypt messages, prove ownership of your wallet.
         </Typography>
-        <Typography gutterBottom>You can modify your password in the same way.</Typography>
+        <Typography gutterBottom variant="body1">
+          To enable reception of encrypted messages, set a password (requires a signature).
+        </Typography>
         <Typography variant="subtitle1" fontWeight="medium">
-          Previous messages won't be decryptable anymore after you change your password.
+          If you change your password, previous messages won't be decryptable anymore.
         </Typography>
         <WalletActions
           provider={props.provider}

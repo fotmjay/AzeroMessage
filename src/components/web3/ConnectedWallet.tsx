@@ -80,7 +80,7 @@ export const ConnectedWallet = (props: Props) => {
                 <MenuItem
                   sx={{
                     width: "100%",
-                    border: account.address === props.account!.address ? "1px solid green" : "",
+                    border: account.address === props.account!.address ? "1px solid #00eac7" : "",
                   }}
                   key={account.address}
                   value={account.address}

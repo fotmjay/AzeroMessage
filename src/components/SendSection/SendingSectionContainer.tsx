@@ -102,10 +102,10 @@ export const SendingSectionContainer = (props: Props) => {
 
   let messageToShow = "";
   let iconToShow = undefined;
-  let color = "green";
+  let color = "success.main";
   if (errorMessage.length > 0) {
     messageToShow = errorMessage;
-    color = "red";
+    color = "error.main";
   } else if (subscriptionText.length > 0) {
     messageToShow = subscriptionText;
   } else if (validatedAddress !== "") {
