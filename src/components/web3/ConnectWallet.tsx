@@ -1,5 +1,5 @@
 import { useAllWallets } from "useink";
-import { List, ListItemText, ListItemButton, DialogContent, Card, Divider, Typography } from "@mui/material";
+import { List, ListItemText, ListItemButton, Card, Divider, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 
 type Props = {

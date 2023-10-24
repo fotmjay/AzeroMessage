@@ -1,7 +1,7 @@
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 import LockIcon from "@mui/icons-material/Lock";
-import { Card, Box, Typography, Divider, Link, Dialog, DialogContentText, DialogTitle, Button } from "@mui/material";
+import { Card, Box, Typography, Divider, Link, Dialog, Button } from "@mui/material";
 import { MessageFromDatabase } from "../../types/polkaTypes";
 import { Tooltip } from "react-tooltip";
 import { formatTimestamp } from "../../helpers/timestampFormatting";
