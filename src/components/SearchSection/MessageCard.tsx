@@ -38,7 +38,7 @@ export const MessageCard = (props: Props) => {
     const encPrivKey = sessionStorage.getItem(`encryptedPrivateKey:${connectedWallet}`);
     const myPubKey = sessionStorage.getItem(`myPublicKey:${connectedWallet}`);
     if (!encPrivKey || !myPubKey) {
-      console.log("prove ownership");
+      console.error("You need to prove ownership.");
       return;
     }
     const pswPrompt = prompt() || "";

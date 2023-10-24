@@ -26,6 +26,7 @@ type Props = {
   selectedAccountBalance?: accountBalance;
   provider?: IApiProvider;
   setOwnershipProven: React.Dispatch<SetStateAction<boolean>>;
+  ownershipProven: boolean;
 };
 
 export const BaseAppLayout = (props: Props) => {
@@ -49,7 +50,7 @@ export const BaseAppLayout = (props: Props) => {
         setEncryptionEnabled(true);
       }
     }
-  }, [props.account]);
+  }, [props.account, props.ownershipProven]);
 
   return (
     <Container sx={{ paddingX: "0", paddingY: "10px" }}>
@@ -122,7 +123,7 @@ export const BaseAppLayout = (props: Props) => {
             accounts={props.accounts}
             setAccount={props.setAccount}
           />
-        )}{" "}
+        )}
         {openModal === "encryptionStatus" && props.provider && props.account && (
           <EncryptionControlPanel
             setOwnershipProven={props.setOwnershipProven}

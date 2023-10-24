@@ -110,7 +110,6 @@ export const SendingSectionContainer = (props: Props) => {
         .get(`/api/publickey/${validatedAddress}`)
         .then((res) => {
           if (res.data.success) {
-            console.log(res.data.publicKey);
             setPublicEncryptionAddress(res.data.publicKey);
             setEncryptionEnabled(true);
           } else {

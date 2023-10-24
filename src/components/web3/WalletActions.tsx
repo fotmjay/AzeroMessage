@@ -49,12 +49,14 @@ export const WalletActions = (props: Props) => {
     setButtonDisabled(true);
     setConfirmationMessage("");
     try {
-      const randomNonce = await getNonceFromDatabase(
-        props.connectedWallet.address,
-        setHasError,
-        setConfirmationMessage
-      );
-      if (randomNonce === undefined) {
+      const res = await getNonceFromDatabase(props.connectedWallet.address, setHasError, setConfirmationMessage);
+      if (res === undefined) {
+        return;
+      }
+      if (res.publicKey === undefined && resetPsw === false) {
+        setHasError(true);
+        setConfirmationMessage('You do not have encryption enabled.  Use "Set password" instead of "Prove Ownership."');
+        setButtonDisabled(false);
         return;
       }
       let generatedKeys;
@@ -63,7 +65,7 @@ export const WalletActions = (props: Props) => {
       }
       await signMessage(
         props.connectedWallet,
-        randomNonce,
+        res.randomNonce,
         props.provider,
         setHasError,
         setConfirmationMessage,
@@ -85,6 +87,12 @@ export const WalletActions = (props: Props) => {
       <Button onClick={() => submitClick(false)} size="small" variant="outlined" disabled={buttonDisabled}>
         {buttonDisabled ? <CircularProgress sx={{ fontSize: "0.8rem" }} /> : "Prove ownership"}
       </Button>
+      <Typography gutterBottom variant="body1">
+        To enable reception of encrypted messages, choose a password and sign a message.
+      </Typography>
+      <Typography variant="subtitle1" fontWeight="medium">
+        If you change your password, previous messages won't be decryptable anymore.
+      </Typography>
       <Button
         onClick={toggleForm ? () => submitClick(true) : handleClick}
         size="small"

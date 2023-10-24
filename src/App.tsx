@@ -20,10 +20,6 @@ function App() {
   useEffect(() => {
     const encPrivKey = sessionStorage.getItem(`encryptedPrivateKey:${account?.address}`);
     const myPubKey = sessionStorage.getItem(`myPublicKey:${account?.address}`);
-    console.log("here");
-    console.log(encPrivKey);
-    console.log(myPubKey);
-    console.log(ownershipProven);
     if (!encPrivKey || !myPubKey) {
       setOwnershipProven(false);
     } else {
@@ -60,6 +56,7 @@ function App() {
               }}
             >
               <BaseAppLayout
+                ownershipProven={ownershipProven}
                 selectedAccountBalance={selectedAccountBalance}
                 darkMode={darkMode}
                 switchTheme={switchTheme}

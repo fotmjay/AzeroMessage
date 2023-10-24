@@ -3,14 +3,19 @@ import { axiosInstance } from "../config/axios";
 import { WalletAccount } from "useink/core";
 import { IApiProvider } from "useink";
 
+type NonceResponse = {
+  randomNonce: string;
+  publicKey: string | undefined;
+};
+
 export const getNonceFromDatabase = (
   walletAddress: string,
   setHasError: React.Dispatch<SetStateAction<boolean>>,
   setConfirmationMessage: React.Dispatch<SetStateAction<string>>
-) => {
+): Promise<NonceResponse | void> => {
   return axiosInstance
     .get(`/auth/getNonce/${walletAddress}`)
-    .then((res) => res.data.randomNonce)
+    .then((res) => ({ randomNonce: res.data.randomNonce, publicKey: res.data.publicKey }))
     .catch((err) => {
       console.error(err);
       setHasError(true);

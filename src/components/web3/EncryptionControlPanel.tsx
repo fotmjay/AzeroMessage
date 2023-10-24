@@ -17,14 +17,9 @@ export const EncryptionControlPanel = (props: Props) => {
         <Typography variant="h4">Encryption Menu</Typography>
         <Divider sx={{ marginY: "10px" }} />
         <Typography gutterBottom variant="body1">
-          To decrypt messages, prove ownership of your wallet.
+          If encryption is already enabled, prove ownership of your wallet to decrypt messages.
         </Typography>
-        <Typography gutterBottom variant="body1">
-          To enable reception of encrypted messages, set a password (requires a signature).
-        </Typography>
-        <Typography variant="subtitle1" fontWeight="medium">
-          If you change your password, previous messages won't be decryptable anymore.
-        </Typography>
+
         <WalletActions
           setOwnershipProven={props.setOwnershipProven}
           provider={props.provider}
