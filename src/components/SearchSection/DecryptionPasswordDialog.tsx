@@ -38,23 +38,21 @@ export const DecryptionPasswordDialog = (props: Props) => {
         <Card sx={{ padding: "15px", border: "1px solid" }}>
           <Typography variant="h4">Password Required</Typography>
           <Divider sx={{ marginY: "10px" }} />
-          <FormControl onSubmit={handleSubmit}>
-            <Typography gutterBottom variant="body1">
-              Please enter your password:
-            </Typography>
+          <FormControl
+            sx={{ display: "flex", justifyContent: "center", alignItems: "center", rowGap: "10px" }}
+            onSubmit={handleSubmit}
+          >
             <TextField
+              sx={{ alignSelf: "flex-start" }}
+              fullWidth
               onChange={handleChange}
               value={props.decryptionPassword}
               label="Password"
               type="password"
+              size="small"
               hidden
             ></TextField>
-            <Button
-              type="submit"
-              onClick={handleSubmit}
-              sx={{ display: "block", marginLeft: "auto" }}
-              variant="outlined"
-            >
+            <Button type="submit" onClick={handleSubmit} variant="outlined">
               Submit
             </Button>
           </FormControl>
