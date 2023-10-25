@@ -1,4 +1,5 @@
 import { Card, Link, List, ListItem, Typography } from "@mui/material";
+import { CONSTANT } from "../constants/constants";
 
 type Props = {
   chosenTab: number;
@@ -41,7 +42,9 @@ export const FAQ = (props: Props) => {
           Connect your wallet using your preferred extension.
         </ListItem>
         <ListItem sx={{ display: "list-item", paddingY: 0 }}>Enter the address you want to send a message to.</ListItem>
-        <ListItem sx={{ display: "list-item", paddingY: 0 }}>Type in your message (500 characters maximum!).</ListItem>
+        <ListItem sx={{ display: "list-item", paddingY: 0 }}>
+          Type in your message ({CONSTANT.MAXMESSAGELENGTH} characters maximum!).
+        </ListItem>
         <ListItem sx={{ display: "list-item", paddingY: 0 }}>
           Click "Send" and approve your transaction in your wallet.
         </ListItem>
