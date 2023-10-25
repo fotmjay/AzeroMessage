@@ -1,15 +1,21 @@
 import { useState } from "react";
 import { MessageList } from "./MessageList";
 import { SearchTextField } from "./SearchTextField";
-import { Card, Typography } from "@mui/material";
+import { Box, Card, Typography } from "@mui/material";
 import { MessageFromDatabase } from "../../types/polkaTypes";
 
-export const SearchSectionContainer = () => {
+type Props = {
+  ownershipProven: boolean;
+  chosenTab: number;
+  index: number;
+};
+
+export const SearchSectionContainer = (props: Props) => {
   const [messageList, setMessageList] = useState<MessageFromDatabase[]>();
   const [errorMessage, setErrorMessage] = useState("");
 
   return (
-    <>
+    <Box hidden={props.chosenTab !== props.index}>
       <Card
         sx={{ position: "relative", overflow: "visible", marginBottom: "10px", maxWidth: "500px", marginX: "auto" }}
       >
@@ -21,8 +27,8 @@ export const SearchSectionContainer = () => {
         <SearchTextField setMessageList={setMessageList} setErrorMessage={setErrorMessage} />
       </Card>
       <Card sx={{ maxWidth: "600px", marginX: "auto" }}>
-        {messageList !== undefined && <MessageList messageList={messageList} />}
+        {messageList !== undefined && <MessageList ownershipProven={props.ownershipProven} messageList={messageList} />}
       </Card>
-    </>
+    </Box>
   );
 };

@@ -1,7 +1,7 @@
-import { Button, Card, TextField, Typography, FormControl, Divider, InputAdornment } from "@mui/material";
+import { Button, Card, TextField, Typography, FormControl, Divider, InputAdornment, Box } from "@mui/material";
 import { IApiProvider } from "useink";
 import { WalletAccount } from "useink/core";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { addressFormatValidation } from "../../helpers/validations";
 import { makeTransaction } from "../../chainRequests/transactionRequest";
 import { useResolveDomainToAddress } from "@azns/resolver-react";
@@ -9,10 +9,15 @@ import { useDebounce } from "@uidotdev/usehooks";
 import { FormInfoBox } from "../FormInfoBox";
 import { Verified } from "@mui/icons-material";
 import { CONSTANT } from "../../constants/constants";
+import { axiosInstance } from "../../config/axios";
+import { encryptMessageWithPublicKey } from "../../helpers/encryptionHelper";
+import { MediaSmallContext } from "../../helpers/Contexts";
 
 type Props = {
   provider: IApiProvider | undefined;
   selectedAccount?: WalletAccount;
+  chosenTab: number;
+  index: number;
 };
 
 export const SendingSectionContainer = (props: Props) => {
@@ -20,8 +25,11 @@ export const SendingSectionContainer = (props: Props) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [subscriptionText, setSubscriptionText] = useState("");
   const [validatedAddress, setValidatedAddress] = useState("");
+  const [publicEncryptionAddress, setPublicEncryptionAddress] = useState("");
+  const [encryptionEnabled, setEncryptionEnabled] = useState(false);
   const domainResolver = useResolveDomainToAddress(form.address);
   const debouncedAddress = useDebounce(form.address, 300);
+  const mediaSmall = useContext(MediaSmallContext);
 
   useEffect(() => {
     if (domainResolver.address !== null && domainResolver.address !== undefined) {
@@ -48,6 +56,12 @@ export const SendingSectionContainer = (props: Props) => {
     if (e.target.name === "message" && e.target.value.length > CONSTANT.MAXMESSAGELENGTH) {
       setErrorMessage(`Message needs to be less than ${CONSTANT.MAXMESSAGELENGTH} characters.`);
       text = e.target.value.slice(0, CONSTANT.MAXMESSAGELENGTH);
+    } else {
+      setErrorMessage("");
+    }
+
+    if (e.target.name === "address") {
+      setValidatedAddress("");
     }
 
     setForm((oldForm) => {
@@ -56,7 +70,7 @@ export const SendingSectionContainer = (props: Props) => {
     });
   };
 
-  const submitForm = () => {
+  const submitForm = async (encryptionEnabled: boolean) => {
     if (!props.provider || !props.selectedAccount) {
       setErrorMessage("Wallet not connected.");
       return;
@@ -65,14 +79,26 @@ export const SendingSectionContainer = (props: Props) => {
       return;
     }
     setErrorMessage("");
-    makeTransaction(props.provider, props.selectedAccount, validatedAddress, form.message, setSubscriptionText);
+    const messageText =
+      encryptionEnabled && publicEncryptionAddress !== ""
+        ? await encryptMessageWithPublicKey(publicEncryptionAddress, form.message)
+        : form.message;
+    makeTransaction(
+      props.provider,
+      props.selectedAccount,
+      validatedAddress,
+      messageText,
+      encryptionEnabled,
+      setSubscriptionText
+    );
   };
+
   let messageToShow = "";
   let iconToShow = undefined;
-  let color = "green";
+  let color = "#00eac7";
   if (errorMessage.length > 0) {
     messageToShow = errorMessage;
-    color = "red";
+    color = "error.main";
   } else if (subscriptionText.length > 0) {
     messageToShow = subscriptionText;
   } else if (validatedAddress !== "") {
@@ -80,13 +106,36 @@ export const SendingSectionContainer = (props: Props) => {
     iconToShow = <Verified fontSize="small" />;
   }
 
+  useEffect(() => {
+    if (validatedAddress !== "") {
+      axiosInstance
+        .get(`/api/publickey/${validatedAddress}`)
+        .then((res) => {
+          if (res.data.success) {
+            setPublicEncryptionAddress(res.data.publicKey);
+            setEncryptionEnabled(true);
+          } else {
+            setPublicEncryptionAddress("");
+            setEncryptionEnabled(false);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [validatedAddress]);
+
   return (
-    <Card sx={{ padding: "15px", paddingTop: "0px", maxWidth: "500px", marginX: "auto", marginBottom: "10px" }}>
+    <Card
+      hidden={props.chosenTab !== props.index}
+      sx={{ padding: "15px", paddingTop: "0px", maxWidth: "500px", marginX: "auto", marginBottom: "10px" }}
+    >
       <FormInfoBox color={color} messageToShow={messageToShow} icon={iconToShow} />
-      <FormControl onSubmit={submitForm} size="small" fullWidth>
+      <FormControl size="small" fullWidth>
         <TextField
           sx={{ paddingBottom: "10px" }}
           fullWidth
+          autoComplete="off"
           name="address"
           size="small"
           onChange={handleChange}
@@ -117,9 +166,30 @@ export const SendingSectionContainer = (props: Props) => {
           placeholder="Enter message"
           value={form.message}
         />
-        <Button type="submit" onClick={submitForm} fullWidth sx={{ marginX: "auto" }} variant="contained">
-          Send
-        </Button>
+        <Box display="flex" gap="15px" flexDirection={mediaSmall ? "column" : "row"}>
+          <Button
+            type="submit"
+            onClick={() => submitForm(false)}
+            fullWidth
+            sx={{ marginX: "auto" }}
+            variant="contained"
+          >
+            Send
+          </Button>
+          {validatedAddress && (
+            <Button
+              onClick={() => submitForm(true)}
+              variant="outlined"
+              sx={{ minWidth: "50%" }}
+              disabled={!encryptionEnabled}
+            >
+              Encrypt & Send
+            </Button>
+          )}
+        </Box>
+        <Typography paddingTop="5px" display="block" marginLeft="auto" color="error">
+          {!encryptionEnabled && validatedAddress && "Encryption isn't enabled on receiver address."}
+        </Typography>
       </FormControl>
     </Card>
   );

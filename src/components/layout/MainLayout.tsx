@@ -1,20 +1,29 @@
 import { Box, Container, Tab, Tabs } from "@mui/material";
-import { useState } from "react";
+import React, { useState } from "react";
 import { SearchSectionContainer } from "../SearchSection/SearchSectionContainer";
 import { SendingSectionContainer } from "../SendSection/SendingSectionContainer";
 import { IApiProvider } from "useink";
 import { WalletAccount } from "useink/core";
+import { FAQ } from "../FAQ";
 
 type Props = {
   provider: IApiProvider | undefined;
   selectedAccount: WalletAccount | undefined;
+  ownershipProven: boolean;
 };
 export const MainLayout = (props: Props) => {
-  const [toggleSendingTab, setToggleSendingTab] = useState(false);
+  const [chosenTab, setChosenTab] = useState(0);
 
-  const handleChange = () => {
-    setToggleSendingTab((toggle) => !toggle);
+  const handleChange = (_e: React.SyntheticEvent, newTab: number) => {
+    setChosenTab(newTab);
   };
+
+  function a11yProps(index: number) {
+    return {
+      id: `simple-tab-${index}`,
+      "aria-controls": `simple-tabpanel-${index}`,
+    };
+  }
 
   return (
     <Container sx={{ display: "block" }}>
@@ -22,20 +31,24 @@ export const MainLayout = (props: Props) => {
         <Tabs
           variant="fullWidth"
           sx={{ maxWidth: "500px", margin: "auto" }}
-          value={toggleSendingTab}
+          value={chosenTab}
           onChange={handleChange}
           textColor="primary"
           indicatorColor="primary"
           aria-label="secondary tabs example"
         >
-          <Tab value={false} label="Read Messages" />
-          <Tab value={true} label="Send Messages" />
+          <Tab label="Read Messages" {...a11yProps(0)} />
+          <Tab label="Send Messages" {...a11yProps(1)} />
+          <Tab label="FAQ" {...a11yProps(2)} />
         </Tabs>
-        {toggleSendingTab ? (
-          <SendingSectionContainer provider={props.provider} selectedAccount={props.selectedAccount} />
-        ) : (
-          <SearchSectionContainer />
-        )}
+        <SearchSectionContainer ownershipProven={props.ownershipProven} chosenTab={chosenTab} index={0} />
+        <SendingSectionContainer
+          provider={props.provider}
+          selectedAccount={props.selectedAccount}
+          chosenTab={chosenTab}
+          index={1}
+        />
+        <FAQ chosenTab={chosenTab} index={2} />
       </Box>
     </Container>
   );

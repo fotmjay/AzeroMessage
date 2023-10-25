@@ -4,7 +4,7 @@ export const CONSTANT = {
     URL: "https://alephzero.subscan.io/",
   },
   CONTRACT: {
-    ADDRESS: "5GEDATiqzWkVu98jdSi2EuJ2Xtee2KoB7fMoRnJPTVAvqoVq",
+    ADDRESS: "5HBYqDMzTQFTux4Nx2Lez9ruuuFUrzdMsmkXAUcNJBpUpHx9",
     METHODS: {
       MESSAGESENT: "MessageSent",
     },
@@ -15,5 +15,12 @@ export const CONSTANT = {
       MAINNET: ".azero",
     },
   },
-  MAXMESSAGELENGTH: 500,
+  MAXMESSAGELENGTH: 800,
+  SESSIONSTORAGE: {
+    KEYS: {
+      ENCRYPTENABLE: "encryptionEnabled",
+    },
+  },
 };
+
+// old contract:  5GEDATiqzWkVu98jdSi2EuJ2Xtee2KoB7fMoRnJPTVAvqoVq
