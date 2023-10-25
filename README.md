@@ -40,6 +40,8 @@ git clone https://github.com/fotmjay/AzeroMessageSC
 
 ### Back-End
 
+Full list of API commands available in the [backend readme](https://github.com/fotmjay/AzeroMessageBackend).
+
 The database is currently hosted on MongoDB (NoSQL). The .env file will be missing when you clone the repo.
 
 Create it in `./src/config/.env`:
