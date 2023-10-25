@@ -58,7 +58,6 @@ export const MessageCard = (props: Props) => {
 
   const sendToDecrypt = async () => {
     try {
-      console.log(props.decryptionPassword);
       const decrypted = await decryptMessageWithEncryptedPrivateKey(
         props.message.text,
         props.encryptionAddresses.encPrivKey,

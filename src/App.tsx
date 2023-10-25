@@ -1,21 +1,21 @@
+import type { accountBalance } from "./types/polkaTypes";
+import { BaseAppLayout } from "./components/layout/BaseAppLayout";
 import { Container, CssBaseline, ThemeProvider, useMediaQuery } from "@mui/material";
+import { CurrentConnectedWalletContext, MediaSmallContext } from "./helpers/Contexts";
+import { HomeFooter } from "./components/HomeFooter";
+import { MainLayout } from "./components/layout/MainLayout";
+import { darkTheme, lightTheme } from "./constants/themes";
+import { getBalanceFromChain } from "./chainRequests/balanceRequest";
 import { useApi, useWallet } from "useink";
 import { useEffect, useState } from "react";
-import { BaseAppLayout } from "./components/layout/BaseAppLayout";
-import { MainLayout } from "./components/layout/MainLayout";
-import { getBalanceFromChain } from "./chainRequests/balanceRequest";
-import type { accountBalance } from "./types/polkaTypes";
-import { HomeFooter } from "./components/HomeFooter";
-import { darkTheme, lightTheme } from "./constants/themes";
-import { CurrentConnectedWalletContext, MediaSmallContext } from "./helpers/Contexts";
 
 function App() {
   const [darkMode, setDarkMode] = useState<boolean>(() => localStorage.getItem("darkMode") === "true");
-  const { account, connect, disconnect, accounts, setAccount } = useWallet();
-  const [selectedAccountBalance, setSelectedAccountBalance] = useState<accountBalance>();
   const [ownershipProven, setOwnershipProven] = useState(false);
-  const chainNode = useApi("aleph");
+  const [selectedAccountBalance, setSelectedAccountBalance] = useState<accountBalance>();
+  const { account, connect, disconnect, accounts, setAccount } = useWallet();
   const mediaSmall = useMediaQuery("(max-width:450px)");
+  const chainNode = useApi("aleph");
 
   useEffect(() => {
     const encPrivKey = sessionStorage.getItem(`encryptedPrivateKey:${account?.address}`);
