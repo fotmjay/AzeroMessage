@@ -16,6 +16,8 @@ import { MediaSmallContext } from "../../helpers/Contexts";
 type Props = {
   provider: IApiProvider | undefined;
   selectedAccount?: WalletAccount;
+  chosenTab: number;
+  index: number;
 };
 
 export const SendingSectionContainer = (props: Props) => {
@@ -124,12 +126,16 @@ export const SendingSectionContainer = (props: Props) => {
   }, [validatedAddress]);
 
   return (
-    <Card sx={{ padding: "15px", paddingTop: "0px", maxWidth: "500px", marginX: "auto", marginBottom: "10px" }}>
+    <Card
+      hidden={props.chosenTab !== props.index}
+      sx={{ padding: "15px", paddingTop: "0px", maxWidth: "500px", marginX: "auto", marginBottom: "10px" }}
+    >
       <FormInfoBox color={color} messageToShow={messageToShow} icon={iconToShow} />
       <FormControl size="small" fullWidth>
         <TextField
           sx={{ paddingBottom: "10px" }}
           fullWidth
+          autoComplete="off"
           name="address"
           size="small"
           onChange={handleChange}

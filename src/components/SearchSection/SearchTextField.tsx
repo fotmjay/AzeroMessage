@@ -1,4 +1,4 @@
-import { TextField, IconButton, InputAdornment, Divider, Button, CircularProgress } from "@mui/material";
+import { TextField, IconButton, InputAdornment, Divider, Button, CircularProgress, Box } from "@mui/material";
 import { SetStateAction, useState } from "react";
 import { addressFormatValidation } from "../../helpers/validations";
 import { axiosInstance } from "../../config/axios";
@@ -57,8 +57,10 @@ export const SearchTextField = (props: Props) => {
   };
 
   return (
-    <>
+    <Box>
       <TextField
+        name="searchField"
+        id="searchField"
         fullWidth
         size="small"
         onChange={handleChange}
@@ -92,6 +94,6 @@ export const SearchTextField = (props: Props) => {
       >
         {disabledSearch ? <CircularProgress /> : "Search"}
       </Button>
-    </>
+    </Box>
   );
 };

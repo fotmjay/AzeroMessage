@@ -1,24 +1,21 @@
-import { Typography, Button, Collapse, Container } from "@mui/material";
-import { FAQ } from "./FAQ";
-import { useState } from "react";
+import { Typography, Link, Box } from "@mui/material";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import TwitterIcon from "@mui/icons-material/Twitter";
 
 export const HomeFooter = () => {
-  const [faqIsOpen, setFaqIsOpen] = useState(false);
   return (
-    <Container sx={{ marginTop: "10px" }}>
-      <Typography textAlign="center" paddingBottom="10px">
-        &copy; 2023 - FotmJay
+    <Box sx={{ marginTop: "10px" }}>
+      <Typography textAlign="center" paddingBottom="3px">
+        &copy; 2023 AzeroMessage - FotmJay
       </Typography>
-      <Button
-        onClick={() => setFaqIsOpen((toggle) => !toggle)}
-        variant="outlined"
-        sx={{ display: "block", marginX: "auto" }}
-      >
-        FAQ
-      </Button>
-      <Collapse in={faqIsOpen}>
-        <FAQ />
-      </Collapse>
-    </Container>
+      <Box display="flex" alignItems="center" justifyContent="center" paddingBottom="0px" gap="3px">
+        <Link href="https://www.twitter.com/fotmjay" target="_blank">
+          <TwitterIcon />
+        </Link>
+        <Link href="https://www.github.com/fotmjay" target="_blank">
+          <GitHubIcon />
+        </Link>
+      </Box>
+    </Box>
   );
 };

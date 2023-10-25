@@ -1,8 +1,13 @@
 import { Card, Link, List, ListItem, Typography } from "@mui/material";
 
-export const FAQ = () => {
+type Props = {
+  chosenTab: number;
+  index: number;
+};
+export const FAQ = (props: Props) => {
   return (
     <Card
+      hidden={props.chosenTab !== props.index}
       sx={{
         maxWidth: "500px",
         marginX: "auto",
@@ -40,10 +45,22 @@ export const FAQ = () => {
         <ListItem sx={{ display: "list-item", paddingY: 0 }}>
           Click "Send" and approve your transaction in your wallet.
         </ListItem>
-        <ListItem sx={{ paddingY: 0, color: "orange" }}>
-          ****** There is a 0.2 AZERO fee to send a message. ******
+        <ListItem sx={{ paddingY: 0, color: "warning.main" }}>
+          **** There is a 0.05 AZERO fee to send a message. ****
         </ListItem>
       </List>
+
+      <Typography fontWeight="bold" paddingX="5px">
+        Encryption? How does it work?
+      </Typography>
+      <Typography paddingX="15px">
+        To enable reception of encrypted message, the user needs to enable encryption on his address by choosing a
+        password and signing a message. It creates a key pair protected by password for message encryption/decryption.
+        Encrypted messages CANNOT be sent to users who have not enabled it.
+      </Typography>
+      <Typography paddingX="15px" color="warning.main">
+        Encrypted messages CANNOT be sent to users who have not enabled it.
+      </Typography>
 
       <Typography fontWeight="bold" paddingX="5px">
         Can I see the code?
