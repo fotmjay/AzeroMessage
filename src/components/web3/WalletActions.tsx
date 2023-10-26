@@ -1,18 +1,18 @@
 import { Box, Button, CircularProgress, TextField, Typography } from "@mui/material";
-import { SetStateAction, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { WalletAccount } from "useink/core";
 import { IApiProvider } from "useink";
 import { validatePassword } from "../../helpers/validations";
 import { generateKeyPair } from "../../helpers/encryptionHelper";
 import { getNonceFromDatabase, signMessage } from "../../helpers/walletInteractions";
 import { MediaSmallContext } from "../../helpers/Contexts";
+import { ProveOwnershipContext } from "../../App";
 
 type Props = {
   connectedWallet: WalletAccount;
   provider: IApiProvider;
   decryptingMessage: boolean;
   settingPassword: boolean;
-  setOwnershipProven: React.Dispatch<SetStateAction<boolean>>;
 };
 
 type PasswordForm = {
@@ -27,6 +27,7 @@ export const WalletActions = (props: Props) => {
   const [toggleForm, setToggleForm] = useState(false);
   const [formData, setFormData] = useState<PasswordForm>({ password: "", confirmPassword: "" });
   const mediaSmall = useContext(MediaSmallContext);
+  const { setOwnershipProven } = useContext(ProveOwnershipContext);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((oldData) => ({ ...oldData, [e.target.name]: e.target.value }));
@@ -69,7 +70,7 @@ export const WalletActions = (props: Props) => {
         props.provider,
         setHasError,
         setConfirmationMessage,
-        props.setOwnershipProven,
+        setOwnershipProven,
         generatedKeys?.encryptedPrivateKey,
         generatedKeys?.publicKey
       );

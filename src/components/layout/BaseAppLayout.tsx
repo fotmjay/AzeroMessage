@@ -6,7 +6,7 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import AlephA from "../../assets/Alephabet/A.svg?react";
 import AlephM from "../../assets/Alephabet/M.svg?react";
 
-import React, { SetStateAction, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { WalletAccount } from "useink/core";
 import { ConnectionStatus } from "../web3/ConnectionStatus";
 import type { accountBalance } from "../../types/polkaTypes";
@@ -14,6 +14,7 @@ import { IApiProvider } from "useink";
 import { EncryptionControlPanel } from "../web3/EncryptionControlPanel";
 import { axiosInstance } from "../../config/axios";
 import { MediaSmallContext } from "../../helpers/Contexts";
+import { ProveOwnershipContext } from "../../App";
 
 type Props = {
   darkMode: boolean;
@@ -25,13 +26,12 @@ type Props = {
   switchTheme: () => void;
   selectedAccountBalance?: accountBalance;
   provider?: IApiProvider;
-  setOwnershipProven: React.Dispatch<SetStateAction<boolean>>;
-  ownershipProven: boolean;
 };
 
 export const BaseAppLayout = (props: Props) => {
   const [openModal, setOpenModal] = useState<"connectionStatus" | "encryptionStatus" | null>(null);
   const [encryptionEnabled, setEncryptionEnabled] = useState(false);
+  const { ownershipProven } = useContext(ProveOwnershipContext);
   const mediaSmall = useContext(MediaSmallContext);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export const BaseAppLayout = (props: Props) => {
         setEncryptionEnabled(true);
       }
     }
-  }, [props.account, props.ownershipProven]);
+  }, [props.account, ownershipProven]);
 
   return (
     <Container sx={{ paddingX: "0", paddingY: "10px" }}>
@@ -73,7 +73,7 @@ export const BaseAppLayout = (props: Props) => {
             )}
           </Box>
         </Box>
-        <Link color="text.primary" href="http://localhost:3001">
+        <Link color="text.primary" href=".">
           <Box
             display="flex"
             justifyContent="center"
@@ -125,11 +125,7 @@ export const BaseAppLayout = (props: Props) => {
           />
         )}
         {openModal === "encryptionStatus" && props.provider && props.account && (
-          <EncryptionControlPanel
-            setOwnershipProven={props.setOwnershipProven}
-            provider={props.provider}
-            connectedWallet={props.account}
-          />
+          <EncryptionControlPanel provider={props.provider} connectedWallet={props.account} />
         )}
       </Dialog>
     </Container>

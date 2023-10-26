@@ -9,7 +9,6 @@ import { FAQ } from "../FAQ";
 type Props = {
   provider: IApiProvider | undefined;
   selectedAccount: WalletAccount | undefined;
-  ownershipProven: boolean;
 };
 export const MainLayout = (props: Props) => {
   const [chosenTab, setChosenTab] = useState(0);
@@ -41,7 +40,7 @@ export const MainLayout = (props: Props) => {
           <Tab label="Send Messages" {...a11yProps(1)} />
           <Tab label="FAQ" {...a11yProps(2)} />
         </Tabs>
-        <SearchSectionContainer ownershipProven={props.ownershipProven} chosenTab={chosenTab} index={0} />
+        <SearchSectionContainer chosenTab={chosenTab} index={0} />
         <SendingSectionContainer
           provider={props.provider}
           selectedAccount={props.selectedAccount}

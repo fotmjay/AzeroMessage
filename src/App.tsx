@@ -7,11 +7,25 @@ import { MainLayout } from "./components/layout/MainLayout";
 import { darkTheme, lightTheme } from "./constants/themes";
 import { getBalanceFromChain } from "./chainRequests/balanceRequest";
 import { useApi, useWallet } from "useink";
-import { useEffect, useState } from "react";
+import { SetStateAction, createContext, useEffect, useState } from "react";
+
+type EncAddresses = {
+  myPubKey: string;
+  encPrivKey: string;
+};
+
+type Ownership = {
+  ownershipProven: boolean;
+  setOwnershipProven: React.Dispatch<SetStateAction<boolean>>;
+  encAddresses?: EncAddresses;
+};
+
+export const ProveOwnershipContext = createContext<Ownership>({ ownershipProven: false, setOwnershipProven: () => {} });
 
 function App() {
   const [darkMode, setDarkMode] = useState<boolean>(() => localStorage.getItem("darkMode") === "true");
   const [ownershipProven, setOwnershipProven] = useState(false);
+  const [encryptionAddresses, setEncryptionAddresses] = useState({ myPubKey: "", encPrivKey: "" });
   const [selectedAccountBalance, setSelectedAccountBalance] = useState<accountBalance>();
   const { account, connect, disconnect, accounts, setAccount } = useWallet();
   const mediaSmall = useMediaQuery("(max-width:450px)");
@@ -22,8 +36,10 @@ function App() {
     const myPubKey = sessionStorage.getItem(`myPublicKey:${account?.address}`);
     if (!encPrivKey || !myPubKey) {
       setOwnershipProven(false);
+      setEncryptionAddresses({ myPubKey: "", encPrivKey: "" });
     } else {
       setOwnershipProven(true);
+      setEncryptionAddresses({ myPubKey, encPrivKey });
     }
   }, [account, ownershipProven]);
 
@@ -45,34 +61,36 @@ function App() {
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <CurrentConnectedWalletContext.Provider value={account?.address}>
-        <MediaSmallContext.Provider value={mediaSmall}>
-          <CssBaseline />
-          <Container sx={{ height: "100vh" }}>
-            <Container
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "flex-start",
-              }}
-            >
-              <BaseAppLayout
-                ownershipProven={ownershipProven}
-                selectedAccountBalance={selectedAccountBalance}
-                darkMode={darkMode}
-                switchTheme={switchTheme}
-                account={account}
-                connect={connect}
-                disconnect={disconnect}
-                accounts={accounts}
-                setAccount={setAccount}
-                provider={chainNode}
-                setOwnershipProven={setOwnershipProven}
-              />
+        <ProveOwnershipContext.Provider
+          value={{ ownershipProven, setOwnershipProven, encAddresses: encryptionAddresses }}
+        >
+          <MediaSmallContext.Provider value={mediaSmall}>
+            <CssBaseline />
+            <Container sx={{ height: "100vh" }}>
+              <Container
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "flex-start",
+                }}
+              >
+                <BaseAppLayout
+                  selectedAccountBalance={selectedAccountBalance}
+                  darkMode={darkMode}
+                  switchTheme={switchTheme}
+                  account={account}
+                  connect={connect}
+                  disconnect={disconnect}
+                  accounts={accounts}
+                  setAccount={setAccount}
+                  provider={chainNode}
+                />
+              </Container>
+              <MainLayout provider={chainNode} selectedAccount={account} />
+              <HomeFooter />
             </Container>
-            <MainLayout ownershipProven={ownershipProven} provider={chainNode} selectedAccount={account} />
-            <HomeFooter />
-          </Container>
-        </MediaSmallContext.Provider>
+          </MediaSmallContext.Provider>
+        </ProveOwnershipContext.Provider>
       </CurrentConnectedWalletContext.Provider>
     </ThemeProvider>
   );

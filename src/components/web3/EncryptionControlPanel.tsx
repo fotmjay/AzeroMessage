@@ -2,12 +2,10 @@ import { Box, Card, Divider, Typography } from "@mui/material";
 import { WalletActions } from "./WalletActions";
 import { WalletAccount } from "useink/core";
 import { IApiProvider } from "useink";
-import { SetStateAction } from "react";
 
 type Props = {
   connectedWallet: WalletAccount;
   provider: IApiProvider;
-  setOwnershipProven: React.Dispatch<SetStateAction<boolean>>;
 };
 
 export const EncryptionControlPanel = (props: Props) => {
@@ -21,7 +19,6 @@ export const EncryptionControlPanel = (props: Props) => {
         </Typography>
 
         <WalletActions
-          setOwnershipProven={props.setOwnershipProven}
           provider={props.provider}
           connectedWallet={props.connectedWallet}
           decryptingMessage={false}

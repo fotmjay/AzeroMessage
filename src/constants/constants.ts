@@ -21,6 +21,9 @@ export const CONSTANT = {
       ENCRYPTENABLE: "encryptionEnabled",
     },
   },
+  DISPLAY: {
+    TEXTLENGTHTOTRUNCATE: 150,
+  },
 };
 
 // old contract:  5GEDATiqzWkVu98jdSi2EuJ2Xtee2KoB7fMoRnJPTVAvqoVq

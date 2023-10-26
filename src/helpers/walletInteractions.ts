@@ -68,7 +68,7 @@ export const signMessage = async (
         sessionStorage.setItem(connectedWallet.address, "true");
         setConfirmationMessage("Successfully fetched your encrypted private key.");
         setHasError(false);
-        setOwnershipProven(true);
+        setOwnershipProven((old) => !old);
       }
     })
     .catch((err) => {
