@@ -1,6 +1,4 @@
 import { Button, Card, TextField, Typography, FormControl, Divider, InputAdornment, Box } from "@mui/material";
-import { IApiProvider } from "useink";
-import { WalletAccount } from "useink/core";
 import React, { useContext, useEffect, useState } from "react";
 import { addressFormatValidation } from "../../helpers/validations";
 import { makeTransaction } from "../../chainRequests/transactionRequest";
@@ -11,11 +9,9 @@ import { Verified } from "@mui/icons-material";
 import { CONSTANT } from "../../constants/constants";
 import { axiosInstance } from "../../config/axios";
 import { encryptMessageWithPublicKey } from "../../helpers/encryptionHelper";
-import { MediaSmallContext } from "../../helpers/Contexts";
+import { CurrentConnectedWalletContext, MediaSmallContext } from "../../helpers/Contexts";
 
 type Props = {
-  provider: IApiProvider | undefined;
-  selectedAccount?: WalletAccount;
   chosenTab: number;
   index: number;
 };
@@ -30,6 +26,7 @@ export const SendingSectionContainer = (props: Props) => {
   const domainResolver = useResolveDomainToAddress(form.address);
   const debouncedAddress = useDebounce(form.address, 300);
   const mediaSmall = useContext(MediaSmallContext);
+  const { account, provider } = useContext(CurrentConnectedWalletContext);
 
   useEffect(() => {
     if (domainResolver.address !== null && domainResolver.address !== undefined) {
@@ -71,7 +68,7 @@ export const SendingSectionContainer = (props: Props) => {
   };
 
   const submitForm = async (encryptionEnabled: boolean) => {
-    if (!props.provider || !props.selectedAccount) {
+    if (!provider || !account) {
       setErrorMessage("Wallet not connected.");
       return;
     }
@@ -83,14 +80,7 @@ export const SendingSectionContainer = (props: Props) => {
       encryptionEnabled && publicEncryptionAddress !== ""
         ? await encryptMessageWithPublicKey(publicEncryptionAddress, form.message)
         : form.message;
-    makeTransaction(
-      props.provider,
-      props.selectedAccount,
-      validatedAddress,
-      messageText,
-      encryptionEnabled,
-      setSubscriptionText
-    );
+    makeTransaction(provider, account, validatedAddress, messageText, encryptionEnabled, setSubscriptionText);
   };
 
   let messageToShow = "";

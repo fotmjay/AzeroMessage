@@ -2,15 +2,9 @@ import { Box, Container, Tab, Tabs } from "@mui/material";
 import React, { useState } from "react";
 import { SearchSectionContainer } from "../SearchSection/SearchSectionContainer";
 import { SendingSectionContainer } from "../SendSection/SendingSectionContainer";
-import { IApiProvider } from "useink";
-import { WalletAccount } from "useink/core";
 import { FAQ } from "../FAQ";
 
-type Props = {
-  provider: IApiProvider | undefined;
-  selectedAccount: WalletAccount | undefined;
-};
-export const MainLayout = (props: Props) => {
+export const MainLayout = () => {
   const [chosenTab, setChosenTab] = useState(0);
 
   const handleChange = (_e: React.SyntheticEvent, newTab: number) => {
@@ -41,12 +35,7 @@ export const MainLayout = (props: Props) => {
           <Tab label="FAQ" {...a11yProps(2)} />
         </Tabs>
         <SearchSectionContainer chosenTab={chosenTab} index={0} />
-        <SendingSectionContainer
-          provider={props.provider}
-          selectedAccount={props.selectedAccount}
-          chosenTab={chosenTab}
-          index={1}
-        />
+        <SendingSectionContainer chosenTab={chosenTab} index={1} />
         <FAQ chosenTab={chosenTab} index={2} />
       </Box>
     </Container>

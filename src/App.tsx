@@ -4,10 +4,10 @@ import { Container, CssBaseline, ThemeProvider, useMediaQuery } from "@mui/mater
 import { CurrentConnectedWalletContext, MediaSmallContext } from "./helpers/Contexts";
 import { HomeFooter } from "./components/HomeFooter";
 import { MainLayout } from "./components/layout/MainLayout";
+import { SetStateAction, createContext, useEffect, useState } from "react";
 import { darkTheme, lightTheme } from "./constants/themes";
 import { getBalanceFromChain } from "./chainRequests/balanceRequest";
 import { useApi, useWallet } from "useink";
-import { SetStateAction, createContext, useEffect, useState } from "react";
 
 type EncAddresses = {
   myPubKey: string;
@@ -60,7 +60,9 @@ function App() {
 
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-      <CurrentConnectedWalletContext.Provider value={account?.address}>
+      <CurrentConnectedWalletContext.Provider
+        value={{ account: account || undefined, provider: chainNode || undefined }}
+      >
         <ProveOwnershipContext.Provider
           value={{ ownershipProven, setOwnershipProven, encAddresses: encryptionAddresses }}
         >
@@ -78,15 +80,13 @@ function App() {
                   selectedAccountBalance={selectedAccountBalance}
                   darkMode={darkMode}
                   switchTheme={switchTheme}
-                  account={account}
                   connect={connect}
                   disconnect={disconnect}
                   accounts={accounts}
                   setAccount={setAccount}
-                  provider={chainNode}
                 />
               </Container>
-              <MainLayout provider={chainNode} selectedAccount={account} />
+              <MainLayout />
               <HomeFooter />
             </Container>
           </MediaSmallContext.Provider>

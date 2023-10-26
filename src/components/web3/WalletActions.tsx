@@ -1,32 +1,25 @@
 import { Box, Button, CircularProgress, TextField, Typography } from "@mui/material";
-import { useContext, useState } from "react";
-import { WalletAccount } from "useink/core";
-import { IApiProvider } from "useink";
-import { validatePassword } from "../../helpers/validations";
+import { CurrentConnectedWalletContext, MediaSmallContext } from "../../helpers/Contexts";
+import { ProveOwnershipContext } from "../../App";
 import { generateKeyPair } from "../../helpers/encryptionHelper";
 import { getNonceFromDatabase, signMessage } from "../../helpers/walletInteractions";
-import { MediaSmallContext } from "../../helpers/Contexts";
-import { ProveOwnershipContext } from "../../App";
-
-type Props = {
-  connectedWallet: WalletAccount;
-  provider: IApiProvider;
-  decryptingMessage: boolean;
-  settingPassword: boolean;
-};
+import { useContext, useState } from "react";
+import { validatePassword } from "../../helpers/validations";
 
 type PasswordForm = {
   password: string;
   confirmPassword: string;
 };
 
-export const WalletActions = (props: Props) => {
+export const WalletActions = () => {
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState("");
   const [hasError, setHasError] = useState(false);
   const [toggleForm, setToggleForm] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState<number | null>(null);
   const [formData, setFormData] = useState<PasswordForm>({ password: "", confirmPassword: "" });
   const mediaSmall = useContext(MediaSmallContext);
+  const { provider, account } = useContext(CurrentConnectedWalletContext);
   const { setOwnershipProven } = useContext(ProveOwnershipContext);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,11 +39,15 @@ export const WalletActions = (props: Props) => {
         return;
       }
     }
+    if (!account || !provider) {
+      return;
+    }
+    setButtonLoading(resetPsw ? 2 : 1);
     setHasError(false);
     setButtonDisabled(true);
     setConfirmationMessage("");
     try {
-      const res = await getNonceFromDatabase(props.connectedWallet.address, setHasError, setConfirmationMessage);
+      const res = await getNonceFromDatabase(account.address, setHasError, setConfirmationMessage);
       if (res === undefined) {
         return;
       }
@@ -58,6 +55,7 @@ export const WalletActions = (props: Props) => {
         setHasError(true);
         setConfirmationMessage('You do not have encryption enabled.  Use "Set password" instead of "Prove Ownership."');
         setButtonDisabled(false);
+        setButtonLoading(null);
         return;
       }
       let generatedKeys;
@@ -65,9 +63,9 @@ export const WalletActions = (props: Props) => {
         generatedKeys = await generateKeyPair(formData.password);
       }
       await signMessage(
-        props.connectedWallet,
+        account,
         res.randomNonce,
-        props.provider,
+        provider,
         setHasError,
         setConfirmationMessage,
         setOwnershipProven,
@@ -80,13 +78,14 @@ export const WalletActions = (props: Props) => {
       console.error(err);
     }
     setButtonDisabled(false);
+    setButtonLoading(null);
   };
 
   const buttonText = toggleForm ? "Sign & Send" : "Set Password";
   return (
     <Box paddingTop="15px" display="flex" flexDirection="column" alignContent="center" gap="15px">
       <Button onClick={() => submitClick(false)} size="small" variant="outlined" disabled={buttonDisabled}>
-        {buttonDisabled ? <CircularProgress sx={{ fontSize: "0.8rem" }} /> : "Prove ownership"}
+        {buttonLoading === 1 ? <CircularProgress sx={{ fontSize: "0.8rem" }} /> : "Prove ownership"}
       </Button>
       <Typography gutterBottom variant="body1">
         To enable reception of encrypted messages, choose a password and sign a message.
@@ -100,7 +99,7 @@ export const WalletActions = (props: Props) => {
         variant={toggleForm ? "contained" : "outlined"}
         disabled={buttonDisabled}
       >
-        {buttonDisabled ? <CircularProgress sx={{ fontSize: "0.8rem" }} /> : buttonText}
+        {buttonLoading === 2 ? <CircularProgress sx={{ fontSize: "0.8rem" }} /> : buttonText}
       </Button>
       {toggleForm && (
         <Box

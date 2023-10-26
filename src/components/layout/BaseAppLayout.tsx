@@ -10,22 +10,19 @@ import { useContext, useEffect, useState } from "react";
 import { WalletAccount } from "useink/core";
 import { ConnectionStatus } from "../web3/ConnectionStatus";
 import type { accountBalance } from "../../types/polkaTypes";
-import { IApiProvider } from "useink";
 import { EncryptionControlPanel } from "../web3/EncryptionControlPanel";
 import { axiosInstance } from "../../config/axios";
-import { MediaSmallContext } from "../../helpers/Contexts";
+import { CurrentConnectedWalletContext, MediaSmallContext } from "../../helpers/Contexts";
 import { ProveOwnershipContext } from "../../App";
 
 type Props = {
   darkMode: boolean;
-  account: WalletAccount | undefined;
   disconnect: () => void;
   accounts: WalletAccount[] | undefined;
   setAccount: (account: WalletAccount) => void;
   connect: (walletName: string) => void;
   switchTheme: () => void;
   selectedAccountBalance?: accountBalance;
-  provider?: IApiProvider;
 };
 
 export const BaseAppLayout = (props: Props) => {
@@ -33,15 +30,16 @@ export const BaseAppLayout = (props: Props) => {
   const [encryptionEnabled, setEncryptionEnabled] = useState(false);
   const { ownershipProven } = useContext(ProveOwnershipContext);
   const mediaSmall = useContext(MediaSmallContext);
+  const { provider, account } = useContext(CurrentConnectedWalletContext);
 
   useEffect(() => {
-    if (props.account !== undefined) {
-      const addressInStorage = sessionStorage.getItem(props.account.address);
+    if (account !== undefined) {
+      const addressInStorage = sessionStorage.getItem(account.address);
       if (addressInStorage !== "true") {
-        axiosInstance.get(`/api/publickey/${props.account.address}`).then((res) => {
+        axiosInstance.get(`/api/publickey/${account.address}`).then((res) => {
           if (res.data.success === true) {
             setEncryptionEnabled(true);
-            sessionStorage.setItem(props.account!.address, "true");
+            sessionStorage.setItem(account.address, "true");
           } else {
             setEncryptionEnabled(false);
           }
@@ -50,7 +48,7 @@ export const BaseAppLayout = (props: Props) => {
         setEncryptionEnabled(true);
       }
     }
-  }, [props.account, ownershipProven]);
+  }, [account, ownershipProven]);
 
   return (
     <Container sx={{ paddingX: "0", paddingY: "10px" }}>
@@ -64,9 +62,9 @@ export const BaseAppLayout = (props: Props) => {
             <ConnectionStatus
               selectedAccountBalance={props.selectedAccountBalance}
               setOpenWalletModal={() => setOpenModal("connectionStatus")}
-              connectedWallet={props.account}
+              connectedWallet={account}
             />
-            {props.account && props.provider && (
+            {account && provider && (
               <Button onClick={() => setOpenModal("encryptionStatus")} size="small" variant="outlined">
                 {encryptionEnabled ? "Settings" : "Enable encryption"}
               </Button>
@@ -117,16 +115,13 @@ export const BaseAppLayout = (props: Props) => {
       >
         {openModal === "connectionStatus" && (
           <Web3ConnectionSection
-            account={props.account}
             connect={props.connect}
             disconnect={props.disconnect}
             accounts={props.accounts}
             setAccount={props.setAccount}
           />
         )}
-        {openModal === "encryptionStatus" && props.provider && props.account && (
-          <EncryptionControlPanel provider={props.provider} connectedWallet={props.account} />
-        )}
+        {openModal === "encryptionStatus" && provider && account && <EncryptionControlPanel />}
       </Dialog>
     </Container>
   );

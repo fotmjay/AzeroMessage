@@ -1,9 +1,10 @@
 import { WalletAccount } from "useink/core";
 import { ConnectWallet } from "./ConnectWallet";
 import { ConnectedWallet } from "./ConnectedWallet";
+import { CurrentConnectedWalletContext } from "../../helpers/Contexts";
+import { useContext } from "react";
 
 type Props = {
-  account: WalletAccount | undefined;
   connect: (walletName: string) => void;
   disconnect: () => void;
   accounts: WalletAccount[] | undefined;
@@ -11,13 +12,9 @@ type Props = {
 };
 
 export const Web3ConnectionSection = (props: Props) => {
-  return props.account ? (
-    <ConnectedWallet
-      account={props.account}
-      disconnect={props.disconnect}
-      accounts={props.accounts}
-      setAccount={props.setAccount}
-    />
+  const { account } = useContext(CurrentConnectedWalletContext);
+  return account ? (
+    <ConnectedWallet disconnect={props.disconnect} accounts={props.accounts} setAccount={props.setAccount} />
   ) : (
     <ConnectWallet connect={props.connect} />
   );

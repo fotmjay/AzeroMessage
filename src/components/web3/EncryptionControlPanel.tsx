@@ -1,14 +1,7 @@
 import { Box, Card, Divider, Typography } from "@mui/material";
 import { WalletActions } from "./WalletActions";
-import { WalletAccount } from "useink/core";
-import { IApiProvider } from "useink";
 
-type Props = {
-  connectedWallet: WalletAccount;
-  provider: IApiProvider;
-};
-
-export const EncryptionControlPanel = (props: Props) => {
+export const EncryptionControlPanel = () => {
   return (
     <Box>
       <Card sx={{ padding: "15px", border: "1px solid" }}>
@@ -18,12 +11,7 @@ export const EncryptionControlPanel = (props: Props) => {
           If encryption is already enabled, prove ownership of your wallet to decrypt messages.
         </Typography>
 
-        <WalletActions
-          provider={props.provider}
-          connectedWallet={props.connectedWallet}
-          decryptingMessage={false}
-          settingPassword={true}
-        />
+        <WalletActions />
       </Card>
     </Box>
   );

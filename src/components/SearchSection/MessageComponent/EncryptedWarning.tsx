@@ -11,13 +11,13 @@ type Props = {
 
 export const EncryptedWarning = (props: Props) => {
   const { ownershipProven } = useContext(ProveOwnershipContext);
-  const connectedWallet = useContext(CurrentConnectedWalletContext);
+  const { account } = useContext(CurrentConnectedWalletContext);
 
   let textToDisplay;
 
-  if (ownershipProven && props.target === connectedWallet) {
+  if (ownershipProven && props.target === account?.address) {
     textToDisplay = "click to unlock";
-  } else if (props.target !== connectedWallet) {
+  } else if (props.target !== account?.address) {
     textToDisplay = "can't decrypt from this wallet";
   } else {
     textToDisplay = "prove ownership";
@@ -32,14 +32,14 @@ export const EncryptedWarning = (props: Props) => {
         </Typography>
       </Box>
       <Typography
-        onClick={ownershipProven && props.target === connectedWallet ? props.unlockText : undefined}
+        onClick={ownershipProven && props.target === account?.address ? props.unlockText : undefined}
         display="block"
         width="fit-content"
         margin="auto"
         textAlign="center"
         sx={{
           color: "error.main",
-          cursor: ownershipProven && props.target === connectedWallet ? "pointer" : "cursor",
+          cursor: ownershipProven && props.target === account?.address ? "pointer" : "cursor",
         }}
         variant="body1"
       >

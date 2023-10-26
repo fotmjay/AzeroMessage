@@ -9,12 +9,12 @@ import {
   SelectChangeEvent,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { WalletAccount } from "useink/core";
 import { shortenAddressWithEllipsis } from "../../helpers/addressFormatting";
+import { CurrentConnectedWalletContext } from "../../helpers/Contexts";
 
 type Props = {
-  account: WalletAccount | undefined;
   disconnect: () => void;
   accounts: WalletAccount[] | undefined;
   setAccount: (account: WalletAccount) => void;
@@ -22,6 +22,7 @@ type Props = {
 
 export const ConnectedWallet = (props: Props) => {
   const [switchAccountToggle, setSwitchAccountToggle] = useState(false);
+  const { account } = useContext(CurrentConnectedWalletContext);
 
   const switchAccount = (e: SelectChangeEvent<string>) => {
     if (props.accounts) {
@@ -43,10 +44,8 @@ export const ConnectedWallet = (props: Props) => {
         border: "1px solid",
       }}
     >
-      <Typography variant="h6">{props.account ? props.account.name : null}</Typography>
-      <Typography variant="body1">
-        {props.account ? shortenAddressWithEllipsis(props.account.address) : null}
-      </Typography>
+      <Typography variant="h6">{account ? account.name : null}</Typography>
+      <Typography variant="body1">{account ? shortenAddressWithEllipsis(account.address) : null}</Typography>
       <Box width="100%" display="flex" justifyContent="space-between">
         {props.accounts!.length > 1 && (
           <Button
@@ -71,7 +70,7 @@ export const ConnectedWallet = (props: Props) => {
             id="demo-simple-select"
             label="Switch address"
             onChange={switchAccount}
-            value={props?.account?.address}
+            value={account?.address}
             defaultValue=""
             size="medium"
           >
@@ -80,7 +79,7 @@ export const ConnectedWallet = (props: Props) => {
                 <MenuItem
                   sx={{
                     width: "100%",
-                    border: account.address === props.account!.address ? "1px solid #00eac7" : "",
+                    border: account.address === account!.address ? "1px solid #00eac7" : "",
                   }}
                   key={account.address}
                   value={account.address}
