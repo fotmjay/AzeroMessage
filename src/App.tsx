@@ -1,35 +1,24 @@
 import type { accountBalance } from "./types/polkaTypes";
 import { BaseAppLayout } from "./components/layout/BaseAppLayout";
 import { Container, CssBaseline, ThemeProvider, useMediaQuery } from "@mui/material";
-import { CurrentConnectedWalletContext, MediaSmallContext } from "./helpers/Contexts";
+import { CurrentConnectedWalletContext, MediaSmallContext, ProveOwnershipContext } from "./helpers/Contexts";
 import { HomeFooter } from "./components/HomeFooter";
 import { MainLayout } from "./components/layout/MainLayout";
-import { SetStateAction, createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { darkTheme, lightTheme } from "./constants/themes";
 import { getBalanceFromChain } from "./chainRequests/balanceRequest";
 import { useApi, useWallet } from "useink";
 
-type EncAddresses = {
-  myPubKey: string;
-  encPrivKey: string;
-};
-
-type Ownership = {
-  ownershipProven: boolean;
-  setOwnershipProven: React.Dispatch<SetStateAction<boolean>>;
-  encAddresses?: EncAddresses;
-};
-
-export const ProveOwnershipContext = createContext<Ownership>({ ownershipProven: false, setOwnershipProven: () => {} });
-
 function App() {
-  const [darkMode, setDarkMode] = useState<boolean>(() => localStorage.getItem("darkMode") === "true");
-  const [ownershipProven, setOwnershipProven] = useState(false);
+  const [darkMode, setDarkMode] = useState<boolean>(() =>
+    localStorage.getItem("darkMode") === "false" ? false : true
+  );
   const [encryptionAddresses, setEncryptionAddresses] = useState({ myPubKey: "", encPrivKey: "" });
+  const [ownershipProven, setOwnershipProven] = useState(false);
   const [selectedAccountBalance, setSelectedAccountBalance] = useState<accountBalance>();
-  const { account, connect, disconnect, accounts, setAccount } = useWallet();
-  const mediaSmall = useMediaQuery("(max-width:450px)");
   const chainNode = useApi("aleph");
+  const mediaSmall = useMediaQuery("(max-width:450px)");
+  const { account, connect, disconnect, accounts, setAccount } = useWallet();
 
   useEffect(() => {
     const encPrivKey = sessionStorage.getItem(`encryptedPrivateKey:${account?.address}`);

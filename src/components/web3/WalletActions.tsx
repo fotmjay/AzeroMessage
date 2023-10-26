@@ -1,6 +1,6 @@
 import { Box, Button, CircularProgress, TextField, Typography } from "@mui/material";
 import { CurrentConnectedWalletContext, MediaSmallContext } from "../../helpers/Contexts";
-import { ProveOwnershipContext } from "../../App";
+import { ProveOwnershipContext } from "../../helpers/Contexts";
 import { generateKeyPair } from "../../helpers/encryptionHelper";
 import { getNonceFromDatabase, signMessage } from "../../helpers/walletInteractions";
 import { useContext, useState } from "react";

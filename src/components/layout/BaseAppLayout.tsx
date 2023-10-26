@@ -12,8 +12,7 @@ import { ConnectionStatus } from "../web3/ConnectionStatus";
 import type { accountBalance } from "../../types/polkaTypes";
 import { EncryptionControlPanel } from "../web3/EncryptionControlPanel";
 import { axiosInstance } from "../../config/axios";
-import { CurrentConnectedWalletContext, MediaSmallContext } from "../../helpers/Contexts";
-import { ProveOwnershipContext } from "../../App";
+import { CurrentConnectedWalletContext, MediaSmallContext, ProveOwnershipContext } from "../../helpers/Contexts";
 
 type Props = {
   darkMode: boolean;

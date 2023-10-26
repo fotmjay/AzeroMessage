@@ -1,8 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
-import { ProveOwnershipContext } from "../../../App";
 import { useContext } from "react";
-import { CurrentConnectedWalletContext } from "../../../helpers/Contexts";
+import { CurrentConnectedWalletContext, ProveOwnershipContext } from "../../../helpers/Contexts";
 
 type Props = {
   target: string;
