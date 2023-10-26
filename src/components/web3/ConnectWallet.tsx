@@ -1,10 +1,8 @@
 import { useAllWallets } from "useink";
 import { List, ListItemText, ListItemButton, Card, Divider, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
-
-type Props = {
-  connect: (walletName: string) => void;
-};
+import { UseWalletContext } from "../../helpers/Contexts";
+import { useContext } from "react";
 
 type passedWallet = {
   installed: boolean;
@@ -12,13 +10,14 @@ type passedWallet = {
   installUrl: string;
 };
 
-export const ConnectWallet = (props: Props) => {
+export const ConnectWallet = () => {
   // Get the valid wallet extensions and put the installed one at top of list.
   const wallets = useAllWallets().sort((w1, w2) => (w1.installed === w2.installed ? 0 : w1.installed ? -1 : 1));
+  const { connect } = useContext(UseWalletContext);
 
   const handleClick = (isInstalled: boolean, wallet: passedWallet): void => {
-    if (isInstalled) {
-      props.connect(wallet.extensionName);
+    if (isInstalled && connect) {
+      connect(wallet.extensionName);
     } else {
       window.open(wallet.installUrl);
     }

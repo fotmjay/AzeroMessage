@@ -1,5 +1,5 @@
 import { SetStateAction, createContext } from "react";
-import { IApiProvider } from "useink";
+import { IApiProvider, WalletState } from "useink";
 import { WalletAccount } from "useink/core";
 
 type EncAddresses = {
@@ -19,3 +19,4 @@ export const CurrentConnectedWalletContext = createContext<{
 }>({ account: undefined, provider: undefined });
 export const MediaSmallContext = createContext(false);
 export const ProveOwnershipContext = createContext<Ownership>({ ownershipProven: false, setOwnershipProven: () => {} });
+export const UseWalletContext = createContext<Partial<WalletState>>({});

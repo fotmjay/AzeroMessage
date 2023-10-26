@@ -1,7 +1,12 @@
 import type { accountBalance } from "./types/polkaTypes";
 import { BaseAppLayout } from "./components/layout/BaseAppLayout";
 import { Container, CssBaseline, ThemeProvider, useMediaQuery } from "@mui/material";
-import { CurrentConnectedWalletContext, MediaSmallContext, ProveOwnershipContext } from "./helpers/Contexts";
+import {
+  CurrentConnectedWalletContext,
+  MediaSmallContext,
+  ProveOwnershipContext,
+  UseWalletContext,
+} from "./helpers/Contexts";
 import { HomeFooter } from "./components/HomeFooter";
 import { MainLayout } from "./components/layout/MainLayout";
 import { useEffect, useState } from "react";
@@ -56,28 +61,26 @@ function App() {
           value={{ ownershipProven, setOwnershipProven, encAddresses: encryptionAddresses }}
         >
           <MediaSmallContext.Provider value={mediaSmall}>
-            <CssBaseline />
-            <Container sx={{ height: "100vh" }}>
-              <Container
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "flex-start",
-                }}
-              >
-                <BaseAppLayout
-                  selectedAccountBalance={selectedAccountBalance}
-                  darkMode={darkMode}
-                  switchTheme={switchTheme}
-                  connect={connect}
-                  disconnect={disconnect}
-                  accounts={accounts}
-                  setAccount={setAccount}
-                />
+            <UseWalletContext.Provider value={{ connect, disconnect, accounts, setAccount }}>
+              <CssBaseline />
+              <Container sx={{ height: "100vh" }}>
+                <Container
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <BaseAppLayout
+                    selectedAccountBalance={selectedAccountBalance}
+                    darkMode={darkMode}
+                    switchTheme={switchTheme}
+                  />
+                </Container>
+                <MainLayout />
+                <HomeFooter />
               </Container>
-              <MainLayout />
-              <HomeFooter />
-            </Container>
+            </UseWalletContext.Provider>
           </MediaSmallContext.Provider>
         </ProveOwnershipContext.Provider>
       </CurrentConnectedWalletContext.Provider>

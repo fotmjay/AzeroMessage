@@ -7,7 +7,6 @@ import AlephA from "../../assets/Alephabet/A.svg?react";
 import AlephM from "../../assets/Alephabet/M.svg?react";
 
 import { useContext, useEffect, useState } from "react";
-import { WalletAccount } from "useink/core";
 import { ConnectionStatus } from "../web3/ConnectionStatus";
 import type { accountBalance } from "../../types/polkaTypes";
 import { EncryptionControlPanel } from "../web3/EncryptionControlPanel";
@@ -16,10 +15,6 @@ import { CurrentConnectedWalletContext, MediaSmallContext, ProveOwnershipContext
 
 type Props = {
   darkMode: boolean;
-  disconnect: () => void;
-  accounts: WalletAccount[] | undefined;
-  setAccount: (account: WalletAccount) => void;
-  connect: (walletName: string) => void;
   switchTheme: () => void;
   selectedAccountBalance?: accountBalance;
 };
@@ -112,14 +107,7 @@ export const BaseAppLayout = (props: Props) => {
           top: mediaSmall ? "0" : "-40%",
         }}
       >
-        {openModal === "connectionStatus" && (
-          <Web3ConnectionSection
-            connect={props.connect}
-            disconnect={props.disconnect}
-            accounts={props.accounts}
-            setAccount={props.setAccount}
-          />
-        )}
+        {openModal === "connectionStatus" && <Web3ConnectionSection />}
         {openModal === "encryptionStatus" && provider && account && <EncryptionControlPanel />}
       </Dialog>
     </Container>

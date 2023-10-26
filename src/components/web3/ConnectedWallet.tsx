@@ -10,25 +10,19 @@ import {
   Typography,
 } from "@mui/material";
 import { useContext, useState } from "react";
-import { WalletAccount } from "useink/core";
 import { shortenAddressWithEllipsis } from "../../helpers/addressFormatting";
-import { CurrentConnectedWalletContext } from "../../helpers/Contexts";
+import { CurrentConnectedWalletContext, UseWalletContext } from "../../helpers/Contexts";
 
-type Props = {
-  disconnect: () => void;
-  accounts: WalletAccount[] | undefined;
-  setAccount: (account: WalletAccount) => void;
-};
-
-export const ConnectedWallet = (props: Props) => {
+export const ConnectedWallet = () => {
   const [switchAccountToggle, setSwitchAccountToggle] = useState(false);
   const { account } = useContext(CurrentConnectedWalletContext);
+  const { accounts, setAccount, disconnect } = useContext(UseWalletContext);
 
   const switchAccount = (e: SelectChangeEvent<string>) => {
-    if (props.accounts) {
-      const accountChosen = props.accounts.find((account) => account.address === e.target.value);
+    if (accounts && setAccount) {
+      const accountChosen = accounts.find((account) => account.address === e.target.value);
       if (accountChosen !== undefined) {
-        return props.setAccount(accountChosen);
+        return setAccount(accountChosen);
       }
     }
   };
@@ -47,7 +41,7 @@ export const ConnectedWallet = (props: Props) => {
       <Typography variant="h6">{account ? account.name : null}</Typography>
       <Typography variant="body1">{account ? shortenAddressWithEllipsis(account.address) : null}</Typography>
       <Box width="100%" display="flex" justifyContent="space-between">
-        {props.accounts!.length > 1 && (
+        {accounts!.length > 1 && (
           <Button
             size="small"
             variant="contained"
@@ -58,7 +52,7 @@ export const ConnectedWallet = (props: Props) => {
           </Button>
         )}
 
-        <Button sx={{ marginLeft: "auto" }} size="small" variant="contained" color="error" onClick={props.disconnect}>
+        <Button sx={{ marginLeft: "auto" }} size="small" variant="contained" color="error" onClick={disconnect}>
           Disconnect
         </Button>
       </Box>
@@ -74,7 +68,7 @@ export const ConnectedWallet = (props: Props) => {
             defaultValue=""
             size="medium"
           >
-            {props.accounts?.map((account) => {
+            {accounts?.map((account) => {
               return (
                 <MenuItem
                   sx={{
