@@ -31,8 +31,12 @@ export const ConnectWallet = () => {
       <List sx={{ width: "100%", maxWidth: "400px" }}>
         {wallets.map((w) => {
           return (
-            <ListItemButton sx={{ gap: "3px" }} onClick={() => handleClick(w.installed, w)} key={w.title}>
-              <Avatar sx={{ width: "20px", height: "20px" }}>
+            <ListItemButton
+              sx={{ columnGap: "10px", paddingBottom: "0" }}
+              onClick={() => handleClick(w.installed, w)}
+              key={w.title}
+            >
+              <Avatar sx={{ width: "25px", height: "25px" }}>
                 <img src={w.logo.src} alt={w.logo.alt} />
               </Avatar>
               <ListItemText
