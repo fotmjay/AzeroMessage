@@ -1,5 +1,5 @@
 import { Box, Container, Tab, Tabs } from "@mui/material";
-import React, { SetStateAction, useEffect, useState } from "react";
+import React, { SetStateAction, useState } from "react";
 import { SearchSectionContainer } from "../SearchSection/SearchSectionContainer";
 import { SendingSectionContainer } from "../SendSection/SendingSectionContainer";
 import { FAQ } from "../FAQ";
