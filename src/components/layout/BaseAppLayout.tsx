@@ -47,7 +47,7 @@ export const BaseAppLayout = (props: Props) => {
   return (
     <Container sx={{ paddingX: "0", paddingY: "10px" }}>
       <Box>
-        <Box display="flex" justifyContent="space-between" marginY="10px">
+        <Box display="flex" justifyContent="space-between" alignItems="flex-start" marginY="10px">
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <DarkModeIcon />
             <Switch name="darkModeSwitch" onClick={props.switchTheme} size="small" checked={props.darkMode}></Switch>

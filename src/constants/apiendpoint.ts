@@ -1,4 +1,4 @@
 export const APIENDPOINT = {
   aleph: "https://alephzero.api.subscan.io",
-  azeroMessageBackend: "https://azeromessagebackend.cyclic.app/",
+  azeroMessageBackend: "http://localhost:3000/",
 };

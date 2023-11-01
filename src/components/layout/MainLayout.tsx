@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { SearchSectionContainer } from "../SearchSection/SearchSectionContainer";
 import { SendingSectionContainer } from "../SendSection/SendingSectionContainer";
 import { FAQ } from "../FAQ";
+import { LatestMessagesContainer } from "../LatestMessagesContainer";
 
 export const MainLayout = () => {
   const [chosenTab, setChosenTab] = useState(0);
@@ -32,11 +33,13 @@ export const MainLayout = () => {
         >
           <Tab label="Read Messages" {...a11yProps(0)} />
           <Tab label="Send Messages" {...a11yProps(1)} />
-          <Tab label="FAQ" {...a11yProps(2)} />
+          <Tab label="Latest messages" {...a11yProps(2)} />
+          <Tab label="FAQ" {...a11yProps(3)} />
         </Tabs>
         <SearchSectionContainer chosenTab={chosenTab} index={0} />
         <SendingSectionContainer chosenTab={chosenTab} index={1} />
-        <FAQ chosenTab={chosenTab} index={2} />
+        <LatestMessagesContainer chosenTab={chosenTab} index={2} />
+        <FAQ chosenTab={chosenTab} index={3} />
       </Box>
     </Container>
   );
