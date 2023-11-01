@@ -1,14 +1,9 @@
 import { Card, Link, List, ListItem, Typography } from "@mui/material";
 import { CONSTANT } from "../constants/constants";
 
-type Props = {
-  chosenTab: number;
-  index: number;
-};
-export const FAQ = (props: Props) => {
+export const FAQ = () => {
   return (
     <Card
-      hidden={props.chosenTab !== props.index}
       sx={{
         maxWidth: "500px",
         marginX: "auto",

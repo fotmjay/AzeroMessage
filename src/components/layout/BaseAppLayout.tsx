@@ -6,7 +6,7 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import AlephA from "../../assets/Alephabet/A.svg?react";
 import AlephM from "../../assets/Alephabet/M.svg?react";
 
-import { useContext, useEffect, useState } from "react";
+import React, { SetStateAction, useContext, useEffect, useState } from "react";
 import { ConnectionStatus } from "../web3/ConnectionStatus";
 import type { accountBalance } from "../../types/polkaTypes";
 import { EncryptionControlPanel } from "../web3/EncryptionControlPanel";
@@ -17,6 +17,7 @@ type Props = {
   darkMode: boolean;
   switchTheme: () => void;
   selectedAccountBalance?: accountBalance;
+  setShowFaq: React.Dispatch<SetStateAction<boolean>>;
 };
 
 export const BaseAppLayout = (props: Props) => {
@@ -47,7 +48,7 @@ export const BaseAppLayout = (props: Props) => {
   return (
     <Container sx={{ paddingX: "0", paddingY: "10px" }}>
       <Box>
-        <Box display="flex" justifyContent="space-between" marginY="10px">
+        <Box display="flex" justifyContent="space-between" alignItems="flex-start" marginY="10px">
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <DarkModeIcon />
             <Switch name="darkModeSwitch" onClick={props.switchTheme} size="small" checked={props.darkMode}></Switch>
@@ -63,6 +64,7 @@ export const BaseAppLayout = (props: Props) => {
                 {encryptionEnabled ? "Settings" : "Enable encryption"}
               </Button>
             )}
+            <Button onClick={() => props.setShowFaq(true)}>FAQ</Button>
           </Box>
         </Box>
         <Link color="text.primary" href=".">

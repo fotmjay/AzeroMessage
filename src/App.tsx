@@ -21,6 +21,7 @@ function App() {
   const [encryptionAddresses, setEncryptionAddresses] = useState({ myPubKey: "", encPrivKey: "" });
   const [ownershipProven, setOwnershipProven] = useState(false);
   const [selectedAccountBalance, setSelectedAccountBalance] = useState<accountBalance>();
+  const [showFaq, setShowFaq] = useState(false);
   const chainNode = useApi("aleph");
   const mediaSmall = useMediaQuery("(max-width:450px)");
   const { account, connect, disconnect, accounts, setAccount } = useWallet();
@@ -75,9 +76,10 @@ function App() {
                     selectedAccountBalance={selectedAccountBalance}
                     darkMode={darkMode}
                     switchTheme={switchTheme}
+                    setShowFaq={setShowFaq}
                   />
                 </Container>
-                <MainLayout />
+                <MainLayout showFaq={showFaq} setShowFaq={setShowFaq} />
                 <HomeFooter />
               </Container>
             </UseWalletContext.Provider>

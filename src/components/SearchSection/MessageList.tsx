@@ -21,7 +21,7 @@ export const MessageList = (props: Props) => {
 
   return (
     <Box>
-      {currentlyDisplayedMessages === undefined ? (
+      {currentlyDisplayedMessages === undefined || props.messageList.length === 0 ? (
         <Typography textAlign="center">No messages found.</Typography>
       ) : (
         currentlyDisplayedMessages.map((message) => {
@@ -36,7 +36,9 @@ export const MessageList = (props: Props) => {
         })
       )}
       <Box display="flex" justifyContent="flex-end" alignItems="center" paddingX="8px" paddingBottom="5px">
-        <PaginationRounded currentPage={currentPage} onChange={setCurrentPage} maxNumberOfPages={maxNumberOfPages} />
+        {maxNumberOfPages > 1 && (
+          <PaginationRounded currentPage={currentPage} onChange={setCurrentPage} maxNumberOfPages={maxNumberOfPages} />
+        )}
       </Box>
     </Box>
   );
