@@ -11,22 +11,27 @@ type Props = {
 export const LatestMessagesContainer = (props: Props) => {
   const [latestMessages, setLatestMessages] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    axiosInstance
-      .get(`/api/messages/latest`)
-      .then((res) => {
-        setLatestMessages(res.data.data);
-      })
-      .catch((err) => {
-        console.error(err);
-        if (err.code === "ECONNABORTED") {
-          setErrorMessage("Connection timed out.  Please try again.");
-        } else {
-          setErrorMessage(err.message);
-        }
-      });
-  }, []);
+    if (props.chosenTab === props.index) {
+      setIsLoading(true);
+      axiosInstance
+        .get(`/api/messages/latest`)
+        .then((res) => {
+          setLatestMessages(res.data.data);
+        })
+        .catch((err) => {
+          console.error(err);
+          if (err.code === "ECONNABORTED") {
+            setErrorMessage("Connection timed out.  Please try again.");
+          } else {
+            setErrorMessage(err.message);
+          }
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, [props.chosenTab, props.index]);
 
   return (
     <Box hidden={props.chosenTab !== props.index}>
@@ -34,7 +39,7 @@ export const LatestMessagesContainer = (props: Props) => {
         <Typography paddingX="10px" paddingTop="10px" color="error.main">
           {errorMessage}
         </Typography>
-        <MessageList messageList={latestMessages} />
+        {isLoading ? <Typography>Loading...</Typography> : <MessageList messageList={latestMessages} />}
       </Card>
     </Box>
   );
