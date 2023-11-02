@@ -47,24 +47,28 @@ export const FAQ = () => {
           **** There is a 0.05 AZERO fee to send a message. ****
         </ListItem>
       </List>
-
       <Typography fontWeight="bold" paddingX="5px">
         Encryption? How does it work?
       </Typography>
       <Typography paddingX="15px">
-        To enable reception of encrypted message, the user needs to enable encryption on his address by choosing a
-        password and signing a message. It creates a key pair protected by password for message encryption/decryption.
-        Encrypted messages CANNOT be sent to users who have not enabled it.
+        Everyone can send encrypted messages. To receive encrypted messages, you need to enable encryption by choosing a
+        password in your settings.
       </Typography>
       <Typography paddingX="15px" color="warning.main">
-        Encrypted messages CANNOT be sent to users who have not enabled it.
+        Encrypted messages CANNOT be sent to users who have not enabled it as they won't be able to decrypt them.
       </Typography>
-
+      <Typography fontWeight="bold" paddingX="5px">
+        I changed my password and can't decrypt messages anymore, why?
+      </Typography>
+      <Typography paddingX="15px">
+        A new encryption keypair is generated every time you set a password. This makes all previously received messages
+        non-decryptable, while all newly-received encrypted messages will be decryptable only with that fresh password.
+      </Typography>
       <Typography fontWeight="bold" paddingX="5px">
         Can I see the code?
       </Typography>
       <Typography paddingX="15px">
-        Sure thing! All parts (smart-contract, back-end and front-end) are available on{" "}
+        Sure thing! All parts (smart-contract, back-end and front-end) are available on
         <Link sx={{ color: "lightblue" }} target="_blank" href="https://www.github.com/fotmJay">
           Github
         </Link>
