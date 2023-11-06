@@ -53,6 +53,7 @@ export const BaseAppLayout = (props: Props) => {
             <DarkModeIcon />
             <Switch name="darkModeSwitch" onClick={props.switchTheme} size="small" checked={props.darkMode}></Switch>
           </Box>
+
           <Box display="flex" flexDirection="column" justifyContent="flex-start" alignItems="flex-end">
             <ConnectionStatus
               selectedAccountBalance={props.selectedAccountBalance}
@@ -67,17 +68,18 @@ export const BaseAppLayout = (props: Props) => {
             <Button onClick={() => props.setShowFaq(true)}>FAQ</Button>
           </Box>
         </Box>
-        <Link color="text.primary" href=".">
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            columnGap="10px"
-            minWidth="170px"
-            flexDirection={mediaSmall ? "column" : "row"}
-            margin="auto"
-          >
-            <Typography textAlign="center" variant="h2" component="h1" sx={{ textDecoration: "underline" }}>
+
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          columnGap="10px"
+          minWidth="250px"
+          flexDirection={mediaSmall ? "column" : "row"}
+          margin="auto"
+        >
+          <Typography textAlign="center" variant="h2" component="h1" sx={{ textDecoration: "underline" }}>
+            <Link color="text.primary" href=".">
               <SvgIcon
                 viewBox="0 0 105 100"
                 sx={{ fontSize: "1.1em", marginRight: "3px", display: "inline-block", verticalAlign: "middle" }}
@@ -85,8 +87,10 @@ export const BaseAppLayout = (props: Props) => {
                 inheritViewBox
               />
               zero
-            </Typography>
-            <Typography textAlign="center" variant="h2" component="h1" sx={{ textDecoration: "underline" }}>
+            </Link>
+          </Typography>
+          <Typography textAlign="center" variant="h2" component="h1" sx={{ textDecoration: "underline" }}>
+            <Link color="text.primary" href=".">
               <SvgIcon
                 viewBox="0 0 92.42 100"
                 sx={{ fontSize: "1.1em", marginRight: "3px", display: "inline-block", verticalAlign: "middle" }}
@@ -94,9 +98,9 @@ export const BaseAppLayout = (props: Props) => {
                 inheritViewBox
               />
               essage
-            </Typography>
-          </Box>
-        </Link>
+            </Link>
+          </Typography>
+        </Box>
       </Box>
       <Dialog
         fullWidth

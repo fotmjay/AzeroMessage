@@ -23,7 +23,7 @@ function App() {
   const [selectedAccountBalance, setSelectedAccountBalance] = useState<accountBalance>();
   const [showFaq, setShowFaq] = useState(false);
   const chainNode = useApi("aleph");
-  const mediaSmall = useMediaQuery("(max-width:450px)");
+  const mediaSmall = useMediaQuery("(max-width:500px)");
   const { account, connect, disconnect, accounts, setAccount } = useWallet();
 
   useEffect(() => {
@@ -64,7 +64,7 @@ function App() {
           <MediaSmallContext.Provider value={mediaSmall}>
             <UseWalletContext.Provider value={{ connect, disconnect, accounts, setAccount }}>
               <CssBaseline />
-              <Container sx={{ height: "100vh" }}>
+              <Container sx={{ height: "100vh", minWidth: "330px" }}>
                 <Container
                   sx={{
                     display: "flex",

@@ -68,7 +68,7 @@ export const FAQ = () => {
         Can I see the code?
       </Typography>
       <Typography paddingX="15px">
-        Sure thing! All parts (smart-contract, back-end and front-end) are available on
+        Sure thing! All parts (smart-contract, back-end and front-end) are available on{" "}
         <Link sx={{ color: "lightblue" }} target="_blank" href="https://www.github.com/fotmJay">
           Github
         </Link>

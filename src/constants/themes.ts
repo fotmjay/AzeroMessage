@@ -74,7 +74,8 @@ export const darkTheme = responsiveFontSizes(
         fontFamily: '"Outfit", "Roboto", "Helvetica", "Arial", sans-serif',
       },
     },
-  })
+  }),
+  { factor: 1.03 }
 );
 
 export const lightTheme = responsiveFontSizes(
@@ -151,5 +152,6 @@ export const lightTheme = responsiveFontSizes(
         fontFamily: '"Outfit", "Roboto", "Helvetica", "Arial", sans-serif',
       },
     },
-  })
+  }),
+  { factor: 1.03 }
 );
