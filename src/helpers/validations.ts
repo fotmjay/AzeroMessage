@@ -4,15 +4,19 @@ import { SetStateAction } from "react";
 
 export const addressFormatValidation = (
   address: string,
-  setErrorCB: React.Dispatch<SetStateAction<string>>
+  setErrorCB?: React.Dispatch<SetStateAction<string>>
 ): boolean => {
   const isValidAddressPolkadotAddress = () => {
-    setErrorCB("");
+    if (setErrorCB) {
+      setErrorCB("");
+    }
     try {
       encodeAddress(isHex(address) ? hexToU8a(address) : decodeAddress(address));
       return true;
     } catch (error) {
-      setErrorCB("Provided address is invalid.");
+      if (setErrorCB) {
+        setErrorCB("Provided address is invalid.");
+      }
       return false;
     }
   };

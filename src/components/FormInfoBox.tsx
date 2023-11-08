@@ -12,7 +12,9 @@ export const FormInfoBox = (props: Props) => {
       <Typography variant="body1" sx={{ marginTop: "5px" }} paddingX="5px">
         {props.icon}
       </Typography>
-      <Typography variant="body1">{props.messageToShow}</Typography>
+      <Typography variant="body1" sx={{ wordWrap: "normal" }}>
+        {props.messageToShow}
+      </Typography>
     </Box>
   );
 };

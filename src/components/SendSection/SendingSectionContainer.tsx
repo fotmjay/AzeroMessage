@@ -43,24 +43,36 @@ export const SendingSectionContainer = (props: Props) => {
   const { account, provider } = useContext(CurrentConnectedWalletContext);
 
   useEffect(() => {
-    if (domainResolver.address !== null && domainResolver.address !== undefined) {
-      setValidatedAddress(domainResolver.address);
-      setErrorMessage("");
-    } else if (domainResolver.address === null) {
-      setErrorMessage("There is no address resolved from this domain.");
+    if (!toggleMultisend) {
+      if (domainResolver.address !== null && domainResolver.address !== undefined) {
+        setValidatedAddress(domainResolver.address);
+        setErrorMessage("");
+      } else if (domainResolver.address === null) {
+        setErrorMessage("There is no address resolved from this domain.");
+      } else if (debouncedAddress !== "") {
+        const valid = addressFormatValidation(debouncedAddress, setErrorMessage);
+        setValidatedAddress(() => {
+          if (valid) {
+            return debouncedAddress;
+          } else {
+            return "";
+          }
+        });
+      } else {
+        setErrorMessage("");
+      }
     } else if (debouncedAddress !== "") {
-      const valid = addressFormatValidation(debouncedAddress, setErrorMessage);
-      setValidatedAddress(() => {
-        if (valid) {
-          return debouncedAddress;
-        } else {
-          return "";
-        }
-      });
-    } else {
-      setErrorMessage("");
+      let addressListString = debouncedAddress.replace(/[\n\r\s\t]+/g, "");
+      if (addressListString[addressListString.length - 1] === ",") {
+        addressListString = addressListString.slice(0, addressListString.length - 1);
+      }
+      const addressList = addressListString.split(",");
+      const wrongAddresses = addressList.filter((address) => !addressFormatValidation(address));
+      if (wrongAddresses.length > 0) {
+        setErrorMessage(`These ${wrongAddresses.length} addresses are not valid:  ${wrongAddresses.join(",\n")}`);
+      }
     }
-  }, [domainResolver.address, debouncedAddress]);
+  }, [domainResolver.address, debouncedAddress, toggleMultisend]);
 
   const handleMultisendToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setToggleMultisend((toggle) => !toggle);
@@ -118,7 +130,7 @@ export const SendingSectionContainer = (props: Props) => {
   }
 
   useEffect(() => {
-    if (validatedAddress !== "") {
+    if (validatedAddress !== "" && !toggleMultisend) {
       axiosInstance
         .get(`/api/publickey/${validatedAddress}`)
         .then((res) => {
@@ -134,7 +146,7 @@ export const SendingSectionContainer = (props: Props) => {
           console.error(err);
         });
     }
-  }, [validatedAddress]);
+  }, [validatedAddress, toggleMultisend]);
 
   return (
     <Card
@@ -161,9 +173,11 @@ export const SendingSectionContainer = (props: Props) => {
               </InputAdornment>
             ),
             endAdornment: (
-              <InputAdornment position="end">
-                <Checkbox checked={toggleMultisend} onChange={handleMultisendToggle} />
-                <Typography variant="caption">Multisend?</Typography>
+              <InputAdornment position="end" sx={{ margin: "0" }}>
+                <Checkbox sx={{ padding: "1px" }} checked={toggleMultisend} onChange={handleMultisendToggle} />
+                <Typography sx={{ padding: "0", margin: "0" }} variant="caption">
+                  {mediaSmall ? "List" : "Multisend?"}
+                </Typography>
               </InputAdornment>
             ),
             sx: {
