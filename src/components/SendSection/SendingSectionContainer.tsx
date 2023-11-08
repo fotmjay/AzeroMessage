@@ -1,4 +1,15 @@
-import { Button, Card, TextField, Typography, FormControl, Divider, InputAdornment, Box } from "@mui/material";
+import {
+  Button,
+  Card,
+  TextField,
+  Typography,
+  FormControl,
+  Divider,
+  InputAdornment,
+  Box,
+  Checkbox,
+  Dialog,
+} from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { addressFormatValidation } from "../../helpers/validations";
 import { makeTransaction } from "../../chainRequests/transactionRequest";
@@ -10,6 +21,7 @@ import { CONSTANT } from "../../constants/constants";
 import { axiosInstance } from "../../config/axios";
 import { encryptMessageWithPublicKey } from "../../helpers/encryptionHelper";
 import { CurrentConnectedWalletContext, MediaSmallContext } from "../../helpers/Contexts";
+import { MultisendFAQ } from "./MultisendFAQ";
 
 type Props = {
   chosenTab: number;
@@ -23,6 +35,8 @@ export const SendingSectionContainer = (props: Props) => {
   const [validatedAddress, setValidatedAddress] = useState("");
   const [publicEncryptionAddress, setPublicEncryptionAddress] = useState("");
   const [encryptionEnabled, setEncryptionEnabled] = useState(false);
+  const [toggleMultisend, setToggleMultisend] = useState(false);
+  const [multisendWarningToggle, setMultisendWarningToggle] = useState(false);
   const domainResolver = useResolveDomainToAddress(form.address);
   const debouncedAddress = useDebounce(form.address, 300);
   const mediaSmall = useContext(MediaSmallContext);
@@ -47,6 +61,13 @@ export const SendingSectionContainer = (props: Props) => {
       setErrorMessage("");
     }
   }, [domainResolver.address, debouncedAddress]);
+
+  const handleMultisendToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setToggleMultisend((toggle) => !toggle);
+    if (e.target.checked === true) {
+      setMultisendWarningToggle(true);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let text = e.target.value;
@@ -139,6 +160,12 @@ export const SendingSectionContainer = (props: Props) => {
                 <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
               </InputAdornment>
             ),
+            endAdornment: (
+              <InputAdornment position="end">
+                <Checkbox checked={toggleMultisend} onChange={handleMultisendToggle} />
+                <Typography variant="caption">Multisend?</Typography>
+              </InputAdornment>
+            ),
             sx: {
               paddingLeft: "10px",
               paddingRight: "12px",
@@ -181,6 +208,18 @@ export const SendingSectionContainer = (props: Props) => {
           {!encryptionEnabled && validatedAddress && "Encryption isn't enabled on receiver address."}
         </Typography>
       </FormControl>
+      <Dialog
+        fullWidth
+        open={multisendWarningToggle}
+        sx={{
+          marginX: "auto",
+          display: "block",
+          maxWidth: "500px",
+          top: mediaSmall ? "0" : "-40%",
+        }}
+      >
+        <MultisendFAQ setMultisendWarningToggle={setMultisendWarningToggle} setToggleMultisend={setToggleMultisend} />
+      </Dialog>
     </Card>
   );
 };
