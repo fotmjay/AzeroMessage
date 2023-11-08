@@ -193,7 +193,7 @@ export const SendingSectionContainer = (props: Props) => {
           >
             Send
           </Button>
-          {validatedAddress && (
+          {validatedAddress && !toggleMultisend && (
             <Button
               onClick={() => submitForm(true)}
               variant="outlined"
@@ -205,7 +205,10 @@ export const SendingSectionContainer = (props: Props) => {
           )}
         </Box>
         <Typography paddingTop="5px" display="block" marginLeft="auto" color="error">
-          {!encryptionEnabled && validatedAddress && "Encryption isn't enabled on receiver address."}
+          {!encryptionEnabled &&
+            validatedAddress &&
+            !toggleMultisend &&
+            "Encryption isn't enabled on receiver address."}
         </Typography>
       </FormControl>
       <Dialog
