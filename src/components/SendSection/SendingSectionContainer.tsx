@@ -70,6 +70,8 @@ export const SendingSectionContainer = (props: Props) => {
       const wrongAddresses = addressList.filter((address) => !addressFormatValidation(address));
       if (wrongAddresses.length > 0) {
         setErrorMessage(`These ${wrongAddresses.length} addresses are not valid:  ${wrongAddresses.join(",\n")}`);
+      } else {
+        setValidatedAddress(addressList.join(","));
       }
     }
   }, [domainResolver.address, debouncedAddress, toggleMultisend]);
@@ -113,7 +115,15 @@ export const SendingSectionContainer = (props: Props) => {
       encryptionEnabled && publicEncryptionAddress !== ""
         ? await encryptMessageWithPublicKey(publicEncryptionAddress, form.message)
         : form.message;
-    makeTransaction(provider, account, validatedAddress, messageText, encryptionEnabled, setSubscriptionText);
+    makeTransaction(
+      provider,
+      account,
+      validatedAddress,
+      messageText,
+      encryptionEnabled,
+      toggleMultisend,
+      setSubscriptionText
+    );
   };
 
   let messageToShow = "";

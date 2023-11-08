@@ -11,12 +11,13 @@ export const makeTransaction = async (
   address: string,
   message: string,
   encrypted: boolean,
+  toggleMultisend: boolean,
   setSubscriptionText: React.Dispatch<SetStateAction<string>>
 ) => {
   const contract = new ContractPromise(provider.api, metadata, CONSTANT.CONTRACT.ADDRESS);
   const gasLimit = provider.api?.registry.createType("WeightV2", {
-    refTime: 4200000000,
-    proofSize: 200000,
+    refTime: 10000000000,
+    proofSize: 1000000,
   });
   const { result, output } = await contract.query.getFees(signerAccount.address, {
     storageDepositLimit: null,
