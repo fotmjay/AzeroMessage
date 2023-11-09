@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0x07245558ecb37eadc3595027e192bc4940b87e49af746af5b85a7f5c0565fc29",
+    "hash": "0xa89092be77d840560bc0217e0696ccc835161c5f1b2d8263542bb741c415a263",
     "language": "ink! 4.3.0",
     "compiler": "rustc 1.73.0",
     "build_info": {
@@ -58,26 +58,26 @@
         "displayName": [
           "BlockNumber"
         ],
-        "type": 17
+        "type": 16
       },
       "chainExtension": {
         "displayName": [
           "ChainExtension"
         ],
-        "type": 18
+        "type": 17
       },
       "hash": {
         "displayName": [
           "Hash"
         ],
-        "type": 15
+        "type": 14
       },
       "maxEventTopics": 4,
       "timestamp": {
         "displayName": [
           "Timestamp"
         ],
-        "type": 16
+        "type": 15
       }
     },
     "events": [
@@ -187,43 +187,6 @@
         "selector": "0xafdc403f"
       },
       {
-        "args": [
-          {
-            "label": "addresses",
-            "type": {
-              "displayName": [
-                "Vec"
-              ],
-              "type": 12
-            }
-          },
-          {
-            "label": "message",
-            "type": {
-              "displayName": [
-                "String"
-              ],
-              "type": 7
-            }
-          }
-        ],
-        "default": false,
-        "docs": [
-          " Function to bulk emit message events on the blockchain."
-        ],
-        "label": "bulk_send_message",
-        "mutates": true,
-        "payable": true,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 9
-        },
-        "selector": "0x2debbdf5"
-      },
-      {
         "args": [],
         "default": false,
         "docs": [
@@ -285,7 +248,7 @@
         "docs": [
           " Function to modify the messaging fee of the contract (only usable by current owner)"
         ],
-        "label": "modify_standard_fee",
+        "label": "modify_fees",
         "mutates": true,
         "payable": false,
         "returnType": {
@@ -295,61 +258,7 @@
           ],
           "type": 9
         },
-        "selector": "0x740a7d03"
-      },
-      {
-        "args": [
-          {
-            "label": "value",
-            "type": {
-              "displayName": [
-                "u128"
-              ],
-              "type": 3
-            }
-          }
-        ],
-        "default": false,
-        "docs": [
-          " Function to modify the messaging fee of the contract (only usable by current owner) (base fee, per address fee)"
-        ],
-        "label": "modify_bulk_base_fee",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 9
-        },
-        "selector": "0xdc090d4f"
-      },
-      {
-        "args": [
-          {
-            "label": "value",
-            "type": {
-              "displayName": [
-                "u128"
-              ],
-              "type": 3
-            }
-          }
-        ],
-        "default": false,
-        "docs": [],
-        "label": "modify_bulk_var_fee",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 9
-        },
-        "selector": "0x3e3ea6f2"
+        "selector": "0x725a758d"
       },
       {
         "args": [],
@@ -365,7 +274,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 13
+          "type": 12
         },
         "selector": "0x07fcd0b1"
       },
@@ -375,7 +284,7 @@
         "docs": [
           " Function to query the current messaging fee."
         ],
-        "label": "get_standard_fee",
+        "label": "get_fees",
         "mutates": false,
         "payable": false,
         "returnType": {
@@ -383,45 +292,9 @@
             "ink",
             "MessageResult"
           ],
-          "type": 14
+          "type": 13
         },
-        "selector": "0x631cd50e"
-      },
-      {
-        "args": [],
-        "default": false,
-        "docs": [
-          " Function to query the current bulk base messaging fee."
-        ],
-        "label": "get_bulk_base_fee",
-        "mutates": false,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 14
-        },
-        "selector": "0x72f12867"
-      },
-      {
-        "args": [],
-        "default": false,
-        "docs": [
-          " Function to query the current bulk per address messaging fee."
-        ],
-        "label": "get_bulk_var_fee",
-        "mutates": false,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 14
-        },
-        "selector": "0x6f8e8a90"
+        "selector": "0x26c06684"
       }
     ]
   },
@@ -446,25 +319,7 @@
                   "ty": 3
                 }
               },
-              "name": "standard_fee"
-            },
-            {
-              "layout": {
-                "leaf": {
-                  "key": "0x00000000",
-                  "ty": 3
-                }
-              },
-              "name": "bulk_base_fee"
-            },
-            {
-              "layout": {
-                "leaf": {
-                  "key": "0x00000000",
-                  "ty": 3
-                }
-              },
-              "name": "bulk_var_fee"
+              "name": "fees"
             }
           ],
           "name": "AzeroMessage"
@@ -718,16 +573,6 @@
       "id": 12,
       "type": {
         "def": {
-          "sequence": {
-            "type": 0
-          }
-        }
-      }
-    },
-    {
-      "id": 13,
-      "type": {
-        "def": {
           "variant": {
             "variants": [
               {
@@ -767,7 +612,7 @@
       }
     },
     {
-      "id": 14,
+      "id": 13,
       "type": {
         "def": {
           "variant": {
@@ -809,7 +654,7 @@
       }
     },
     {
-      "id": 15,
+      "id": 14,
       "type": {
         "def": {
           "composite": {
@@ -829,7 +674,7 @@
       }
     },
     {
-      "id": 16,
+      "id": 15,
       "type": {
         "def": {
           "primitive": "u64"
@@ -837,7 +682,7 @@
       }
     },
     {
-      "id": 17,
+      "id": 16,
       "type": {
         "def": {
           "primitive": "u32"
@@ -845,7 +690,7 @@
       }
     },
     {
-      "id": 18,
+      "id": 17,
       "type": {
         "def": {
           "variant": {}
