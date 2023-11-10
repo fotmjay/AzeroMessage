@@ -211,6 +211,7 @@ export const SendingSectionContainer = (props: Props) => {
           <Button
             type="submit"
             onClick={() => submitForm(false)}
+            disabled={validatedAddress === ""}
             fullWidth
             sx={{ marginX: "auto" }}
             variant="contained"
