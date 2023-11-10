@@ -198,7 +198,7 @@ export const SendingSectionContainer = (props: Props) => {
               <InputAdornment position="end" sx={{ margin: "0" }}>
                 <Checkbox sx={{ padding: "1px" }} checked={toggleMultisend} onChange={handleMultisendToggle} />
                 <Typography sx={{ padding: "0", margin: "0" }} variant="caption">
-                  {mediaSmall ? "List" : "Multisend?"}
+                  {mediaSmall ? "Bulk" : "Multisend?"}
                 </Typography>
               </InputAdornment>
             ),
