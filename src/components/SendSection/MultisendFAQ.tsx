@@ -24,6 +24,9 @@ export const MultisendFAQ = (props: Props) => {
         <Typography gutterBottom variant="body1">
           E.g. address1, address2, address3 or address1,address2,address3
         </Typography>
+        <Typography gutterBottom variant="body1" color="warning.main">
+          ***Fees: 2 AZERO + 0.02 PER ADDRESS***
+        </Typography>
         <Box display="flex" justifyContent="flex-end" columnGap="5px">
           <Button variant="outlined" type="button" color="error" onClick={() => handleClick(false)}>
             Cancel
