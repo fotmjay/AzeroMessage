@@ -21,6 +21,9 @@ export const MultisendFAQ = (props: Props) => {
           By checking the multisend box, you will send your message to all addresses in the address field. Addresses
           need to be separated by a comma.
         </Typography>
+        <Typography gutterBottom variant="body1" color="warning.main">
+          Maximum 200 characters and 500 addresses at once.
+        </Typography>
         <Typography gutterBottom variant="body1">
           E.g. address1, address2, address3 or address1,address2,address3
         </Typography>

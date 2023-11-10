@@ -17,8 +17,8 @@ export const makeTransaction = async (
   const addressToSend = toggleMultisend ? address.split(",") : address;
   const contract = new ContractPromise(provider.api, metadata, CONSTANT.CONTRACT.ADDRESS);
   const gasLimit = provider.api.registry.createType("WeightV2", {
-    refTime: 1000000000000,
-    proofSize: 200000,
+    refTime: 200000000000,
+    proofSize: 132000,
   });
   const feesForMessage = await getTransactionCost(
     contract,

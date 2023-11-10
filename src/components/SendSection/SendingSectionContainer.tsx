@@ -67,11 +67,15 @@ export const SendingSectionContainer = (props: Props) => {
         addressListString = addressListString.slice(0, addressListString.length - 1);
       }
       const addressList = addressListString.split(",");
-      const wrongAddresses = addressList.filter((address) => !addressFormatValidation(address));
-      if (wrongAddresses.length > 0) {
-        setErrorMessage(`These ${wrongAddresses.length} addresses are not valid:  ${wrongAddresses.join(",\n")}`);
+      if (addressList.length > 500) {
+        setErrorMessage("Maximum 500 addresses at once for bulk messaging.");
       } else {
-        setValidatedAddress(addressList.join(","));
+        const wrongAddresses = addressList.filter((address) => !addressFormatValidation(address));
+        if (wrongAddresses.length > 0) {
+          setErrorMessage(`These ${wrongAddresses.length} addresses are not valid:  ${wrongAddresses.join(",\n")}`);
+        } else {
+          setValidatedAddress(addressList.join(","));
+        }
       }
     }
   }, [domainResolver.address, debouncedAddress, toggleMultisend]);
@@ -80,6 +84,7 @@ export const SendingSectionContainer = (props: Props) => {
     setToggleMultisend((toggle) => !toggle);
     if (e.target.checked === true) {
       setMultisendWarningToggle(true);
+      setForm((oldForm) => ({ ...oldForm, message: oldForm.message.slice(0, 200) }));
     }
   };
 
@@ -88,6 +93,13 @@ export const SendingSectionContainer = (props: Props) => {
     if (e.target.name === "message" && e.target.value.length > CONSTANT.MAXMESSAGELENGTH) {
       setErrorMessage(`Message needs to be less than ${CONSTANT.MAXMESSAGELENGTH} characters.`);
       text = e.target.value.slice(0, CONSTANT.MAXMESSAGELENGTH);
+    } else {
+      setErrorMessage("");
+    }
+
+    if (e.target.name === "message" && e.target.value.length > 200 && toggleMultisend) {
+      setErrorMessage(`Message needs to be less than 200 characters when bulk messaging.`);
+      text = e.target.value.slice(0, 200);
     } else {
       setErrorMessage("");
     }
