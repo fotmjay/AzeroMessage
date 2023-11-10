@@ -28,6 +28,7 @@ export const makeTransaction = async (
   );
   if (feesForMessage === 0) {
     setSubscriptionText("There was an error fetching the messaging fee.");
+    setTimeout(() => setSubscriptionText(""), 1500);
     return;
   } else {
     setSubscriptionText(`Fees will be ${parseInt(feesForMessage.toString(), 10) / 1000000000000} Azero`);
@@ -58,6 +59,7 @@ export const makeTransaction = async (
       setTimeout(() => setSubscriptionText(""), 1500);
     } else if (result.status.index > 6 || result.status.index === 4) {
       setSubscriptionText(`Error: Transaction ${result.status.defKeys[result.status.index]}`);
+      setTimeout(() => setSubscriptionText(""), 2500);
     }
   });
 };
