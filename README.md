@@ -84,7 +84,6 @@ Once done, use: `npm run dev`.
 
 ## Bugs
 
-- "ENCRYPTED" sometimes does not show up to hide the encrypted text (whilst still encrypted, text is shown instead).
 - Address while sometimes evaluate to "not valid" even though it is. Need to make a change in the address and back for it to register properly.
 - Balance does not instantly update after making a transaction.
 - RPC Decoration warning shows up in console on every refresh.
