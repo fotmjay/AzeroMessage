@@ -19,7 +19,7 @@ export const EncryptedWarning = (props: Props) => {
   } else if (props.target !== account?.address) {
     textToDisplay = "can't decrypt from this wallet";
   } else {
-    textToDisplay = "prove ownership";
+    textToDisplay = "go to settings & prove ownership";
   }
 
   return (

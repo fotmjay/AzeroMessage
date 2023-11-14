@@ -99,7 +99,7 @@ export const MessageCard = (props: Props) => {
       <Divider sx={{ marginBottom: "5px" }} />
 
       <Box>
-        {locked ? (
+        {locked && textToShow ? (
           <EncryptedWarning target={props.message.to} unlockText={unlockText} />
         ) : (
           <MessageTextBox setToggleShowAll={setToggleShowAll} toggleShowAll={toggleShowAll} messageText={textToShow} />

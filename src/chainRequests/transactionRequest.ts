@@ -31,7 +31,11 @@ export const makeTransaction = async (
     setTimeout(() => setSubscriptionText(""), 1500);
     return;
   } else {
-    setSubscriptionText(`Fees will be ${parseInt(feesForMessage.toString(), 10) / 1000000000000} Azero`);
+    setSubscriptionText(
+      `Fees will be ${parseInt(feesForMessage.toString(), 10) / 1000000000000} Azero.${
+        toggleMultisend ? `  Sending to ${addressToSend.length} addresses.` : ""
+      }`
+    );
   }
   let transaction;
   if (toggleMultisend) {

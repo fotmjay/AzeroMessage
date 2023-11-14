@@ -43,6 +43,7 @@ export const SendingSectionContainer = (props: Props) => {
   const { account, provider } = useContext(CurrentConnectedWalletContext);
 
   useEffect(() => {
+    setSubscriptionText("");
     if (!toggleMultisend) {
       if (domainResolver.address !== null && domainResolver.address !== undefined) {
         setValidatedAddress(domainResolver.address);
@@ -152,7 +153,9 @@ export const SendingSectionContainer = (props: Props) => {
   }
 
   useEffect(() => {
-    if (validatedAddress !== "" && !toggleMultisend) {
+    // Make sure the address is validated, multisend is off and there isn't more than one address in the field
+    // if user just switched off multisend before poking the server.
+    if (validatedAddress !== "" && validatedAddress.length < 55 && !toggleMultisend) {
       axiosInstance
         .get(`/api/publickey/${validatedAddress}`)
         .then((res) => {
