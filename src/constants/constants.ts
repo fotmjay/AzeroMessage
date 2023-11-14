@@ -27,4 +27,5 @@ export const CONSTANT = {
 };
 
 // old contract:  5GEDATiqzWkVu98jdSi2EuJ2Xtee2KoB7fMoRnJPTVAvqoVq
-// old new contract:  5HBYqDMzTQFTux4Nx2Lez9ruuuFUrzdMsmkXAUcNJBpUpHx9
+// old new contract (encryption live):  5HBYqDMzTQFTux4Nx2Lez9ruuuFUrzdMsmkXAUcNJBpUpHx9
+// old contract (bulk test): 5C7eCHCJhSLPqUoTet1JH5fJN4WADJd5sbSXgdiosdumrneK
