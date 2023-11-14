@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0xb9e49a41cd0ddbd6bf4a4cc5c5075d54d32f6bced6bc554efc0f7dbd8ba822ea",
+    "hash": "0x07245558ecb37eadc3595027e192bc4940b87e49af746af5b85a7f5c0565fc29",
     "language": "ink! 4.3.0",
     "compiler": "rustc 1.73.0",
     "build_info": {
@@ -26,7 +26,7 @@
         "args": [],
         "default": false,
         "docs": [
-          "Constructor that initializes the contract with the caller as owner and standard fees at 0.05 AZERO, bulk base fee at 5 AZERO and bulk variable fee at 0.01 AZERO."
+          "Constructor that initializes the contract with the caller as a owner and fees at 0.05 AZERO."
         ],
         "label": "default",
         "payable": false,

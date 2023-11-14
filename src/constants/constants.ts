@@ -4,7 +4,7 @@ export const CONSTANT = {
     URL: "https://alephzero.subscan.io/",
   },
   CONTRACT: {
-    ADDRESS: "5C7eCHCJhSLPqUoTet1JH5fJN4WADJd5sbSXgdiosdumrneK",
+    ADDRESS: "5FqCPwksbPocdYTy4fYi6hdKdR5NGAeuoJECyKZQDtr9eGbH",
     METHODS: {
       MESSAGESENT: "MessageSent",
     },
