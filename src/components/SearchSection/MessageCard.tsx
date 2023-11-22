@@ -32,6 +32,7 @@ export const MessageCard = (props: Props) => {
 
   // RESOLVER HOOK
   const toResolver = useResolveAddressToDomain(props.message.to);
+  console.log(toResolver);
   const fromResolver = useResolveAddressToDomain(props.message.from);
 
   const unlockText = () => {

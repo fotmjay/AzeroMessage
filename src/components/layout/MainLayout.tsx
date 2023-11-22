@@ -4,6 +4,7 @@ import { SearchSectionContainer } from "../SearchSection/SearchSectionContainer"
 import { SendingSectionContainer } from "../SendSection/SendingSectionContainer";
 import { FAQ } from "../FAQ";
 import { LatestMessagesContainer } from "../LatestMessagesContainer";
+import { PublicBoard } from "../PublicBoard";
 
 type Props = {
   showFaq: boolean;
@@ -45,6 +46,7 @@ export const MainLayout = (props: Props) => {
         <LatestMessagesContainer chosenTab={props.showFaq ? -1 : chosenTab} index={2} />
         {props.showFaq && <FAQ />}
       </Box>
+      <PublicBoard />
     </Container>
   );
 };
