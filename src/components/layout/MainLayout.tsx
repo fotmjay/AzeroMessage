@@ -1,4 +1,4 @@
-import { Box, Container, Tab, Tabs } from "@mui/material";
+import { Box, Button, Container, Tab, Tabs, Typography } from "@mui/material";
 import React, { SetStateAction, useContext, useState } from "react";
 import { SearchSectionContainer } from "../SearchSection/SearchSectionContainer";
 import { SendingSectionContainer } from "../SendSection/SendingSectionContainer";
@@ -29,8 +29,32 @@ export const MainLayout = (props: Props) => {
   }
 
   return (
-    <Container sx={{ display: mediaSize.medium || showPublicBoard === false ? "block" : "flex" }}>
-      <PublicBoard setShowPublicBoard={setShowPublicBoard} showPublicBoard={showPublicBoard} />
+    <Container
+      sx={{
+        display: mediaSize.medium || showPublicBoard === false ? "block" : "flex",
+        justifyContent: "space-between",
+        alignContent: "flex-start",
+      }}
+    >
+      <Box sx={{ maxWidth: "500px", margin: "auto" }}>
+        <Box sx={{ display: "flex", justifyContent: "center", columnGap: "15px" }}>
+          <Typography variant="subtitle1" component="h3" textAlign="center" color="primary.main" fontWeight="500">
+            PUBLIC BOARD
+          </Typography>
+          <Button
+            sx={{ minWidth: "fit-content", minHeight: "fit-content", paddingX: "5px", paddingY: 0 }}
+            variant="contained"
+            size="small"
+            onClick={() => setShowPublicBoard((toggle) => !toggle)}
+          >
+            {showPublicBoard ? "Hide" : "Show"}
+          </Button>
+        </Box>
+        <Typography textAlign="center" variant="subtitle2">
+          Send a message to azeromessage.azero to publish!
+        </Typography>
+        <PublicBoard setShowPublicBoard={setShowPublicBoard} showPublicBoard={showPublicBoard} />
+      </Box>
       <Box>
         <Tabs
           variant="fullWidth"

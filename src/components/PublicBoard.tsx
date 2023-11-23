@@ -3,6 +3,8 @@ import { MessageList } from "./SearchSection/MessageList";
 import { SetStateAction, useEffect, useState } from "react";
 import { axiosInstance } from "../config/axios";
 import { useResolveDomainToAddress } from "@azns/resolver-react";
+import { MessageFromDatabase } from "../types/polkaTypes";
+import { CONSTANT } from "../constants/constants";
 
 type Props = {
   setShowPublicBoard: React.Dispatch<SetStateAction<boolean>>;
@@ -11,7 +13,7 @@ type Props = {
 
 export const PublicBoard = (props: Props) => {
   const publicBoardAddress = useResolveDomainToAddress("azeromessage.azero").address;
-  const [messageList, setMessageList] = useState([]);
+  const [messageList, setMessageList] = useState<MessageFromDatabase[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
@@ -41,35 +43,22 @@ export const PublicBoard = (props: Props) => {
   return (
     <Card
       sx={{
+        display: props.showPublicBoard ? "block" : "none",
         position: "relative",
         marginX: "auto",
         maxWidth: "500px",
         border: "1px solid",
         borderColor: "divider",
         paddingX: "10px",
+        height: "auto",
       }}
     >
-      <Button
-        sx={{ position: "absolute", right: "5px", top: "5px", padding: "0" }}
-        variant="contained"
-        size="small"
-        onClick={() => props.setShowPublicBoard((toggle) => !toggle)}
-      >
-        {props.showPublicBoard ? "Hide" : "Show"}
-      </Button>
-      <Typography variant="h6" component="h3" textAlign="center">
-        Public Board
-      </Typography>
-      <Box sx={{ display: props.showPublicBoard ? "block" : "none" }}>
-        <Typography textAlign="center" variant="subtitle2">
-          To publish on the public board, send a message to azeromessage.azero
-        </Typography>
-        <Divider sx={{ paddingTop: "3px" }} />
+      <Box>
         {errorMessage === "" ? (
           isLoading ? (
             "Loading..."
           ) : (
-            <MessageList messageList={messageList} publicBoard={true} />
+            <MessageList messageList={messageList.slice(0, CONSTANT.MAXIMUMPUBLICMESSAGES)} publicBoard={true} />
           )
         ) : (
           <Typography textAlign="center" color="error.main" variant="subtitle2">
