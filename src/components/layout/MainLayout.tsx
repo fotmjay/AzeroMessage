@@ -1,10 +1,11 @@
 import { Box, Container, Tab, Tabs } from "@mui/material";
-import React, { SetStateAction, useState } from "react";
+import React, { SetStateAction, useContext, useState } from "react";
 import { SearchSectionContainer } from "../SearchSection/SearchSectionContainer";
 import { SendingSectionContainer } from "../SendSection/SendingSectionContainer";
 import { FAQ } from "../FAQ";
 import { LatestMessagesContainer } from "../LatestMessagesContainer";
 import { PublicBoard } from "../PublicBoard";
+import { MediaSizeContext } from "../../helpers/Contexts";
 
 type Props = {
   showFaq: boolean;
@@ -13,6 +14,7 @@ type Props = {
 
 export const MainLayout = (props: Props) => {
   const [chosenTab, setChosenTab] = useState(0);
+  const mediaSize = useContext(MediaSizeContext);
 
   const handleChange = (_e: React.SyntheticEvent, newTab: number) => {
     setChosenTab(newTab);
@@ -26,7 +28,7 @@ export const MainLayout = (props: Props) => {
   }
 
   return (
-    <Container sx={{ display: "block" }}>
+    <Container sx={{ display: mediaSize.medium ? "block" : "flex" }}>
       <Box>
         <Tabs
           variant="fullWidth"

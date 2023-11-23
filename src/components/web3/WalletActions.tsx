@@ -1,5 +1,5 @@
 import { Box, Button, CircularProgress, TextField, Typography } from "@mui/material";
-import { CurrentConnectedWalletContext, MediaSmallContext } from "../../helpers/Contexts";
+import { CurrentConnectedWalletContext, MediaSizeContext } from "../../helpers/Contexts";
 import { ProveOwnershipContext } from "../../helpers/Contexts";
 import { generateKeyPair } from "../../helpers/encryptionHelper";
 import { getNonceFromDatabase, signMessage } from "../../helpers/walletInteractions";
@@ -18,7 +18,7 @@ export const WalletActions = () => {
   const [toggleForm, setToggleForm] = useState(false);
   const [buttonLoading, setButtonLoading] = useState<number | null>(null);
   const [formData, setFormData] = useState<PasswordForm>({ password: "", confirmPassword: "" });
-  const mediaSmall = useContext(MediaSmallContext);
+  const mediaSize = useContext(MediaSizeContext);
   const { provider, account } = useContext(CurrentConnectedWalletContext);
   const { setOwnershipProven } = useContext(ProveOwnershipContext);
 
@@ -104,7 +104,7 @@ export const WalletActions = () => {
       {toggleForm && (
         <Box
           display="flex"
-          flexDirection={mediaSmall ? "column" : "row"}
+          flexDirection={mediaSize.small ? "column" : "row"}
           justifyContent="space-between"
           alignContent="center"
           gap="5px"
@@ -119,7 +119,7 @@ export const WalletActions = () => {
             onChange={handleChange}
             size="small"
             placeholder="Password"
-            fullWidth={mediaSmall}
+            fullWidth={mediaSize.small}
           ></TextField>
           <TextField
             type="password"
@@ -129,7 +129,7 @@ export const WalletActions = () => {
             onChange={handleChange}
             size="small"
             placeholder="Confirm Password"
-            fullWidth={mediaSmall}
+            fullWidth={mediaSize.small}
           ></TextField>
         </Box>
       )}

@@ -1,6 +1,6 @@
 import { Dialog, Box, Card, Typography, Divider, Button, TextField, FormControl } from "@mui/material";
 import React, { SetStateAction, useContext } from "react";
-import { MediaSmallContext } from "../../helpers/Contexts";
+import { MediaSizeContext } from "../../helpers/Contexts";
 
 type Props = {
   setDecryptionPassword: React.Dispatch<SetStateAction<string>>;
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const DecryptionPasswordDialog = (props: Props) => {
-  const mediaSmall = useContext(MediaSmallContext);
+  const mediaSize = useContext(MediaSizeContext);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.setDecryptionPassword(e.target.value);
@@ -31,7 +31,7 @@ export const DecryptionPasswordDialog = (props: Props) => {
         marginX: "auto",
         display: "block",
         maxWidth: "500px",
-        top: mediaSmall ? "0" : "-40%",
+        top: mediaSize.small ? "0" : "-40%",
       }}
     >
       <Box>

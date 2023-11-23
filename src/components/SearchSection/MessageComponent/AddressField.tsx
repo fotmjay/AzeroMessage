@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import { shortenAddressWithEllipsis } from "../../../helpers/addressFormatting";
-import { MediaSmallContext } from "../../../helpers/Contexts";
+import { MediaSizeContext } from "../../../helpers/Contexts";
 import { useContext } from "react";
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const AddressField = (props: Props) => {
-  const mediaSmall = useContext(MediaSmallContext);
+  const mediaSize = useContext(MediaSizeContext);
 
   // Copy an address when you click on it
   const copyText = (text: string) => {
@@ -22,7 +22,7 @@ export const AddressField = (props: Props) => {
       data-tooltip-id="copiedTo"
       data-tooltip-content="Copied to clipboard"
       onClick={() => copyText(props.address)}
-      textAlign={mediaSmall ? "center" : "left"}
+      textAlign={mediaSize.small ? "center" : "left"}
       display="block"
       variant="subtitle1"
       width="fit-content"
