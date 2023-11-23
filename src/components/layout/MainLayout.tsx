@@ -29,6 +29,7 @@ export const MainLayout = (props: Props) => {
 
   return (
     <Container sx={{ display: mediaSize.medium ? "block" : "flex" }}>
+      <PublicBoard />
       <Box>
         <Tabs
           variant="fullWidth"
@@ -48,7 +49,6 @@ export const MainLayout = (props: Props) => {
         <LatestMessagesContainer chosenTab={props.showFaq ? -1 : chosenTab} index={2} />
         {props.showFaq && <FAQ />}
       </Box>
-      <PublicBoard />
     </Container>
   );
 };
