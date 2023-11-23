@@ -15,6 +15,7 @@ type Props = {
 export const MainLayout = (props: Props) => {
   const [chosenTab, setChosenTab] = useState(0);
   const mediaSize = useContext(MediaSizeContext);
+  const [showPublicBoard, setShowPublicBoard] = useState(true);
 
   const handleChange = (_e: React.SyntheticEvent, newTab: number) => {
     setChosenTab(newTab);
@@ -28,8 +29,8 @@ export const MainLayout = (props: Props) => {
   }
 
   return (
-    <Container sx={{ display: mediaSize.medium ? "block" : "flex" }}>
-      <PublicBoard />
+    <Container sx={{ display: mediaSize.medium || showPublicBoard === false ? "block" : "flex" }}>
+      <PublicBoard setShowPublicBoard={setShowPublicBoard} showPublicBoard={showPublicBoard} />
       <Box>
         <Tabs
           variant="fullWidth"
