@@ -32,7 +32,7 @@ export const PublicBoard = () => {
   }, [publicBoardAddress]);
 
   return (
-    <Card sx={{ marginX: "auto", maxWidth: "500px", border: "1px solid initial" }}>
+    <Card sx={{ marginX: "auto", maxWidth: "500px", border: "1px solid", borderColor: "divider", paddingX: "10px" }}>
       <Typography variant="h6" component="h3" textAlign="center">
         Public Board
       </Typography>
