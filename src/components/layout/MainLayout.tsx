@@ -36,7 +36,7 @@ export const MainLayout = (props: Props) => {
         alignContent: "flex-start",
       }}
     >
-      <Box sx={{ maxWidth: "500px", margin: "auto" }}>
+      <Box sx={{ maxWidth: "500px", margin: "auto", paddingTop: "20px", paddingX: 0 }}>
         <Box sx={{ display: "flex", justifyContent: "center", columnGap: "15px" }}>
           <Typography variant="subtitle1" component="h3" textAlign="center" color="primary.main" fontWeight="500">
             PUBLIC BOARD
@@ -50,15 +50,15 @@ export const MainLayout = (props: Props) => {
             {showPublicBoard ? "Hide" : "Show"}
           </Button>
         </Box>
-        <Typography textAlign="center" variant="subtitle2">
+        <Typography textAlign="center" variant="subtitle2" gutterBottom={true}>
           Send a message to azeromessage.azero to publish!
         </Typography>
         <PublicBoard setShowPublicBoard={setShowPublicBoard} showPublicBoard={showPublicBoard} />
       </Box>
-      <Box>
+      <Box paddingTop="20px">
         <Tabs
           variant="fullWidth"
-          sx={{ maxWidth: "500px", margin: "auto" }}
+          sx={{ maxWidth: "500px", margin: "auto", paddingTop: 0 }}
           value={chosenTab}
           onChange={handleChange}
           textColor="primary"

@@ -1,4 +1,4 @@
-import { Box, Button, Card, Divider, Typography } from "@mui/material";
+import { Box, Card, Typography } from "@mui/material";
 import { MessageList } from "./SearchSection/MessageList";
 import { SetStateAction, useEffect, useState } from "react";
 import { axiosInstance } from "../config/axios";
