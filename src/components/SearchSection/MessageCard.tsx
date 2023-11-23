@@ -17,6 +17,7 @@ type Props = {
   message: MessageFromDatabase;
   setDecryptionPassword: React.Dispatch<SetStateAction<string>>;
   decryptionPassword: string;
+  publicBoard?: boolean;
 };
 
 export const MessageCard = (props: Props) => {
@@ -32,7 +33,6 @@ export const MessageCard = (props: Props) => {
 
   // RESOLVER HOOK
   const toResolver = useResolveAddressToDomain(props.message.to);
-  console.log(toResolver);
   const fromResolver = useResolveAddressToDomain(props.message.from);
 
   const unlockText = () => {
@@ -91,10 +91,19 @@ export const MessageCard = (props: Props) => {
       <Box display={mediaSmall ? "block" : "flex"} justifyContent="space-around" alignItems="center">
         <AddressField target="From" address={props.message.from} domain={fromResolver.primaryDomain} />
 
-        {!mediaSmall && <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />}
+        {!mediaSmall && !props.publicBoard && <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />}
 
-        <AddressField target="To" address={props.message.to} domain={toResolver.primaryDomain} />
-        <Tooltip style={{ background: "gray", maxWidth: "100px" }} positionStrategy="fixed" openOnClick id="copiedTo" />
+        {!props.publicBoard && (
+          <>
+            <AddressField target="To" address={props.message.to} domain={toResolver.primaryDomain} />
+            <Tooltip
+              style={{ background: "gray", maxWidth: "100px" }}
+              positionStrategy="fixed"
+              openOnClick
+              id="copiedTo"
+            />
+          </>
+        )}
       </Box>
 
       <Divider sx={{ marginBottom: "5px" }} />

@@ -41,7 +41,7 @@ export const PublicBoard = () => {
       </Typography>
       <Divider sx={{ paddingTop: "3px" }} />
       {errorMessage === "" ? (
-        <MessageList messageList={messageList} />
+        <MessageList messageList={messageList} publicBoard={true} />
       ) : (
         <Typography textAlign="center" color="error.main" variant="subtitle2">
           {errorMessage}

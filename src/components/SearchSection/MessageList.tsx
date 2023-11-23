@@ -6,6 +6,7 @@ import PaginationRounded from "./PaginationRounded";
 
 type Props = {
   messageList: MessageFromDatabase[];
+  publicBoard?: boolean;
 };
 
 export const MessageList = (props: Props) => {
@@ -31,6 +32,7 @@ export const MessageList = (props: Props) => {
               decryptionPassword={decryptionPassword}
               key={`${message.timestamp}${message.to}${message.from}`}
               message={message}
+              publicBoard={props.publicBoard}
             />
           );
         })
