@@ -176,7 +176,15 @@ export const SendingSectionContainer = (props: Props) => {
   return (
     <Card
       hidden={props.chosenTab !== props.index}
-      sx={{ padding: "15px", paddingTop: "0px", maxWidth: "500px", marginX: "auto", marginBottom: "10px" }}
+      sx={{
+        padding: "15px",
+        paddingTop: "0px",
+        maxWidth: "500px",
+        marginX: "auto",
+        marginBottom: "10px",
+        border: "1px solid",
+        borderColor: "divider",
+      }}
     >
       <FormInfoBox color={color} messageToShow={messageToShow} icon={iconToShow} />
       <FormControl size="small" fullWidth>

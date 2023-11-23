@@ -35,7 +35,17 @@ export const LatestMessagesContainer = (props: Props) => {
 
   return (
     <Box hidden={props.chosenTab !== props.index}>
-      <Card sx={{ padding: "15px", paddingTop: "0px", maxWidth: "500px", marginX: "auto", marginBottom: "10px" }}>
+      <Card
+        sx={{
+          padding: "15px",
+          paddingTop: "0px",
+          maxWidth: "500px",
+          marginX: "auto",
+          marginBottom: "10px",
+          border: "1px solid",
+          borderColor: "divider",
+        }}
+      >
         <Typography paddingX="10px" paddingTop="10px" color="error.main">
           {errorMessage}
         </Typography>

@@ -24,7 +24,7 @@ function App() {
   const [showFaq, setShowFaq] = useState(false);
   const chainNode = useApi("aleph");
   const mediaSmall = useMediaQuery("(max-width:500px)");
-  const mediaMedium = useMediaQuery("(max-width:1000px)");
+  const mediaMedium = useMediaQuery("(max-width:1050px)");
   const { account, connect, disconnect, accounts, setAccount } = useWallet();
 
   useEffect(() => {
