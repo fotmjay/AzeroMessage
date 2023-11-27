@@ -33,10 +33,10 @@ export const MainLayout = (props: Props) => {
       sx={{
         display: mediaSize.medium || showPublicBoard === false ? "block" : "flex",
         justifyContent: "space-between",
-        alignContent: "flex-start",
+        alignItems: "flex-start",
       }}
     >
-      <Box sx={{ maxWidth: "500px", margin: "auto", paddingTop: "20px", paddingX: 0 }}>
+      <Box sx={{ maxWidth: "500px", marginX: "auto", paddingTop: "20px", paddingX: 0 }}>
         <Box sx={{ display: "flex", justifyContent: "center", columnGap: "15px" }}>
           <Typography variant="subtitle1" component="h3" textAlign="center" color="primary.main" fontWeight="500">
             PUBLIC BOARD
