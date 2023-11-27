@@ -11,7 +11,7 @@ import { ConnectionStatus } from "../web3/ConnectionStatus";
 import type { accountBalance } from "../../types/polkaTypes";
 import { EncryptionControlPanel } from "../web3/EncryptionControlPanel";
 import { axiosInstance } from "../../config/axios";
-import { CurrentConnectedWalletContext, MediaSmallContext, ProveOwnershipContext } from "../../helpers/Contexts";
+import { CurrentConnectedWalletContext, MediaSizeContext, ProveOwnershipContext } from "../../helpers/Contexts";
 
 type Props = {
   darkMode: boolean;
@@ -24,7 +24,7 @@ export const BaseAppLayout = (props: Props) => {
   const [openModal, setOpenModal] = useState<"connectionStatus" | "encryptionStatus" | null>(null);
   const [encryptionEnabled, setEncryptionEnabled] = useState(false);
   const { ownershipProven } = useContext(ProveOwnershipContext);
-  const mediaSmall = useContext(MediaSmallContext);
+  const mediaSize = useContext(MediaSizeContext);
   const { provider, account } = useContext(CurrentConnectedWalletContext);
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export const BaseAppLayout = (props: Props) => {
           alignItems="center"
           columnGap="10px"
           minWidth="250px"
-          flexDirection={mediaSmall ? "column" : "row"}
+          flexDirection={mediaSize.small ? "column" : "row"}
           margin="auto"
         >
           <Typography textAlign="center" variant="h2" component="h1" sx={{ textDecoration: "underline" }}>
@@ -110,7 +110,7 @@ export const BaseAppLayout = (props: Props) => {
           marginX: "auto",
           display: "block",
           maxWidth: "500px",
-          top: mediaSmall ? "0" : "-40%",
+          top: mediaSize.small ? "0" : "-40%",
         }}
       >
         {openModal === "connectionStatus" && <Web3ConnectionSection />}

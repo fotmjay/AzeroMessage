@@ -1,6 +1,6 @@
 import { Dialog, Box, Card, Typography, Divider, Button } from "@mui/material";
 import { SetStateAction, useContext } from "react";
-import { MediaSmallContext } from "../../helpers/Contexts";
+import { MediaSizeContext } from "../../helpers/Contexts";
 
 type Props = {
   setHasError: React.Dispatch<SetStateAction<boolean>>;
@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const DecryptionFailedDialog = (props: Props) => {
-  const mediaSmall = useContext(MediaSmallContext);
+  const mediaSize = useContext(MediaSizeContext);
   return (
     <Dialog
       fullWidth
@@ -18,7 +18,7 @@ export const DecryptionFailedDialog = (props: Props) => {
         marginX: "auto",
         display: "block",
         maxWidth: "500px",
-        top: mediaSmall ? "0" : "-40%",
+        top: mediaSize.small ? "0" : "-40%",
       }}
     >
       <Box>

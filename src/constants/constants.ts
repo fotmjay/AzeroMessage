@@ -24,6 +24,7 @@ export const CONSTANT = {
   DISPLAY: {
     TEXTLENGTHTOTRUNCATE: 150,
   },
+  MAXIMUMPUBLICMESSAGES: 5,
 };
 
 // old contract:  5GEDATiqzWkVu98jdSi2EuJ2Xtee2KoB7fMoRnJPTVAvqoVq

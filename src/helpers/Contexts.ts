@@ -17,6 +17,6 @@ export const CurrentConnectedWalletContext = createContext<{
   account: WalletAccount | undefined;
   provider: IApiProvider | undefined;
 }>({ account: undefined, provider: undefined });
-export const MediaSmallContext = createContext(false);
+export const MediaSizeContext = createContext({ small: false, medium: false });
 export const ProveOwnershipContext = createContext<Ownership>({ ownershipProven: false, setOwnershipProven: () => {} });
 export const UseWalletContext = createContext<Partial<WalletState>>({});

@@ -20,7 +20,7 @@ import { Verified } from "@mui/icons-material";
 import { CONSTANT } from "../../constants/constants";
 import { axiosInstance } from "../../config/axios";
 import { encryptMessageWithPublicKey } from "../../helpers/encryptionHelper";
-import { CurrentConnectedWalletContext, MediaSmallContext } from "../../helpers/Contexts";
+import { CurrentConnectedWalletContext, MediaSizeContext } from "../../helpers/Contexts";
 import { MultisendFAQ } from "./MultisendFAQ";
 
 type Props = {
@@ -39,7 +39,7 @@ export const SendingSectionContainer = (props: Props) => {
   const [multisendWarningToggle, setMultisendWarningToggle] = useState(false);
   const domainResolver = useResolveDomainToAddress(form.address);
   const debouncedAddress = useDebounce(form.address, 300);
-  const mediaSmall = useContext(MediaSmallContext);
+  const mediaSize = useContext(MediaSizeContext);
   const { account, provider } = useContext(CurrentConnectedWalletContext);
 
   useEffect(() => {
@@ -176,7 +176,15 @@ export const SendingSectionContainer = (props: Props) => {
   return (
     <Card
       hidden={props.chosenTab !== props.index}
-      sx={{ padding: "15px", paddingTop: "0px", maxWidth: "500px", marginX: "auto", marginBottom: "10px" }}
+      sx={{
+        padding: "15px",
+        paddingTop: "0px",
+        maxWidth: "500px",
+        marginX: "auto",
+        marginBottom: "10px",
+        border: "1px solid",
+        borderColor: "divider",
+      }}
     >
       <FormInfoBox color={color} messageToShow={messageToShow} icon={iconToShow} />
       <FormControl size="small" fullWidth>
@@ -201,7 +209,7 @@ export const SendingSectionContainer = (props: Props) => {
               <InputAdornment position="end" sx={{ margin: "0" }}>
                 <Checkbox sx={{ padding: "1px" }} checked={toggleMultisend} onChange={handleMultisendToggle} />
                 <Typography sx={{ padding: "0", margin: "0" }} variant="caption">
-                  {mediaSmall ? "Bulk" : "Multisend?"}
+                  {mediaSize.small ? "Bulk" : "Multisend?"}
                 </Typography>
               </InputAdornment>
             ),
@@ -222,7 +230,7 @@ export const SendingSectionContainer = (props: Props) => {
           placeholder="Enter message"
           value={form.message}
         />
-        <Box display="flex" gap="15px" flexDirection={mediaSmall ? "column" : "row"}>
+        <Box display="flex" gap="15px" flexDirection={mediaSize.small ? "column" : "row"}>
           <Button
             type="submit"
             onClick={() => submitForm(false)}
@@ -258,7 +266,7 @@ export const SendingSectionContainer = (props: Props) => {
           marginX: "auto",
           display: "block",
           maxWidth: "500px",
-          top: mediaSmall ? "0" : "-40%",
+          top: mediaSize.small ? "0" : "-40%",
         }}
       >
         <MultisendFAQ setMultisendWarningToggle={setMultisendWarningToggle} setToggleMultisend={setToggleMultisend} />

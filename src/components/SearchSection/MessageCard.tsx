@@ -6,7 +6,7 @@ import { formatTimestamp } from "../../helpers/timestampFormatting";
 import { useResolveAddressToDomain } from "@azns/resolver-react";
 import { useEffect, useState, useContext, SetStateAction } from "react";
 import { decryptMessageWithEncryptedPrivateKey } from "../../helpers/encryptionHelper";
-import { MediaSmallContext, ProveOwnershipContext } from "../../helpers/Contexts";
+import { MediaSizeContext, ProveOwnershipContext } from "../../helpers/Contexts";
 import { DecryptionFailedDialog } from "./DecryptionFailedDialog";
 import { DecryptionPasswordDialog } from "./DecryptionPasswordDialog";
 import { AddressField } from "./MessageComponent/AddressField";
@@ -17,6 +17,7 @@ type Props = {
   message: MessageFromDatabase;
   setDecryptionPassword: React.Dispatch<SetStateAction<string>>;
   decryptionPassword: string;
+  publicBoard?: boolean;
 };
 
 export const MessageCard = (props: Props) => {
@@ -28,7 +29,7 @@ export const MessageCard = (props: Props) => {
 
   // CONTEXT
   const { ownershipProven, encAddresses } = useContext(ProveOwnershipContext);
-  const mediaSmall = useContext(MediaSmallContext);
+  const mediaSize = useContext(MediaSizeContext);
 
   // RESOLVER HOOK
   const toResolver = useResolveAddressToDomain(props.message.to);
@@ -87,13 +88,22 @@ export const MessageCard = (props: Props) => {
 
       <Divider />
 
-      <Box display={mediaSmall ? "block" : "flex"} justifyContent="space-around" alignItems="center">
+      <Box display={mediaSize.small ? "block" : "flex"} justifyContent="space-around" alignItems="center">
         <AddressField target="From" address={props.message.from} domain={fromResolver.primaryDomain} />
 
-        {!mediaSmall && <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />}
+        {!mediaSize.small && !props.publicBoard && <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />}
 
-        <AddressField target="To" address={props.message.to} domain={toResolver.primaryDomain} />
-        <Tooltip style={{ background: "gray", maxWidth: "100px" }} positionStrategy="fixed" openOnClick id="copiedTo" />
+        {!props.publicBoard && (
+          <>
+            <AddressField target="To" address={props.message.to} domain={toResolver.primaryDomain} />
+            <Tooltip
+              style={{ background: "gray", maxWidth: "100px" }}
+              positionStrategy="fixed"
+              openOnClick
+              id="copiedTo"
+            />
+          </>
+        )}
       </Box>
 
       <Divider sx={{ marginBottom: "5px" }} />
