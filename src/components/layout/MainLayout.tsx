@@ -55,7 +55,7 @@ export const MainLayout = (props: Props) => {
         </Typography>
         <PublicBoard setShowPublicBoard={setShowPublicBoard} showPublicBoard={showPublicBoard} />
       </Box>
-      <Box paddingTop="20px">
+      <Box paddingTop="19px">
         <Tabs
           variant="fullWidth"
           sx={{ maxWidth: "500px", margin: "auto", paddingTop: 0 }}
